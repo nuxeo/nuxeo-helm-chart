@@ -1,0 +1,22 @@
+{{- if .Values.nuxeo.ingress.enabled -}}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ template "nuxeo.fullname" . }}
+  labels:
+    app: {{ template "nuxeo.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+{{- with .Values.nuxeo.ingress.labels }}
+{{ toYaml . | indent 4 }}
+{{- end }}
+  annotations:
+    {{- range $key, $value := .Values.nuxeo.ingress.annotations }}
+      {{ $key }}: {{ $value | quote }}
+    {{- end }}
+spec:
+  backend:
+    serviceName: {{ template "nuxeo.fullname" . }}
+    servicePort: {{ .Values.nuxeo.service.externalPort}}
+{{- end -}}

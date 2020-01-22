@@ -1,0 +1,62 @@
+{{- if .Values.nuxeo.mongodb.backup.enable }}
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  labels:
+    app: {{ template "nuxeo.fullname" . }}-cron-backup
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+  name: {{ template "nuxeo.fullname" . }}-cron-backup
+spec:
+  schedule: {{ .Values.nuxeo.mongodb.backup.schedule }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: actor
+            image: 'docker.io/mongo:{{.Values.mongodb.image.tag}}'
+            env:
+              - name: POD_NAME
+                valueFrom:
+                  fieldRef:
+                    fieldPath: metadata.name
+            command: ["mongodump"]
+            args:
+              - '--host=mongodb://{{ .Release.Name }}-mongodb:27017'
+              - '--db={{ .Values.nuxeo.mongodb.dbname }}'
+              - '--archive="/opt/mongo-backup/mongo-data/$(POD_NAME).gzip"'
+              - '--gzip'
+              - '--verbose'
+            volumeMounts:
+              - mountPath: /opt/mongo-backup/mongo-data
+                name: mongo-cache
+          - name: uploader
+            image: 'mesosphere/aws-cli:latest'
+            env:
+              - name: BUCKET
+                value: {{ .Values.nuxeo.mongodb.backup.aws.bucket }}
+              - name: AWS_ACCESS_KEY_ID
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ .Values.nuxeo.mongodb.backup.aws.secret }}
+                    key: aws_key
+              - name: AWS_SECRET_ACCESS_KEY
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ .Values.nuxeo.mongodb.backup.aws.secret }}
+                    key: aws_secret
+              - name: POD_NAME
+                valueFrom:
+                  fieldRef:
+                    fieldPath: metadata.name
+            command: ["aws", "s3", "cp" , "/opt/mongo-backup/mongo-data/$(POD_NAME).gzip", "s3://$(BUCKET)/$(POD_NAME).gzip"]
+            volumeMounts:
+              - mountPath: /opt/mongo-backup/mongo-data
+                name: mongo-cache
+          restartPolicy: Never
+          volumes:
+            - name: mongo-cache
+              emptyDir: {}
+{{- end }}

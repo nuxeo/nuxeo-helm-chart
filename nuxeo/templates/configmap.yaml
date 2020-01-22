@@ -1,0 +1,66 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "nuxeo.fullname" . }}-conf
+  labels:
+    app: {{ template "nuxeo.fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+    role: config
+data:
+  nuxeo.conf: |-
+    # Additional nuxeo.conf parameters
+    nuxeo.stream.work.log.codec=avro
+    nuxeo.stream.audit.log.codec=avro
+    nuxeo.stream.pubsub.log.codec=avro
+{{- if or .Values.mongodb.deploy .Values.tags.mongodb }}
+    nuxeo.templates=default,mongodb
+    nuxeo.mongodb.server=mongodb://{{ .Release.Name }}-mongodb:27017
+    nuxeo.mongodb.dbname={{ .Values.nuxeo.mongodb.dbname }}
+{{- end }}
+{{- if or .Values.postgresql.deploy .Values.tags.postgresql }}
+    nuxeo.templates=default,postgresql
+    nuxeo.db.name={{ .Values.nuxeo.postgresql.dbname }}
+    nuxeo.db.user={{ .Values.nuxeo.postgresql.username }}
+    nuxeo.db.password={{ .Values.nuxeo.postgresql.password }}
+    nuxeo.db.host={{ .Release.Name }}-postgresql
+    nuxeo.db.port=5432
+{{- end }}
+{{- if or .Values.elasticsearch.deploy .Values.tags.elasticsearch }}
+    elasticsearch.client=RestClient
+    elasticsearch.clusterName={{ .Values.nuxeo.elasticsearch.clusterName }}
+    elasticsearch.addressList=http://{{ .Release.Name }}-elasticsearch-client:9200
+    elasticsearch.indexName={{ .Values.nuxeo.elasticsearch.indexName }}
+{{- end }}
+{{- if or .Values.kafka.deploy .Values.tags.kafka}}
+    kafka.enabled=true
+    kafka.bootstrap.servers={{ .Release.Name }}-kafka-headless:9092
+    nuxeo.stream.work.enabled=true
+    nuxeo.pubsub.provider=stream
+{{- end }}
+{{- if or .Values.redis.deploy .Values.tags.redis }}
+{{- if or .Values.mongodb.deploy .Values.tags.mongodb }}
+    nuxeo.templates=default,mongodb,redis
+{{- else if or  .Values.postgresql.deploy  .Values.tags.postgresql }}
+    nuxeo.templates=default,postgresql,redis
+{{- else }}
+    nuxeo.templates=default,redis
+{{- end }}
+    nuxeo.redis.host={{ .Release.Name }}-master
+    nuxeo.work.queuing=redis
+    nuxeo.redis.enabled=true
+{{- end }}
+{{- if .Values.nuxeo.custom_params }}
+{{ .Values.nuxeo.custom_params | indent 4 }}
+{{- end }}
+  init.sh: |
+    #!/bin/sh
+    echo $NUXEO_CONNECT_USERNAME;
+    if [ ! -f $NUXEO_DATA/instance.clid -a -f /opt/nuxeo/connect/connect.properties ]; then
+      . /opt/nuxeo/connect/connect.properties
+      if [ -n "$NUXEO_CONNECT_USERNAME" -a -n "$NUXEO_CONNECT_PASSWORD" -a -n "$NUXEO_STUDIO_PROJECT" ]; then
+        echo "---> Registering instance on connect"
+        nuxeoctl register $NUXEO_CONNECT_USERNAME $NUXEO_STUDIO_PROJECT dev helm $NUXEO_CONNECT_PASSWORD
+      fi
+    fi

@@ -1,0 +1,8 @@
+
+Get the application URL:
+
+$ kubectl get ingress {{ template "nuxeo.fullname" . }} -n {{ .Release.Namespace }}
+
+Get the application logs:
+
+$ kubectl logs $(kubectl get pods --selector=app={{ template "nuxeo.fullname" . }} -n {{ .Release.Namespace }} --output=jsonpath="{.items..metadata.name}") -n {{ .Release.Namespace }} -f

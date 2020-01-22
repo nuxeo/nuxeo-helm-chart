@@ -1,0 +1,125 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "nuxeo.fullname" . }}
+  labels:
+    draft: {{ default "draft-app" .Values.nuxeo.draft }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
+spec:
+  selector:
+    matchLabels:
+      draft: {{ default "draft-app" .Values.nuxeo.draft }}
+      app: {{ template "nuxeo.fullname" . }}
+  replicas: {{ .Values.nuxeo.replicaCount }}
+  template:
+    metadata:
+      labels:
+        draft: {{ default "draft-app" .Values.nuxeo.draft }}
+        app: {{ template "nuxeo.fullname" . }}
+{{- with .Values.nuxeo.podLabels }}
+{{ toYaml . | indent 8 }}
+{{- end }}
+{{- if .Values.nuxeo.podAnnotations }}
+      annotations:
+{{ toYaml .Values.nuxeo.podAnnotations | indent 8 }}
+{{- end }}
+    spec:
+      containers:
+      - name: {{ .Chart.Name }}
+        resources:
+          requests:
+            memory: "{{ .Values.nuxeo.resources.requests.memory }}"
+            cpu: "{{ .Values.nuxeo.resources.requests.cpu }}"
+          limits:
+            memory: "{{ .Values.nuxeo.resources.limits.memory }}"
+            cpu: "{{ .Values.nuxeo.resources.limits.cpu }}"
+        image: "{{ .Values.nuxeo.image.repository }}:{{ .Values.nuxeo.image.tag }}"
+        imagePullPolicy: {{ .Values.nuxeo.image.pullPolicy }}
+        ports:
+        - containerPort: {{ .Values.nuxeo.service.internalPort }}
+        livenessProbe:
+          httpGet:
+            path: {{ .Values.nuxeo.probePath }}
+            port: {{ .Values.nuxeo.service.internalPort }}
+          initialDelaySeconds: {{ .Values.nuxeo.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.nuxeo.livenessProbe.periodSeconds }}
+          successThreshold: {{ .Values.nuxeo.livenessProbe.successThreshold }}
+          timeoutSeconds: {{ .Values.nuxeo.livenessProbe.timeoutSeconds }}
+        readinessProbe:
+          httpGet:
+            path: {{ .Values.nuxeo.probePath }}
+            port: {{ .Values.nuxeo.service.internalPort }}
+          initialDelaySeconds: {{ .Values.nuxeo.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.nuxeo.readinessProbe.periodSeconds }}
+          successThreshold: {{ .Values.nuxeo.readinessProbe.successThreshold }}
+          timeoutSeconds: {{ .Values.nuxeo.readinessProbe.timeoutSeconds }}
+        env:
+{{- if .Values.nuxeo.clid }}
+        - name: NUXEO_CLID
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "nuxeo.fullname" . }}-instance-clid
+              key: CLID
+{{- end }}
+        - name: NUXEO_PACKAGES
+          value: {{ .Values.nuxeo.packages }}
+{{- if .Values.nuxeo.custom_envs }}
+{{ toYaml .Values.nuxeo.custom_envs | indent 8 }}
+{{- end }}
+        envFrom:
+{{- if .Values.nuxeo.custom_envsFrom }}
+{{ toYaml .Values.nuxeo.custom_envsFrom | indent 8 }}
+{{- end }}
+        volumeMounts:
+          - name: nuxeoconf
+            mountPath: /docker-entrypoint-initnuxeo.d/
+          - name: connect-secret
+            mountPath: /opt/nuxeo/connect/
+          - name: log
+            mountPath: /var/log/nuxeo
+          - name: binaries
+            mountPath: /binaries
+      initContainers:
+{{- if or .Values.elasticsearch.deploy .Values.tags.elasticsearch }}
+      - name: init-elasticsearch
+        image: busybox
+        command: ['sh', '-c', 'until nc -w1 {{ .Release.Name }}-elasticsearch-client 9200; do echo "waiting for elastic"; sleep 2; done;']
+{{- end }}
+{{- if or .Values.mongodb.deploy .Values.tags.mongodb }}
+      - name: init-mongodb
+        image: busybox
+        command: ['sh', '-c', 'until nc -w1 {{ .Release.Name }}-mongodb 27017; do echo "waiting for mongodb"; sleep 2; done;']
+{{- end }}
+{{- if or .Values.postgresql.deploy .Values.tags.postgresql }}
+      - name: init-postgresql
+        image: busybox
+        command: ['sh', '-c', 'until nc -w1 {{ .Release.Name }}-postgresql 5432; do echo "waiting for postgresql"; sleep 2; done;']
+{{- end }}
+{{- if or .Values.kafka.deploy .Values.tags.kafka}}
+      - name: init-kafka
+        image: busybox
+        command: ['sh', '-c', 'until nc -w1 {{ .Release.Name }}-kafka-headless 9092; do echo "waiting for kafka"; sleep 2; done;']
+{{- end }}
+      securityContext:
+        fsGroup: 1000
+      volumes:
+      - name: nuxeoconf
+        configMap:
+          name: {{ template "nuxeo.fullname" . }}-conf
+      - name: connect-secret
+        secret:
+          secretName: {{ template "nuxeo.fullname" . }}-connect
+      - name: binaries
+        {{- if .Values.nuxeo.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ template "nuxeo.fullname" . }}-binaries
+        {{- else }}
+        emptyDir: {}
+        {{- end }}
+      - name: log
+        {{- if .Values.nuxeo.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ template "nuxeo.fullname" . }}-log
+        {{- else }}
+        emptyDir: {}
+        {{- end }}

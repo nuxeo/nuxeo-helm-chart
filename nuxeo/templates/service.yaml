@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "nuxeo.fullname" . }}
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
+{{- with .Values.nuxeo.service.labels }}
+{{ toYaml . | indent 4 }}
+{{- end }}
+{{- if .Values.nuxeo.service.annotations }}
+  annotations:
+{{ toYaml .Values.nuxeo.service.annotations | indent 4 }}
+{{- end }}
+spec:
+  type: {{ .Values.nuxeo.service.type }}
+  ports:
+  - port: {{ .Values.nuxeo.service.externalPort }}
+    targetPort: {{ .Values.nuxeo.service.internalPort }}
+    protocol: TCP
+    name: http
+  selector:
+    app: {{ template "nuxeo.fullname" . }}
