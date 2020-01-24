@@ -1,7 +1,7 @@
 nuxeo:
   image:
-    repository: nuxeo/nuxeo
-    tag: master
+    repository: docker.packages.nuxeo.com/nuxeo/nuxeo
+    tag: latest
     pullPolicy: Always
   replicaCount: 1
   resources:

@@ -96,16 +96,10 @@ You can also pass values directly to the `helm install` command:
 helm install nuxeo --name RELEASE_NAME --set nuxeo.image.tag=x.y.z
 ```
 
-For example, to register the instance and deploy some custom packages:
+For example, to install some packages using a Nuxeo CLID:
 
 ```shell
-helm install nuxeo --name RELEASE_NAME --set nuxeo.packages=nuxeo-web-ui,nuxeo.studio_project=STUDIO_PROJECT,nuxeo.connect_username=CONNECT_USERNAME,nuxeo.connect_password=CONNECT_PASSWORD
-```
-
-or, using a Nuxeo CLID:
-
-```shell
-helm install nuxeo --name RELEASE_NAME --set nuxeo.packages=nuxeo-web-ui,nuxeo.clid=NUXEO_CLID
+helm install nuxeo --name RELEASE_NAME --set nuxeo.packages=nuxeo-web-ui,nuxeo-drive --set nuxeo.clid=NUXEO_CLID
 ```
 
 In the same way, you can override any subchart value by using the subchart name as a prefix:
@@ -133,6 +127,16 @@ helm upgrade RELEASE_NAME --set nuxeo.persistence.enabled=true nuxeo
 ```shell
 helm delete --purge RELEASE_NAME
 ```
+
+## Parameters
+
+The following tables lists some of the configurable parameters of this chart and their default values. See [values.yaml](nuxeo/values.yaml) for the complete list.
+
+| Parameter                   | Description                             | Default                                 |
+| --------------------------- | --------------------------------------- | --------------------------------------- |
+| `nuxeo.image.repository`    | Nuxeo image name                        | `docker.packages.nuxeo.com/nuxeo/nuxeo` |
+| `nuxeo.image.tag`           | Nuxeo image tag                         | `latest`                                |
+| `nuxeo.persistence.enabled` | Enable persistence of binaries and logs | `false`                                 |
 
 ## Using Minikube
 
