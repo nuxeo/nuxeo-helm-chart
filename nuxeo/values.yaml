@@ -47,7 +47,6 @@ nuxeo:
   elasticsearch:
     clusterName: elasticsearch
     indexName: nuxeo
-    deploy: false
   ingress:
     enabled: false
     annotations:
@@ -57,18 +56,17 @@ nuxeo:
     storageClass: standard
     size:
       binaries: 10Gi
-      tmp: 10Gi
+      log: 10Gi
     annotations: {}
-  ##packages: nuxeo-web-ui
-  custom_params: |-
-    # add any other params that go into nuxeo.conf
-  ## Define the configuration for the env variables referenced in nuxeo.conf
-  ## custom_envs allows to define an env variable from a key of a ConfigMap
-  custom_envs:
-  ## custom_envsFrom allows to load the content of a ConfigMap as environment variables
-  custom_envsFrom:
+  customParams: |-
+    # Custom parameters to be appended to nuxeo.conf
+  ## Custom environment variables to set in the container
+  ## customEnvs allows to define environment variables from a value or a key of a ConfigMap
+  customEnvs:
+  ## customEnvsFrom allows to load the content of a ConfigMap as environment variables
+  customEnvsFrom:
 
-## Values from here can be customized https://github.com/helm/charts/blob/master/stable/mongodb/values.yaml
+## Values overridden from the MongoDB chart: https://github.com/helm/charts/blob/master/stable/mongodb/values.yaml
 mongodb:
   image:
     tag: 4.0.6
@@ -76,7 +74,7 @@ mongodb:
   persistence:
     enabled: false
 
-## Override values for postgresql from https://github.com/helm/charts/blob/master/stable/postgresql/values.yaml
+## Values overridden from the PostgreSQL chart: https://github.com/helm/charts/blob/master/stable/postgresql/values.yaml
 postgresql:
   image:
     tag: 9.6.11
@@ -87,8 +85,8 @@ postgresql:
   persistence:
     enabled: false
 
-## Override values from https://github.com/helm/charts/blob/master/stable/elasticsearch/values.yaml
-## these are for a staging cluster only, but it needs 2 masters anyway
+## Values overridden from the Elasticsearch chart: https://github.com/helm/charts/blob/master/stable/elasticsearch/values.yaml
+## These are for staging only, but it needs 2 masters anyway
 elasticsearch:
   appVersion: "6.2"
   serviceAccounts:
@@ -133,9 +131,8 @@ elasticsearch:
         cpu: 25m
         memory: 1536Mi
 
-## Override values from https://github.com/helm/charts/blob/master/incubator/kafka/values.yaml
-## staging values only, no need for 3 replicas and zoopkeper ( must be 1, 3, kafla needs zookeper)
-## see https://github.com/jenkins-x/jx/issues/2504
+## Values overridden from the Kafka chart: https://github.com/helm/charts/blob/master/incubator/kafka/values.yaml
+## These are for staging only, no need for 3 kafka and zoopkeper replicas
 kafka:
   replicas: 1
   zookeeper:
@@ -152,8 +149,8 @@ kafka:
     cpu: 100m
     memory: 1024Mi
 
-## Override values from https://github.com/helm/charts/blob/master/stable/redis/values.yaml
-## staging values only, no need for a cluster
+## Values overridden from the Redis chart: https://github.com/helm/charts/blob/master/stable/redis/values.yaml
+## These are for staging only, no need for a cluster
 redis:
   cluster:
     enabled: false
@@ -162,13 +159,12 @@ redis:
     persistence:
       enabled: false
 
-## These tags are used to control the deployment of these services.
-## When this chart is deployed directly, to enable any of these pass these tags as true: helm install nuxeo --set tags.mongodb=true
-## When this chart is use as a dependecy in another subchart, than set the variable nuxeo.mongodb.deploy a true
-
+## Tags used to control the deployment of the dependency subcharts when this chart is deployed directly.
+## When this chart is deployed as a dependecy of another chart, these dependencies are controlled by setting values
+## such as `nuxeo.mongodb.deploy` or `nuxeo.elasticsearch.deploy` to `true`.
 tags:
-  mongodb: false
-  redis: false
-  kafka: false
   elasticsearch: false
+  kafka: false
+  mongodb: false
   postgresql: false
+  redis: false

@@ -1,18 +1,4 @@
 dependencies:
-  - name: mongodb
-    version: ~7.2.9
-    repository: https://kubernetes-charts.storage.googleapis.com/
-    condition: nuxeo.mongodb.deploy
-    alias: mongodb
-    tags:
-      - mongodb
-  - name: postgresql
-    version: ~6.3.9
-    repository: https://kubernetes-charts.storage.googleapis.com/
-    condition: nuxeo.postgresql.deploy
-    alias: postgresql
-    tags:
-      - postgresql
   - name: elasticsearch
     version: 1.26.2
     repository: https://kubernetes-charts.storage.googleapis.com/
@@ -27,6 +13,20 @@ dependencies:
     alias: kafka
     tags:
       - kafka
+  - name: mongodb
+    version: ~7.2.9
+    repository: https://kubernetes-charts.storage.googleapis.com/
+    condition: nuxeo.mongodb.deploy
+    alias: mongodb
+    tags:
+      - mongodb
+  - name: postgresql
+    version: ~6.3.9
+    repository: https://kubernetes-charts.storage.googleapis.com/
+    condition: nuxeo.postgresql.deploy
+    alias: postgresql
+    tags:
+      - postgresql
   - name: redis
     version: ~9.1.12
     repository: https://kubernetes-charts.storage.googleapis.com/

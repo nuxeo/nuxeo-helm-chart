@@ -37,7 +37,7 @@ tags:
   postgresql: false  
   elasticsearch: false
   kafka: false
-  redis: false 
+  redis: false
   
 ```
 
@@ -84,16 +84,16 @@ To install the `nuxeo` chart:
 helm install nuxeo --name RELEASE_NAME
 ```
 
-You can override any value of the base [values.yaml](nuxeo/values.yaml) file by creating your own `myvalues.yaml` file and pass it to the `install` command:
+You can override any value of the base [values.yaml](nuxeo/values.yaml) file by creating your own `myvalues.yaml` file and pass it to the `helm install` command:
 
 ```shell
 helm install nuxeo --name RELEASE_NAME -f myvalues.yaml
 ```
 
-You can also pass values directly to the `install` command:
+You can also pass values directly to the `helm install` command:
 
 ```shell
-helm install nuxeo --name RELEASE_NAME --set nuxeo.image.tag=10.3
+helm install nuxeo --name RELEASE_NAME --set nuxeo.image.tag=x.y.z
 ```
 
 For example, to register the instance and deploy some custom packages:

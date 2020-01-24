@@ -26,7 +26,7 @@ spec:
       storage: {{ .Values.nuxeo.persistence.size.binaries | quote }}
 {{- end }}
 ---
-{{- if .Values.nuxeo.persistence.size.tmp }}
+{{- if .Values.nuxeo.persistence.size.log }}
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
@@ -50,6 +50,6 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: {{ .Values.nuxeo.persistence.size.tmp | quote }}
+      storage: {{ .Values.nuxeo.persistence.size.log | quote }}
 {{- end }}
 {{- end }}
