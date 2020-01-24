@@ -28,32 +28,72 @@ void setGitHubBuildStatus(String context, String message, String state) {
   ])
 }
 
-void buildAndRelease() {
-  sh """
-    echo 'Build Helm chart'
-    jx step helm build
-    echo 'Release Helm chart'
-    jx step helm release
-  """
+String getPRVersion() {
+  // get the current chart version and append PR specific versioning
+  String version = sh(returnStdout: true, script: "grep version ${CHART_NAME}/Chart.yaml | awk '{print \$2}'").trim()
+  return version + "-${BRANCH_NAME}-${BUILD_NUMBER}"
 }
+
+String getNextVersion() {
+  // read the VERSION file written by 'jx step next-version'
+  return sh(returnStdout: true, script: 'head -n 1 VERSION')
+}
+
+def nextVersion
 
 pipeline {
   agent {
     label "jenkins-jx-base"
   }
   environment {
-    CHARTMUSEUM_CREDS = credentials('jenkins-x-chartmuseum')
+    CHART_NAME = 'nuxeo'
+    CHART_REPOSITORY = 'http://jenkins-x-chartmuseum:8080'
   }
   stages {
     stage('Helm release') {
-      when {
-        branch 'master'
-      }
       steps {
         setGitHubBuildStatus('helm-release', 'Build and release Helm chart', 'PENDING')
         container('jx-base') {
-          dir('nuxeo') {
-            buildAndRelease()
+          script {
+            if (BRANCH_NAME == 'master') {
+              // Update chart version to the next semantic version.
+              // This also:
+              //   - Adds a release commit that is pushed to master by the next stage.
+              //     That's why we need to locally checkout the master branch first since we're on a detached head.
+              //   - Writes a VERSION file that is read to upload the chart package and create a Git tag in the next stage.
+              sh """
+                git checkout master
+                jx step next-version --dir=${CHART_NAME} --filename=Chart.yaml
+              """
+            } else {
+              // Update chart version to a PR version.
+              sh "jx step next-version --dir=${CHART_NAME} --filename=Chart.yaml --version=${getPRVersion()}"
+            }
+            nextVersion = getNextVersion()
+          }
+          dir(CHART_NAME) {
+            // Unfortunately, 'jx step helm build' and 'jx step helm release' sometimes fail with an obscure error:
+            // "error: failed to build the dependencies of chart '.': failed to run 'helm dependency build' command in directory '.', ..."
+            // Let's use helm directly to update the dependencies and package the chart, then the ChartMuseum API to upload the package.
+            withCredentials([usernameColonPassword(credentialsId: 'jenkins-x-chartmuseum', variable: 'CHARTMUSEUM_AUTH')]) {
+              sh """
+                # initialize Helm
+                helm init --client-only --service-account jenkins
+
+                # add repositories
+                helm repo add kubernetes-charts https://kubernetes-charts.storage.googleapis.com/
+                helm repo add kubernetes-charts-incubator http://storage.googleapis.com/kubernetes-charts-incubator
+
+                # update dependencies
+                helm dependency update
+
+                # package chart
+                helm package .
+
+                # upload package to the ChartMuseum
+                curl --fail -u '${CHARTMUSEUM_AUTH}' --data-binary '@${CHART_NAME}-${nextVersion}.tgz' ${CHART_REPOSITORY}/api/charts
+              """
+            }
           }
         }
       }
@@ -63,6 +103,39 @@ pipeline {
         }
         failure {
           setGitHubBuildStatus('helm-release', 'Build and release Helm chart', 'FAILURE')
+        }
+      }
+    }
+    stage('GitHub release') {
+      when {
+        branch 'master'
+      }
+      steps {
+        setGitHubBuildStatus('github-release', 'GitHub release', 'PENDING')
+        container('jx-base') {
+          sh """
+            # create the Git credentials
+            jx step git credentials
+            git config credential.helper store
+
+            # push release commit added by the revious stage to master
+            git push origin master:master
+
+            # Git tag
+            git tag ${nextVersion}
+            git push --tags
+          """
+        }
+      }
+      post {
+        always {
+          step([$class: 'JiraIssueUpdater', issueSelector: [$class: 'DefaultIssueSelector'], scm: scm])
+        }
+        success {
+          setGitHubBuildStatus('github-release', 'GitHub release', 'SUCCESS')
+        }
+        failure {
+          setGitHubBuildStatus('github-release', 'GitHub release', 'FAILURE')
         }
       }
     }
