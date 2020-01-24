@@ -54,13 +54,3 @@ data:
 {{- if .Values.nuxeo.customParams }}
 {{ .Values.nuxeo.customParams | indent 4 }}
 {{- end }}
-  init.sh: |
-    #!/bin/sh
-    echo $NUXEO_CONNECT_USERNAME;
-    if [ ! -f $NUXEO_DATA/instance.clid -a -f /opt/nuxeo/connect/connect.properties ]; then
-      . /opt/nuxeo/connect/connect.properties
-      if [ -n "$NUXEO_CONNECT_USERNAME" -a -n "$NUXEO_CONNECT_PASSWORD" -a -n "$NUXEO_STUDIO_PROJECT" ]; then
-        echo "---> Registering instance on connect"
-        nuxeoctl register $NUXEO_CONNECT_USERNAME $NUXEO_STUDIO_PROJECT dev helm $NUXEO_CONNECT_PASSWORD
-      fi
-    fi

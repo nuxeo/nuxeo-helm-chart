@@ -72,13 +72,11 @@ spec:
 {{- end }}
         volumeMounts:
           - name: nuxeoconf
-            mountPath: /docker-entrypoint-initnuxeo.d/
-          - name: connect-secret
-            mountPath: /opt/nuxeo/connect/
+            mountPath: /etc/nuxeo/conf.d/
+          - name: binaries
+            mountPath: /var/lib/nuxeo/binaries
           - name: log
             mountPath: /var/log/nuxeo
-          - name: binaries
-            mountPath: /binaries
       initContainers:
 {{- if or .Values.elasticsearch.deploy .Values.tags.elasticsearch }}
       - name: init-elasticsearch
@@ -106,9 +104,6 @@ spec:
       - name: nuxeoconf
         configMap:
           name: {{ template "nuxeo.fullname" . }}-conf
-      - name: connect-secret
-        secret:
-          secretName: {{ template "nuxeo.fullname" . }}-connect
       - name: binaries
         {{- if .Values.nuxeo.persistence.enabled }}
         persistentVolumeClaim:
