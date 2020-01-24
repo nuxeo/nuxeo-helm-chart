@@ -51,8 +51,8 @@ data:
     nuxeo.work.queuing=redis
     nuxeo.redis.enabled=true
 {{- end }}
-{{- if .Values.nuxeo.custom_params }}
-{{ .Values.nuxeo.custom_params | indent 4 }}
+{{- if .Values.nuxeo.customParams }}
+{{ .Values.nuxeo.customParams | indent 4 }}
 {{- end }}
   init.sh: |
     #!/bin/sh

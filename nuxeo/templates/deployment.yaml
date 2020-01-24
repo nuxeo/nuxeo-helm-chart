@@ -63,12 +63,12 @@ spec:
 {{- end }}
         - name: NUXEO_PACKAGES
           value: {{ .Values.nuxeo.packages }}
-{{- if .Values.nuxeo.custom_envs }}
-{{ toYaml .Values.nuxeo.custom_envs | indent 8 }}
+{{- if .Values.nuxeo.customEnvs }}
+{{ toYaml .Values.nuxeo.customEnvs | indent 8 }}
 {{- end }}
         envFrom:
-{{- if .Values.nuxeo.custom_envsFrom }}
-{{ toYaml .Values.nuxeo.custom_envsFrom | indent 8 }}
+{{- if .Values.nuxeo.customEnvsFrom }}
+{{ toYaml .Values.nuxeo.customEnvsFrom | indent 8 }}
 {{- end }}
         volumeMounts:
           - name: nuxeoconf
