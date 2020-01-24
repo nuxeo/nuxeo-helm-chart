@@ -204,3 +204,15 @@ helm install \
 ```
 
 Nuxeo will be exposed on `http://$MINIKUBE IP/`.
+
+## Versioning and Releasing
+
+When a pull request is merged to master:
+
+- The [patch version](nuxeo/Chart.yaml#L4) of the chart is automatically incremented.
+- The chart is released to the [Jenkins X ChartMuseum](http://chartmuseum.jenkins-x.io/index.yaml).
+- A GitHub [tag](https://github.com/nuxeo/nuxeo-helm-chart/tags) is created.
+
+See the [Jenkinsfile](Jenkinsfile) for more details.
+
+The major and minor versions can be incremented manually.
