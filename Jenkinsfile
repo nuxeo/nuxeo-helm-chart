@@ -50,6 +50,23 @@ pipeline {
     CHART_REPOSITORY = 'http://jenkins-x-chartmuseum:8080'
   }
   stages {
+    //  abort if the build is triggered by the release commit push to master, see the 'GitHub release' stage
+    stage('Abort release build') {
+      when {
+        expression {
+          return sh(returnStdout: true, script: 'git log -1 --pretty=%B | head -n 1').startsWith('release')
+        }
+      }
+      steps {
+        container('jx-base') {
+          script {
+            currentBuild.result = 'ABORTED';
+            currentBuild.description = 'Build triggered from a release commit, aborting.'
+            error(currentBuild.description)
+          }
+        }
+      }
+    }
     stage('Helm release') {
       steps {
         setGitHubBuildStatus('helm-release', 'Build and release Helm chart', 'PENDING')
