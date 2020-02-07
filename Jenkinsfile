@@ -157,20 +157,27 @@ pipeline {
         branch 'master'
       }
       steps {
-        setGitHubBuildStatus('github-release', 'GitHub release', 'PENDING')
         container('jx-base') {
-          sh """
-            # create the Git credentials
-            jx step git credentials
-            git config credential.helper store
+          script {
+            def currentNamespace = sh(returnStdout: true, script: "jx --batch-mode ns | cut -d\\' -f2").trim()
+            if (currentNamespace == 'platform-staging') {
+              echo "Running in namespace ${currentNamespace}, skip GitHub release stage."
+              return
+            }
+            setGitHubBuildStatus('github-release', 'GitHub release', 'PENDING')
+            sh """
+              # create the Git credentials
+              jx step git credentials
+              git config credential.helper store
 
-            # push release commit added by the revious stage to master
-            git push origin master:master
+              # push release commit added by the revious stage to master
+              git push origin master:master
 
-            # Git tag
-            git tag ${nextVersion}
-            git push --tags
-          """
+              # Git tag
+              git tag ${nextVersion}
+              git push --tags
+            """
+          }
         }
       }
       post {
