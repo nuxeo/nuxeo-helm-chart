@@ -48,6 +48,10 @@ pipeline {
   environment {
     CHART_NAME = 'nuxeo'
     CHART_REPOSITORY = 'http://jenkins-x-chartmuseum:8080'
+    TEST_NAMESPACE = "nuxeo-helm-chart-${BRANCH_NAME}-${BUILD_NUMBER}".toLowerCase()
+    TEST_RELEASE = 'test-release'
+    TEST_K8S_RESSOURCE = "${TEST_RELEASE}-${CHART_NAME}"
+    TEST_SERVICE_DOMAIN = "${TEST_K8S_RESSOURCE}.${TEST_NAMESPACE}.svc.cluster.local"
   }
   stages {
     //  abort if the build is triggered by the release commit push to master, see the 'GitHub release' stage
@@ -88,28 +92,44 @@ pipeline {
             }
             nextVersion = getNextVersion()
           }
-          dir(CHART_NAME) {
-            // Unfortunately, 'jx step helm build' and 'jx step helm release' sometimes fail with an obscure error:
-            // "error: failed to build the dependencies of chart '.': failed to run 'helm dependency build' command in directory '.', ..."
-            // Let's use helm directly to update the dependencies and package the chart, then the ChartMuseum API to upload the package.
-            withCredentials([usernameColonPassword(credentialsId: 'jenkins-x-chartmuseum', variable: 'CHARTMUSEUM_AUTH')]) {
+          // Unfortunately, 'jx step helm build' and 'jx step helm release' sometimes fail with an obscure error:
+          // "error: failed to build the dependencies of chart '.': failed to run 'helm dependency build' command in directory '.', ..."
+          // Let's use helm directly to update the dependencies and package the chart, then the ChartMuseum API to upload the package.
+          withCredentials([usernameColonPassword(credentialsId: 'jenkins-x-chartmuseum', variable: 'CHARTMUSEUM_AUTH')]) {
+            script {
+              // initialize Helm and package chart
               sh """
-                # initialize Helm
                 helm init --client-only --service-account jenkins
 
-                # add repositories
                 helm repo add kubernetes-charts https://kubernetes-charts.storage.googleapis.com/
                 helm repo add kubernetes-charts-incubator http://storage.googleapis.com/kubernetes-charts-incubator
 
-                # update dependencies
-                helm dependency update
+                helm dependency update ${CHART_NAME}
 
-                # package chart
-                helm package .
-
-                # upload package to the ChartMuseum
-                curl --fail -u '${CHARTMUSEUM_AUTH}' --data-binary '@${CHART_NAME}-${nextVersion}.tgz' ${CHART_REPOSITORY}/api/charts
+                helm package ${CHART_NAME}
               """
+
+              // install the chart into a test namespace that will be cleaned up afterwards
+              sh """
+                jx step helm install ${CHART_NAME} \
+                  --name ${TEST_RELEASE} \
+                  --namespace ${TEST_NAMESPACE} \
+                  --set nuxeo.image.tag=11.1-SNAPSHOT # TODO remove when NXP-28504 is done and the latest tag (default) is available
+              """
+
+              // check deployment status, exits if not OK
+              sh "kubectl rollout status deployment ${TEST_K8S_RESSOURCE} --namespace ${TEST_NAMESPACE}"
+
+              // check running status
+              def runningStatus = sh(returnStatus: true, script: "./running-status.sh http://${TEST_SERVICE_DOMAIN}/nuxeo")
+              if (runningStatus != 0) {
+                currentBuild.result = 'FAILURE';
+                currentBuild.description = "Running status is not OK."
+                error(currentBuild.description)
+              }
+
+              // upload package to the ChartMuseum
+              sh "curl --fail -u '${CHARTMUSEUM_AUTH}' --data-binary '@${CHART_NAME}-${nextVersion}.tgz' ${CHART_REPOSITORY}/api/charts"
             }
           }
         }
