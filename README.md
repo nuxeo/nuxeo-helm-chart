@@ -70,6 +70,20 @@ nuxeo:
     deploy: true
 ```
 
+### How to Install Dependencies Without Nuxeo
+
+To install some dependency subcharts, e.g. `mongodb` and `elasticsearch`, without installing Nuxeo:
+
+```yaml
+nuxeo:
+  enable: false
+tags:
+  mongodb: true
+  elasticsearch: true
+```
+
+This is useful to run the nuxeo unit tests in an production-like environment.
+
 ## Installing the Chart
 
 If you enable some dependencies, make sure you download the related charts before:
@@ -134,6 +148,7 @@ The following tables lists some of the configurable parameters of this chart and
 
 | Parameter                   | Description                             | Default                                 |
 | --------------------------- | --------------------------------------- | --------------------------------------- |
+| `nuxeo.enable`              | Enable Nuxeo                            | `true`                                  |
 | `nuxeo.image.repository`    | Nuxeo image name                        | `docker.packages.nuxeo.com/nuxeo/nuxeo` |
 | `nuxeo.image.tag`           | Nuxeo image tag                         | `latest`                                |
 | `nuxeo.persistence.enabled` | Enable persistence of binaries and logs | `false`                                 |
