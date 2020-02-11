@@ -1,4 +1,4 @@
-{{- if .Values.nuxeo.mongodb.backup.enable }}
+{{- if and .Values.nuxeo.enable .Values.nuxeo.mongodb.backup.enable }}
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:

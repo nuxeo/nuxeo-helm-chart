@@ -1,4 +1,5 @@
 nuxeo:
+  enable: true
   image:
     repository: docker.packages.nuxeo.com/nuxeo/nuxeo
     tag: latest

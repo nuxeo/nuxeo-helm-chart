@@ -1,3 +1,4 @@
+{{- if .Values.nuxeo.enable }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -53,4 +54,5 @@ data:
 {{- end }}
 {{- if .Values.nuxeo.customParams }}
 {{ .Values.nuxeo.customParams | indent 4 }}
+{{- end }}
 {{- end }}

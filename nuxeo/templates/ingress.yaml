@@ -1,4 +1,4 @@
-{{- if .Values.nuxeo.ingress.enabled -}}
+{{- if and .Values.nuxeo.enabled .Values.nuxeo.ingress.enabled -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
