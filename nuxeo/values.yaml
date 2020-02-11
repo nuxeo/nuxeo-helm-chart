@@ -1,4 +1,5 @@
 nuxeo:
+  enable: true
   image:
     repository: nuxeo/nuxeo
     tag: master

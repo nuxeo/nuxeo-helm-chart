@@ -1,4 +1,4 @@
-{{- if .Values.nuxeo.persistence.enabled }}
+{{- if and .Values.nuxeo.enable .Values.nuxeo.persistence.enabled }}
 {{- if .Values.nuxeo.persistence.size.binaries }}
 kind: PersistentVolumeClaim
 apiVersion: v1

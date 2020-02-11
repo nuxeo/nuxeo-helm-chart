@@ -1,3 +1,4 @@
+{{- if .Values.nuxeo.enable }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -67,3 +68,4 @@ data:
         nuxeoctl register $NUXEO_CONNECT_USERNAME $NUXEO_STUDIO_PROJECT dev helm $NUXEO_CONNECT_PASSWORD
       fi
     fi
+{{- end }}
