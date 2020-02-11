@@ -99,7 +99,7 @@ pipeline {
             script {
               // initialize Helm and package chart
               sh """
-                helm init --client-only --service-account jenkins
+                helm init --client-only
 
                 helm repo add kubernetes-charts https://kubernetes-charts.storage.googleapis.com/
                 helm repo add kubernetes-charts-incubator http://storage.googleapis.com/kubernetes-charts-incubator
