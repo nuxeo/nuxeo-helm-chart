@@ -137,10 +137,13 @@ pipeline {
       post {
         always {
           container('jx-base') {
+            // uninstall the chart
+            sh """
+              jx step helm delete ${TEST_RELEASE} \
+                --namespace ${TEST_NAMESPACE} \
+                --purge
+            """
             // clean up the test namespace
-            echo "To prevent namespace deletion stuck in Terminating state, remove the \"kubernetes\" finalizer before deleting the namespace."
-            sh "kubectl get namespace ${TEST_NAMESPACE} -o json | sed -e s/\\\"kubernetes\\\"//g | kubectl replace --raw /api/v1/namespaces/${TEST_NAMESPACE}/finalize -f -"
-            echo "Delete namespace ${TEST_NAMESPACE}"
             sh "kubectl delete namespace ${TEST_NAMESPACE} --ignore-not-found=true"
           }
         }
