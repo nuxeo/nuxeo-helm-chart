@@ -70,7 +70,7 @@ nuxeo:
 ## Values overridden from the MongoDB chart: https://github.com/helm/charts/blob/master/stable/mongodb/values.yaml
 mongodb:
   image:
-    tag: 4.0.6
+    tag: 4.0.16
   usePassword: false
   persistence:
     enabled: false
@@ -78,7 +78,7 @@ mongodb:
 ## Values overridden from the PostgreSQL chart: https://github.com/helm/charts/blob/master/stable/postgresql/values.yaml
 postgresql:
   image:
-    tag: 9.6.11
+    tag: 11.7
   initdbScripts:
     db-init.sql: |
       CREATE ROLE nuxeo WITH PASSWORD 'nuxeo' LOGIN;
@@ -153,6 +153,8 @@ kafka:
 ## Values overridden from the Redis chart: https://github.com/helm/charts/blob/master/stable/redis/values.yaml
 ## These are for staging only, no need for a cluster
 redis:
+  image:
+    tag: 5.0.7
   cluster:
     enabled: false
   usePassword: false
