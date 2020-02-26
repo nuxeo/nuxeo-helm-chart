@@ -112,13 +112,13 @@ pipeline {
               // install the chart into a test namespace that will be cleaned up afterwards
               sh """
                 jx step helm install ${CHART_NAME} \
-                  --name ${TEST_RELEASE} \
-                  --namespace ${TEST_NAMESPACE} \
-                  --set nuxeo.image.tag=11.1-SNAPSHOT # TODO remove when NXP-28504 is done and the latest tag (default) is available
+                  --name=${TEST_RELEASE} \
+                  --namespace=${TEST_NAMESPACE} \
+                  --set=nuxeo.image.tag=11.1-SNAPSHOT # TODO remove when NXP-28504 is done and the latest tag (default) is available
               """
 
               // check deployment status, exits if not OK
-              sh "kubectl rollout status deployment ${TEST_K8S_RESSOURCE} --namespace ${TEST_NAMESPACE}"
+              sh "kubectl rollout status deployment ${TEST_K8S_RESSOURCE} --namespace=${TEST_NAMESPACE}"
 
               // check running status
               def runningStatus = sh(returnStatus: true, script: "./running-status.sh http://${TEST_SERVICE_DOMAIN}/nuxeo")
@@ -140,7 +140,7 @@ pipeline {
             // uninstall the chart
             sh """
               jx step helm delete ${TEST_RELEASE} \
-                --namespace ${TEST_NAMESPACE} \
+                --namespace=${TEST_NAMESPACE} \
                 --purge
             """
             // clean up the test namespace
