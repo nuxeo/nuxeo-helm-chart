@@ -52,6 +52,7 @@ pipeline {
     TEST_RELEASE = 'test-release'
     TEST_K8S_RESSOURCE = "${TEST_RELEASE}-${CHART_NAME}"
     TEST_SERVICE_DOMAIN = "${TEST_K8S_RESSOURCE}.${TEST_NAMESPACE}.svc.cluster.local"
+    TEST_ROLLOUT_STATUS_TIMEOUT = '5m'
   }
   stages {
     //  abort if the build is triggered by the release commit push to master, see the 'GitHub release' stage
@@ -118,7 +119,11 @@ pipeline {
               """
 
               // check deployment status, exits if not OK
-              sh "kubectl rollout status deployment ${TEST_K8S_RESSOURCE} --namespace=${TEST_NAMESPACE}"
+              sh """
+                kubectl rollout status deployment ${TEST_K8S_RESSOURCE} \
+                  --namespace=${TEST_NAMESPACE} \
+                  --timeout=${TEST_ROLLOUT_STATUS_TIMEOUT}
+              """
 
               // check running status
               def runningStatus = sh(returnStatus: true, script: "./running-status.sh http://${TEST_SERVICE_DOMAIN}/nuxeo")
