@@ -70,7 +70,7 @@ nuxeo:
 ## Values overridden from the MongoDB chart: https://github.com/helm/charts/blob/master/stable/mongodb/values.yaml
 mongodb:
   image:
-    tag: 4.0.16
+    tag: 4.2.3
   usePassword: false
   persistence:
     enabled: false
@@ -78,7 +78,7 @@ mongodb:
 ## Values overridden from the PostgreSQL chart: https://github.com/helm/charts/blob/master/stable/postgresql/values.yaml
 postgresql:
   image:
-    tag: 11.7
+    tag: 11.7.0
   initdbScripts:
     db-init.sql: |
       CREATE ROLE nuxeo WITH PASSWORD 'nuxeo' LOGIN;
