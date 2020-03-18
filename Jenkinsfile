@@ -28,13 +28,8 @@ void setGitHubBuildStatus(String context, String message, String state) {
   ])
 }
 
-void buildAndRelease() {
-  sh """
-    echo 'Build Helm chart'
-    jx step helm build
-    echo 'Release Helm chart'
-    jx step helm release
-  """
+String getVersion() {
+  return sh(returnStdout: true, script: "grep version Chart.yaml | awk '{print \$2}'").trim()
 }
 
 pipeline {
@@ -42,18 +37,29 @@ pipeline {
     label "jenkins-jx-base"
   }
   environment {
-    CHARTMUSEUM_CREDS = credentials('jenkins-x-chartmuseum')
+    CHART_REPOSITORY = 'http://jenkins-x-chartmuseum:8080'
   }
   stages {
     stage('Helm release') {
       when {
-        branch 'master'
+        branch '0.2.x'
       }
       steps {
         setGitHubBuildStatus('helm-release', 'Build and release Helm chart', 'PENDING')
         container('jx-base') {
           dir('nuxeo') {
-            buildAndRelease()
+            withCredentials([usernameColonPassword(credentialsId: 'jenkins-x-chartmuseum', variable: 'CHARTMUSEUM_AUTH')]) {
+              sh """
+                echo 'Build Helm chart'
+                helm init --client-only
+                helm repo add kubernetes-charts https://kubernetes-charts.storage.googleapis.com/
+                helm repo add kubernetes-charts-incubator http://storage.googleapis.com/kubernetes-charts-incubator
+                helm dependency update .
+                helm package .
+                echo 'Release Helm chart'
+                curl --fail -u '${CHARTMUSEUM_AUTH}' --data-binary '@nuxeo-${getVersion()}.tgz' ${CHART_REPOSITORY}/api/charts
+              """
+            }
           }
         }
       }
