@@ -87,9 +87,13 @@ postgresql:
     enabled: false
 
 ## Values overridden from the Elasticsearch chart: https://github.com/helm/charts/blob/master/stable/elasticsearch/values.yaml
-## These are for staging only, but it needs 2 masters anyway
+## These are for staging only
 elasticsearch:
-  appVersion: "6.2"
+  image:
+    tag: "6.8.6"
+  cluster:
+    env:
+      MINIMUM_MASTER_NODES: "1"
   serviceAccounts:
     client:
       create: false
@@ -110,7 +114,7 @@ elasticsearch:
         cpu: 25m
         memory: 512Mi
   master:
-    replicas: 2
+    replicas: 1
     persistence:
       enabled: false
     resources:
