@@ -74,6 +74,13 @@ mongodb:
   usePassword: false
   persistence:
     enabled: false
+  resources:
+    requests:
+      cpu: 250m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
 
 ## Values overridden from the PostgreSQL chart: https://github.com/helm/charts/blob/master/stable/postgresql/values.yaml
 postgresql:
@@ -85,6 +92,13 @@ postgresql:
       CREATE DATABASE nuxeo ENCODING 'UTF8' OWNER nuxeo;
   persistence:
     enabled: false
+  resources:
+    requests:
+      cpu: 250m
+      memory: 256Mi
+    limits:
+      cpu: 1
+      memory: 512Mi
 
 ## Values overridden from the Elasticsearch chart: https://github.com/helm/charts/blob/master/stable/elasticsearch/values.yaml
 ## These are for staging only
@@ -108,7 +122,7 @@ elasticsearch:
     replicas: 1
     resources:
       requests:
-        cpu: 25m
+        cpu: 250m
         memory: 512Mi
       limits:
         cpu: 1
@@ -119,7 +133,7 @@ elasticsearch:
       enabled: false
     resources:
       requests:
-        cpu: 25m
+        cpu: 250m
         memory: 512Mi
       limits:
         cpu: 1
@@ -130,7 +144,7 @@ elasticsearch:
       enabled: false
     resources:
       requests:
-        cpu: 25m
+        cpu: 250m
         memory: 1536Mi
       limits:
         cpu: 1
@@ -166,6 +180,13 @@ redis:
   master:
     persistence:
       enabled: false
+    resources:
+      requests:
+        cpu: 100m
+        memory: 16Mi
+      limits:
+        cpu: 200m
+        memory: 64Mi
 
 ## Tags used to control the deployment of the dependency subcharts when this chart is deployed directly.
 ## When this chart is deployed as a dependecy of another chart, these dependencies are controlled by setting values
