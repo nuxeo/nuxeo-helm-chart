@@ -7,11 +7,11 @@ nuxeo:
   replicaCount: 1
   resources:
     requests:
-      memory: 1Gi
       cpu: 0.4
+      memory: 1Gi
     limits:
-      memory: 2Gi
       cpu: 1
+      memory: 2Gi
   service:
     type: ClusterIP
     externalPort: 80
@@ -70,7 +70,7 @@ nuxeo:
 ## Values overridden from the MongoDB chart: https://github.com/helm/charts/blob/master/stable/mongodb/values.yaml
 mongodb:
   image:
-    tag: 4.2.3
+    tag: "4.2.3"
   usePassword: false
   persistence:
     enabled: false
@@ -78,7 +78,7 @@ mongodb:
 ## Values overridden from the PostgreSQL chart: https://github.com/helm/charts/blob/master/stable/postgresql/values.yaml
 postgresql:
   image:
-    tag: 11.7.0
+    tag: "11.7.0"
   initdbScripts:
     db-init.sql: |
       CREATE ROLE nuxeo WITH PASSWORD 'nuxeo' LOGIN;
@@ -107,34 +107,34 @@ elasticsearch:
   client:
     replicas: 1
     resources:
-      limits:
-        cpu: 1
-        memory: 1024Mi
       requests:
         cpu: 25m
         memory: 512Mi
+      limits:
+        cpu: 1
+        memory: 1024Mi
   master:
     replicas: 1
     persistence:
       enabled: false
     resources:
-      limits:
-        cpu: 1
-        memory: 1024Mi
       requests:
         cpu: 25m
         memory: 512Mi
+      limits:
+        cpu: 1
+        memory: 1024Mi
   data:
     replicas: 1
     persistence:
       enabled: false
     resources:
-      limits:
-        cpu: 1
-        memory: 2048Mi
       requests:
         cpu: 25m
         memory: 1536Mi
+      limits:
+        cpu: 1
+        memory: 2048Mi
 
 ## Values overridden from the Kafka chart: https://github.com/helm/charts/blob/master/incubator/kafka/values.yaml
 ## These are for staging only, no need for 3 kafka and zoopkeper replicas
@@ -147,18 +147,19 @@ kafka:
   prometheus:
     operator:
       enabled: false
-  limits:
-    cpu: 200m
-    memory: 1536Mi
   requests:
     cpu: 100m
     memory: 1024Mi
+  limits:
+    cpu: 200m
+    memory: 1536Mi
+
 
 ## Values overridden from the Redis chart: https://github.com/helm/charts/blob/master/stable/redis/values.yaml
 ## These are for staging only, no need for a cluster
 redis:
   image:
-    tag: 5.0.7
+    tag: "5.0.7"
   cluster:
     enabled: false
   usePassword: false
