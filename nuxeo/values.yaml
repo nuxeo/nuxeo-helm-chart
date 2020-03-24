@@ -76,11 +76,11 @@ mongodb:
     enabled: false
   resources:
     requests:
-      cpu: 250m
-      memory: 256Mi
+      cpu: 1
+      memory: 1Gi
     limits:
-      cpu: 500m
-      memory: 512Mi
+      cpu: 2
+      memory: 2Gi
 
 ## Values overridden from the PostgreSQL chart: https://github.com/helm/charts/blob/master/stable/postgresql/values.yaml
 postgresql:
@@ -94,11 +94,11 @@ postgresql:
     enabled: false
   resources:
     requests:
-      cpu: 250m
-      memory: 256Mi
-    limits:
       cpu: 1
-      memory: 512Mi
+      memory: 1Gi
+    limits:
+      cpu: 2
+      memory: 2Gi
 
 ## Values overridden from the Elasticsearch chart: https://github.com/helm/charts/blob/master/stable/elasticsearch/values.yaml
 ## These are for staging only
