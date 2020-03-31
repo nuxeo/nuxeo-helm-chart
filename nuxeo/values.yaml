@@ -3,7 +3,6 @@ nuxeo:
   image:
     repository: docker.packages.nuxeo.com/nuxeo/nuxeo
     tag: latest
-    pullPolicy: Always
   replicaCount: 1
   resources:
     requests:

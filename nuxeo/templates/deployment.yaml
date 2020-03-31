@@ -35,7 +35,9 @@ spec:
             memory: "{{ .Values.nuxeo.resources.limits.memory }}"
             cpu: "{{ .Values.nuxeo.resources.limits.cpu }}"
         image: "{{ .Values.nuxeo.image.repository }}:{{ .Values.nuxeo.image.tag }}"
+{{- if .Values.nuxeo.image.pullPolicy }}
         imagePullPolicy: {{ .Values.nuxeo.image.pullPolicy }}
+{{- end}}
         ports:
         - containerPort: {{ .Values.nuxeo.service.internalPort }}
         livenessProbe:
