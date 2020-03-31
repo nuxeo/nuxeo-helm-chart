@@ -108,6 +108,8 @@ elasticsearch:
   cluster:
     env:
       MINIMUM_MASTER_NODES: "1"
+      EXPECTED_MASTER_NODES: "1"
+      RECOVER_AFTER_MASTER_NODES: "1"
   serviceAccounts:
     client:
       create: false
