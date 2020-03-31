@@ -2,7 +2,6 @@ nuxeo:
   image:
     repository: nuxeo/nuxeo
     tag: master
-    pullPolicy: Always
   replicaCount: 1
   resources:
     requests:
