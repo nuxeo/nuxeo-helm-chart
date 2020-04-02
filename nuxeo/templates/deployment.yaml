@@ -25,6 +25,10 @@ spec:
 {{ toYaml .Values.nuxeo.podAnnotations | indent 8 }}
 {{- end }}
     spec:
+{{- if .Values.nuxeo.image.pullSecrets }}
+      imagePullSecrets:
+      - name: {{ .Values.nuxeo.image.pullSecrets }}
+{{- end }}
       containers:
       - name: {{ .Chart.Name }}
         resources:
