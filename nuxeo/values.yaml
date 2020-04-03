@@ -158,21 +158,26 @@ elasticsearch:
 ## Values overridden from the Kafka chart: https://github.com/helm/charts/blob/master/incubator/kafka/values.yaml
 ## These are for staging only, no need for 3 kafka and zoopkeper replicas
 kafka:
+  updateStrategy:
+    type: RollingUpdate # By default set to "OnDelete", the legacy behavior
+  imageTag: "5.4.1"
   replicas: 1
   zookeeper:
+    image:
+      tag: "3.6.0"
     replicaCount: 1
   persistence:
     enabled: false
   prometheus:
     operator:
       enabled: false
-  requests:
-    cpu: 100m
-    memory: 1024Mi
-  limits:
-    cpu: 200m
-    memory: 1536Mi
-
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1024Mi
+    limits:
+      cpu: 1
+      memory: 1536Mi
 
 ## Values overridden from the Redis chart: https://github.com/helm/charts/blob/master/stable/redis/values.yaml
 ## These are for staging only, no need for a cluster
