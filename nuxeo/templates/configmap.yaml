@@ -32,6 +32,9 @@ data:
     elasticsearch.clusterName={{ .Values.nuxeo.elasticsearch.clusterName }}
     elasticsearch.addressList=http://{{ .Release.Name }}-elasticsearch-client:9200
     elasticsearch.indexName={{ .Values.nuxeo.elasticsearch.indexName }}
+    elasticsearch.indexNumberOfReplicas={{ .Values.nuxeo.elasticsearch.indexNumberOfReplicas }}
+    elasticsearch.restClient.socketTimeoutMs={{ .Values.nuxeo.elasticsearch.restClient.socketTimeoutMs }}
+    elasticsearch.restClient.connectionTimeoutMs={{ .Values.nuxeo.elasticsearch.restClient.connectionTimeoutMs }}
 {{- end }}
 {{- if or .Values.kafka.deploy .Values.tags.kafka}}
     kafka.enabled=true
