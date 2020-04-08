@@ -90,6 +90,11 @@ postgresql:
 ## these are for a staging cluster only, but it needs 2 masters anyway
 elasticsearch:
   appVersion: "6.2"
+  cluster:
+    env:
+      MINIMUM_MASTER_NODES: "1"
+      EXPECTED_MASTER_NODES: "1"
+      RECOVER_AFTER_MASTER_NODES: "1"
   serviceAccounts:
     client:
       create: false
@@ -110,7 +115,7 @@ elasticsearch:
         cpu: 25m
         memory: 512Mi
   master:
-    replicas: 2
+    replicas: 1
     persistence:
       enabled: false
     resources:
