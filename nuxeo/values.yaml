@@ -47,6 +47,7 @@ nuxeo:
   elasticsearch:
     clusterName: elasticsearch
     indexName: nuxeo
+    indexNumberOfReplicas: 0
   ingress:
     enabled: false
     annotations:
