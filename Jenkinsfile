@@ -42,7 +42,7 @@ pipeline {
   stages {
     stage('Helm release') {
       when {
-        branch '0.2.x'
+        branch '0.x'
       }
       steps {
         setGitHubBuildStatus('helm-release', 'Build and release Helm chart', 'PENDING')
