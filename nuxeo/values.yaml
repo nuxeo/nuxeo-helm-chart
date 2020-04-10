@@ -48,6 +48,9 @@ nuxeo:
     indexName: nuxeo
     deploy: false
     indexNumberOfReplicas: 0
+    restClient:
+      socketTimeoutMs: 300000
+      connectionTimeoutMs: 300000
   ingress:
     enabled: false
     annotations:
