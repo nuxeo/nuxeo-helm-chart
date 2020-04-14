@@ -3,7 +3,6 @@ nuxeo:
   image:
     repository: docker.packages.nuxeo.com/nuxeo/nuxeo
     tag: latest
-    pullPolicy: Always
   replicaCount: 1
   resources:
     requests:
@@ -48,6 +47,10 @@ nuxeo:
   elasticsearch:
     clusterName: elasticsearch
     indexName: nuxeo
+    indexNumberOfReplicas: 0
+    restClient:
+      socketTimeoutMs: 300000
+      connectionTimeoutMs: 300000
   ingress:
     enabled: false
     annotations:
@@ -108,6 +111,8 @@ elasticsearch:
   cluster:
     env:
       MINIMUM_MASTER_NODES: "1"
+      EXPECTED_MASTER_NODES: "1"
+      RECOVER_AFTER_MASTER_NODES: "1"
   serviceAccounts:
     client:
       create: false
