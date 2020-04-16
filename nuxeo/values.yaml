@@ -133,6 +133,8 @@ elasticsearch:
         cpu: 1
         memory: 1024Mi
   master:
+    updateStrategy:
+      type: RollingUpdate # By default set to "OnDelete", the legacy behavior
     replicas: 1
     persistence:
       enabled: false
@@ -144,6 +146,8 @@ elasticsearch:
         cpu: 1
         memory: 1024Mi
   data:
+    updateStrategy:
+      type: RollingUpdate # By default set to "OnDelete", the legacy behavior
     replicas: 1
     persistence:
       enabled: false
