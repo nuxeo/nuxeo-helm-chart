@@ -14,7 +14,7 @@ dependencies:
     tags:
       - kafka
   - name: mongodb
-    version: ~7.8.0
+    version: 7.8.9
     repository: https://kubernetes-charts.storage.googleapis.com/
     condition: nuxeo.mongodb.deploy
     alias: mongodb
