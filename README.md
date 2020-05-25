@@ -13,7 +13,7 @@ Currently, there is a single version of this chart for all the versions of Nuxeo
 
 This chart has the following dependencies as subcharts:
 
-- [MongoDB](https://github.com/helm/charts/tree/master/stable/mongodb/values.yaml)
+- [MongoDB](https://github.com/bitnami/charts/blob/master/bitnami/mongodb/values.yaml)
 - [Postgresql](https://github.com/helm/charts/tree/master/stable/postgresql/values.yaml)
 - [Elasticsearch](https://github.com/helm/charts/tree/master/stable/elasticsearch/values.yaml)
 - [Kafka/ZooKeeper](https://github.com/helm/charts/tree/master/incubator/kafka/values.yaml)

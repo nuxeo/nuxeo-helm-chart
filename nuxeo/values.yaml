@@ -73,8 +73,10 @@ nuxeo:
 ## Values overridden from the MongoDB chart: https://github.com/helm/charts/blob/master/stable/mongodb/values.yaml
 mongodb:
   image:
-    tag: "4.2.3"
+    tag: "4.2.7"
   usePassword: false
+  serviceAccount:
+    create: false
   persistence:
     enabled: false
   resources:

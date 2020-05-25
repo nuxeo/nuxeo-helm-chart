@@ -104,6 +104,7 @@ pipeline {
 
                 helm repo add kubernetes-charts https://kubernetes-charts.storage.googleapis.com/
                 helm repo add kubernetes-charts-incubator http://storage.googleapis.com/kubernetes-charts-incubator
+                helm repo add bitnami https://charts.bitnami.com/bitnami
 
                 helm dependency update ${CHART_NAME}
 
@@ -115,7 +116,7 @@ pipeline {
                 jx step helm install ${CHART_NAME} \
                   --name=${TEST_RELEASE} \
                   --namespace=${TEST_NAMESPACE} \
-                  --set=nuxeo.image.tag=11.1-SNAPSHOT # TODO remove when NXP-28504 is done and the latest tag (default) is available
+                  --set=nuxeo.image.tag=11.x # TODO remove when NXP-28504 is done and the latest tag (default) is available
               """
 
               // check deployment status, exits if not OK
