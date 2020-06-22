@@ -51,7 +51,7 @@ data:
 {{- else }}
     nuxeo.templates=default,redis
 {{- end }}
-    nuxeo.redis.host={{ .Release.Name }}-master
+    nuxeo.redis.host={{ .Release.Name }}-redis-master
     nuxeo.work.queuing=redis
     nuxeo.redis.enabled=true
 {{- end }}
