@@ -105,61 +105,21 @@ postgresql:
       cpu: 2
       memory: 2Gi
 
-## Values overridden from the Elasticsearch chart: https://github.com/helm/charts/blob/master/stable/elasticsearch/values.yaml
+## Values overridden from the Elasticsearch chart: https://github.com/elastic/helm-charts/blob/7.9.2/elasticsearch/values.yaml
 ## These are for staging only
 elasticsearch:
-  image:
-    tag: "6.8.6"
-  cluster:
-    env:
-      MINIMUM_MASTER_NODES: "1"
-      EXPECTED_MASTER_NODES: "1"
-      RECOVER_AFTER_MASTER_NODES: "1"
-  serviceAccounts:
-    client:
-      create: false
-      name:
-    master:
-      create: false
-      name:
-    data:
-      create: false
-      name:
-  client:
-    replicas: 1
-    resources:
-      requests:
-        cpu: 250m
-        memory: 512Mi
-      limits:
-        cpu: 1
-        memory: 1024Mi
-  master:
-    updateStrategy:
-      type: RollingUpdate # By default set to "OnDelete", the legacy behavior
-    replicas: 1
-    persistence:
-      enabled: false
-    resources:
-      requests:
-        cpu: 250m
-        memory: 512Mi
-      limits:
-        cpu: 1
-        memory: 1024Mi
-  data:
-    updateStrategy:
-      type: RollingUpdate # By default set to "OnDelete", the legacy behavior
-    replicas: 1
-    persistence:
-      enabled: false
-    resources:
-      requests:
-        cpu: 250m
-        memory: 1536Mi
-      limits:
-        cpu: 1
-        memory: 2048Mi
+  image: "docker.elastic.co/elasticsearch/elasticsearch-oss"
+  clusterName: elasticsearch
+  replicas: 1
+  minimumMasterNodes: 1
+  resources:
+    requests:
+      cpu: "250m"
+      memory: "1024Mi"
+    limits:
+      cpu: "500m"
+      memory: "1024Mi"
+  esJavaOpts: "-Xmx380m -Xms380m"
 
 ## Values overridden from the Kafka chart: https://github.com/helm/charts/blob/master/incubator/kafka/values.yaml
 ## These are for staging only, no need for 3 kafka and zoopkeper replicas
