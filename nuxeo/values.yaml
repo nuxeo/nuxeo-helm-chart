@@ -70,7 +70,7 @@ nuxeo:
   ## customEnvsFrom allows to load the content of a ConfigMap as environment variables
   customEnvsFrom:
 
-## Values overridden from the MongoDB chart: https://github.com/helm/charts/blob/master/stable/mongodb/values.yaml
+## Values overridden from the MongoDB chart: https://github.com/bitnami/charts/blob/master/bitnami/mongodb/values.yaml
 mongodb:
   image:
     tag: "4.2.7"
