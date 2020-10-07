@@ -1,6 +1,6 @@
 # Nuxeo Helm Chart
 
-This chart aims to deploy the Nuxeo platform in a development or staging environment, such as preview in Jenkins X.
+This chart aims to deploy the Nuxeo Platform in a development or staging environment, such as preview in Kubernetes.
 
 > WARNING
 The `nuxeo` chart is not production-ready. It can be configured to deploy external services, such as `MongoDB`, `PostgreSQL`, `Elasticsearch`. Yet, the subcharts referenced as dependencies often have a variant more suitable for production, for example `mongodb-replicaset` vs `mongodb` or `redis-ha` vs `redis`. Also, persistence is disabled by default in all the subcharts.
@@ -13,11 +13,11 @@ Currently, there is a single version of this chart for all the versions of Nuxeo
 
 This chart has the following dependencies as subcharts:
 
-- [MongoDB](https://github.com/bitnami/charts/blob/master/bitnami/mongodb/values.yaml)
-- [Postgresql](https://github.com/helm/charts/tree/master/stable/postgresql/values.yaml)
-- [Elasticsearch](https://github.com/helm/charts/tree/master/stable/elasticsearch/values.yaml)
-- [Kafka/ZooKeeper](https://github.com/helm/charts/tree/master/incubator/kafka/values.yaml)
-- [Redis](https://github.com/helm/charts/tree/master/stable/redis/values.yaml)
+- [MongoDB](https://github.com/bitnami/charts/tree/master/bitnami/mongodb)
+- [PostgreSQL](https://github.com/helm/charts/tree/master/stable/postgresql)
+- [Elasticsearch](https://github.com/helm/charts/tree/master/stable/elasticsearch)
+- [Kafka/ZooKeeper](https://github.com/helm/charts/tree/master/incubator/kafka)
+- [Redis](https://github.com/helm/charts/tree/master/stable/redis)
 
 To list the chart dependencies:
 
