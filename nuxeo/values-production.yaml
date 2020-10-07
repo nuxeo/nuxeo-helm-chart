@@ -1,0 +1,58 @@
+nuxeo:
+  resources:
+    requests:
+      cpu: 2
+      memory: 2Gi
+    limits:
+      cpu: 4
+      memory: 4Gi
+  elasticsearch:
+    indexNumberOfReplicas: 1
+  persistence:
+    enabled: true
+    size:
+      binaries: 10Gi # needs to be adjusted depending on the expected size
+
+## Values taken from the MongoDB chart: https://github.com/bitnami/charts/blob/master/bitnami/mongodb/values-production.yaml
+mongodb:
+  replicaSet:
+    enabled: true
+  persistence:
+    enabled: true
+
+## Values taken from the Elasticsearch chart: https://github.com/helm/charts/blob/master/stable/elasticsearch/values.yaml
+elasticsearch:
+  cluster:
+    env:
+      MINIMUM_MASTER_NODES: "2"
+  client:
+    replicas: 2
+  master:
+    replicas: 3
+    updateStrategy:
+      type: RollingUpdate # By default set to "OnDelete", the legacy behavior
+    persistence:
+      enabled: true
+  data:
+    replicas: 2
+    updateStrategy:
+      type: RollingUpdate # By default set to "OnDelete", the legacy behavior
+    persistence:
+      enabled: true
+
+## Values taken from the Kafka chart: https://github.com/helm/charts/blob/master/incubator/kafka/values.yaml
+kafka:
+  replicas: 3
+  updateStrategy:
+    type: RollingUpdate # By default set to "OnDelete", the legacy behavior
+  persistence:
+    enabled: true 
+  zookeeper:
+    persistence:
+      enabled: true 
+
+## Tags used to control the deployment of the dependency subcharts when this chart is deployed directly.
+tags:
+  mongodb: true
+  elasticsearch: true
+  kafka: true

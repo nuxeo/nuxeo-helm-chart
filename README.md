@@ -3,7 +3,31 @@
 This chart aims to deploy the Nuxeo Platform in a development or staging environment, such as preview in Kubernetes.
 
 > WARNING
-The `nuxeo` chart is not production-ready. It can be configured to deploy external services, such as `MongoDB`, `PostgreSQL`, `Elasticsearch`. Yet, the subcharts referenced as dependencies often have a variant more suitable for production, for example `mongodb-replicaset` vs `mongodb` or `redis-ha` vs `redis`. Also, persistence is disabled by default in all the subcharts.
+The `nuxeo` chart is not production-ready by default.
+
+By default, this chart deploys the strict minimum to have Nuxeo running:
+
+- Single Nuxeo node.
+- No persistence for binaries.
+- H2 database.
+- Elasticsearch embebedded.
+- Chronicle Queue for the WorkManager and Nuxeo Streams.
+
+The [values-production](./nuxeo/values-production.yaml) file provides a sample "production-like" configuration to guide people wanting to use this chart to make a "real" deployment of Nuxeo in Kubernetes, relying on:
+
+- A Nuxeo cluster.
+- Persistence for binaries.
+- MongoDB with a replicaSet and persistence.
+- An Elasticsearch cluster with several replicas and persistence.
+- A Kafka cluster with several replicas and persistence.
+
+This is just a sample, the subcharts referenced as dependencies need a fine-grained configuration to be suitable for production, see the available values of the related Helm charts:
+
+- [MongoDB](https://github.com/helm/charts/blob/master/stable/mongodb/values-production.yaml)
+- [PostgreSQL](https://github.com/helm/charts/blob/master/stable/postgresql/values-production.yaml)
+- [Elasticsearch](https://github.com/helm/charts/blob/master/stable/elasticsearch/values.yaml)
+- [Kafka](https://github.com/helm/charts/blob/master/incubator/kafka/values.yaml)
+- [Redis](https://github.com/helm/charts/blob/master/stable/redis/values-production.yaml)
 
 Currently, there is a single version of this chart for all the versions of Nuxeo.
 
