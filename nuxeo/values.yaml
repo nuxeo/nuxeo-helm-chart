@@ -87,10 +87,10 @@ mongodb:
       cpu: 2
       memory: 2Gi
 
-## Values overridden from the PostgreSQL chart: https://github.com/helm/charts/blob/master/stable/postgresql/values.yaml
+## Values overridden from the PostgreSQL chart: https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
 postgresql:
   image:
-    tag: "11.7.0"
+    tag: "13.0.0"
   initdbScripts:
     db-init.sql: |
       CREATE ROLE nuxeo WITH PASSWORD 'nuxeo' LOGIN;
