@@ -23,7 +23,7 @@ The [values-production](./nuxeo/values-production.yaml) file provides a sample "
 
 This is just a sample, the subcharts referenced as dependencies need a fine-grained configuration to be suitable for production, see the available values of the related Helm charts:
 
-- [MongoDB](https://github.com/helm/charts/blob/master/stable/mongodb/values-production.yaml)
+- [MongoDB](https://github.com/bitnami/charts/blob/master/bitnami/mongodb/values-production.yaml)
 - [PostgreSQL](https://github.com/helm/charts/blob/master/stable/postgresql/values-production.yaml)
 - [Elasticsearch](https://github.com/helm/charts/blob/master/stable/elasticsearch/values.yaml)
 - [Kafka](https://github.com/helm/charts/blob/master/incubator/kafka/values.yaml)
