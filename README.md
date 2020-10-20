@@ -24,7 +24,7 @@ The [values-production](./nuxeo/values-production.yaml) file provides a sample "
 This is just a sample, the subcharts referenced as dependencies need a fine-grained configuration to be suitable for production, see the available values of the related Helm charts:
 
 - [MongoDB](https://github.com/bitnami/charts/blob/master/bitnami/mongodb/values-production.yaml)
-- [PostgreSQL](https://github.com/helm/charts/blob/master/stable/postgresql/values-production.yaml)
+- [PostgreSQL](https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values-production.yaml)
 - [Elasticsearch](https://github.com/helm/charts/blob/master/stable/elasticsearch/values.yaml)
 - [Kafka](https://github.com/helm/charts/blob/master/incubator/kafka/values.yaml)
 - [Redis](https://github.com/helm/charts/blob/master/stable/redis/values-production.yaml)
@@ -38,7 +38,7 @@ Currently, there is a single version of this chart for all the versions of Nuxeo
 This chart has the following dependencies as subcharts:
 
 - [MongoDB](https://github.com/bitnami/charts/tree/master/bitnami/mongodb)
-- [PostgreSQL](https://github.com/helm/charts/tree/master/stable/postgresql)
+- [PostgreSQL](https://github.com/bitnami/charts/tree/master/bitnami/postgresql/)
 - [Elasticsearch](https://github.com/helm/charts/tree/master/stable/elasticsearch)
 - [Kafka/ZooKeeper](https://github.com/helm/charts/tree/master/incubator/kafka)
 - [Redis](https://github.com/helm/charts/tree/master/stable/redis)

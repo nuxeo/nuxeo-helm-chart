@@ -21,8 +21,8 @@ dependencies:
     tags:
       - mongodb
   - name: postgresql
-    version: ~8.1.4
-    repository: https://kubernetes-charts.storage.googleapis.com/
+    version: ~9.8.4
+    repository: https://charts.bitnami.com/bitnami
     condition: nuxeo.postgresql.deploy
     alias: postgresql
     tags:
