@@ -88,7 +88,7 @@ spec:
 {{- if or .Values.elasticsearch.deploy .Values.tags.elasticsearch }}
       - name: init-elasticsearch
         image: busybox
-        command: ['sh', '-c', 'until nc -w1 {{ .Release.Name }}-elasticsearch-client 9200; do echo "waiting for elastic"; sleep 2; done;']
+        command: ['sh', '-c', 'until nc -w1 elasticsearch-master 9200; do echo "waiting for elastic"; sleep 2; done;']
 {{- end }}
 {{- if or .Values.mongodb.deploy .Values.tags.mongodb }}
       - name: init-mongodb
