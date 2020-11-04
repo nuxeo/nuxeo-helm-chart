@@ -40,16 +40,14 @@ elasticsearch:
     persistence:
       enabled: true
 
-## Values taken from the Kafka chart: https://github.com/helm/charts/blob/master/incubator/kafka/values.yaml
+## Values taken from the Kafka chart: https://github.com/bitnami/charts/blob/master/bitnami/kafka/values-production.yaml
 kafka:
-  replicas: 3
-  updateStrategy:
-    type: RollingUpdate # By default set to "OnDelete", the legacy behavior
+  replicaCount: 3
   persistence:
-    enabled: true 
+    enabled: true
   zookeeper:
     persistence:
-      enabled: true 
+      enabled: true
 
 ## Tags used to control the deployment of the dependency subcharts when this chart is deployed directly.
 tags:

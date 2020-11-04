@@ -104,7 +104,6 @@ pipeline {
 
                 helm repo add elastic https://helm.elastic.co/
                 helm repo add kubernetes-charts https://kubernetes-charts.storage.googleapis.com/
-                helm repo add kubernetes-charts-incubator http://storage.googleapis.com/kubernetes-charts-incubator
                 helm repo add bitnami https://charts.bitnami.com/bitnami
 
                 helm dependency update ${CHART_NAME}
