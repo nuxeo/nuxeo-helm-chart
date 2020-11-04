@@ -121,22 +121,22 @@ elasticsearch:
       memory: "1024Mi"
   esJavaOpts: "-Xmx380m -Xms380m"
 
-## Values overridden from the Kafka chart: https://github.com/helm/charts/blob/master/incubator/kafka/values.yaml
+## Values overridden from the Kafka chart: https://github.com/bitnami/charts/blob/master/bitnami/kafka/values.yaml
 ## These are for staging only, no need for 3 kafka and zoopkeper replicas
 kafka:
-  updateStrategy:
-    type: RollingUpdate # By default set to "OnDelete", the legacy behavior
-  imageTag: "5.4.1"
-  replicas: 1
-  zookeeper:
-    image:
-      tag: "3.6.0"
-    replicaCount: 1
+  image:
+    tag: "2.4.1"
+  replicaCount: 1
   persistence:
     enabled: false
-  prometheus:
-    operator:
+  zookeeper:
+    image:
+      tag: "3.6.2"
+    replicaCount: 1
+    persistence:
       enabled: false
+  serviceAccount:
+    create: false
   resources:
     requests:
       cpu: 500m
