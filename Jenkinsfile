@@ -100,10 +100,9 @@ pipeline {
             script {
               // initialize Helm and package chart
               sh """
-                helm init --client-only
+                helm init --client-only --stable-repo-url=https://charts.helm.sh/stable
 
                 helm repo add elastic https://helm.elastic.co/
-                helm repo add kubernetes-charts https://kubernetes-charts.storage.googleapis.com/
                 helm repo add bitnami https://charts.bitnami.com/bitnami
 
                 helm dependency update ${CHART_NAME}
