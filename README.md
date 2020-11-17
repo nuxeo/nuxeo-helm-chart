@@ -25,7 +25,7 @@ This is just a sample, the subcharts referenced as dependencies need a fine-grai
 
 - [MongoDB](https://github.com/bitnami/charts/blob/master/bitnami/mongodb/values-production.yaml)
 - [PostgreSQL](https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values-production.yaml)
-- [Elasticsearch](https://github.com/helm/charts/blob/master/stable/elasticsearch/values.yaml)
+- [Elasticsearch](https://github.com/elastic/helm-charts/blob/master/elasticsearch/values.yaml)
 - [Kafka](https://github.com/bitnami/charts/blob/master/bitnami/kafka/values.yaml)
 - [Redis](https://github.com/bitnami/charts/blob/master/bitnami/redis/values-production.yaml)
 
@@ -38,8 +38,8 @@ Currently, there is a single version of this chart for all the versions of Nuxeo
 This chart has the following dependencies as subcharts:
 
 - [MongoDB](https://github.com/bitnami/charts/tree/master/bitnami/mongodb)
-- [PostgreSQL](https://github.com/bitnami/charts/tree/master/bitnami/postgresql/)
-- [Elasticsearch](https://github.com/helm/charts/tree/master/stable/elasticsearch)
+- [PostgreSQL](https://github.com/bitnami/charts/tree/master/bitnami/postgresql)
+- [Elasticsearch](https://github.com/elastic/helm-charts/tree/master/elasticsearch)
 - [Kafka/ZooKeeper](https://github.com/bitnami/charts/tree/master/bitnami/kafka)
 - [Redis](https://github.com/bitnami/charts/tree/master/bitnami/redis)
 
@@ -222,8 +222,9 @@ minikube addons enable storage-provisioner
 # Initialize Helm
 helm init --history-max 200
 
-# Enable Bitnami repository needed for dependencies
+# Add Helm repositories, needed for dependencies
 helm repo add bitnami https://charts.bitnami.com/bitnami
+helm repo add elastic https://helm.elastic.co
 helm repo update
 
 # Test the dashboard
