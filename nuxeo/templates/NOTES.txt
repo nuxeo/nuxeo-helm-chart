@@ -1,6 +1,12 @@
 
 {{- include "nuxeo.validateValues" . }}
 
+{{- $fullname := include "nuxeo.fullname" . }}
+{{- $releaseNamespace := .Release.Namespace }}
+{{- $clusterDomain := .Values.clusterDomain }}
+
+** Please be patient while the nuxeo chart is being deployed **
+
 {{- if not (include "nuxeo.cloudProvider.enabled" .) }}
 
 -------------------------------------------------------------------------------
@@ -18,10 +24,13 @@ WARNING
 -------------------------------------------------------------------------------
 {{- end }}
 
-Get the application URL:
+Nuxeo can be accessed via port {{ .Values.service.externalPort }} on the following DNS name from within your cluster:
 
-$ kubectl get ingress {{ template "nuxeo.fullname" . }} -n {{ .Release.Namespace }}
+  {{ $fullname }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}
 
-Get the application logs:
+{{- if le (int .Values.replicaCount) 1 }}
 
-$ kubectl logs $(kubectl get pods --selector=app={{ template "nuxeo.fullname" . }} -n {{ .Release.Namespace }} --output=jsonpath="{.items..metadata.name}") -n {{ .Release.Namespace }} -f
+To print the application logs:
+
+  kubectl logs -n {{ $releaseNamespace }} -f $(kubectl get pods -n {{ $releaseNamespace }} --selector=app={{ $fullname }} --output=jsonpath='{.items[*].metadata.name}')
+{{- end }}
