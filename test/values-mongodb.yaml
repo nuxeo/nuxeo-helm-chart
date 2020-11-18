@@ -1,0 +1,15 @@
+# Values overridden from the MongoDB chart: https://github.com/bitnami/charts/blob/master/bitnami/mongodb/values.yaml
+image:
+  tag: "4.4.1"
+usePassword: false
+serviceAccount:
+  create: false
+persistence:
+  enabled: false
+resources:
+  requests:
+    cpu: "1"
+    memory: "1Gi"
+  limits:
+    cpu: "2"
+    memory: "2Gi"

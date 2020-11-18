@@ -1,4 +1,3 @@
-{{- if .Values.nuxeo.enable }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -85,25 +84,25 @@ spec:
           - name: log
             mountPath: /var/log/nuxeo
       initContainers:
-{{- if or .Values.elasticsearch.deploy .Values.tags.elasticsearch }}
-      - name: init-elasticsearch
-        image: busybox
-        command: ['sh', '-c', 'until nc -w1 elasticsearch-master 9200; do echo "waiting for elastic"; sleep 2; done;']
-{{- end }}
-{{- if or .Values.mongodb.deploy .Values.tags.mongodb }}
+{{- if .Values.nuxeo.mongodb.enabled }}
       - name: init-mongodb
         image: busybox
-        command: ['sh', '-c', 'until nc -w1 {{ .Release.Name }}-mongodb 27017; do echo "waiting for mongodb"; sleep 2; done;']
+        command: ['sh', '-c', 'until nc -w1 {{ .Values.nuxeo.mongodb.host }} {{ .Values.nuxeo.mongodb.port }}; do echo "waiting for mongodb"; sleep 2; done;']
 {{- end }}
-{{- if or .Values.postgresql.deploy .Values.tags.postgresql }}
+{{- if .Values.nuxeo.postgresql.enabled }}
       - name: init-postgresql
         image: busybox
-        command: ['sh', '-c', 'until nc -w1 {{ .Release.Name }}-postgresql 5432; do echo "waiting for postgresql"; sleep 2; done;']
+        command: ['sh', '-c', 'until nc -w1 {{ .Values.nuxeo.postgresql.host }} {{ .Values.nuxeo.postgresql.port }}; do echo "waiting for postgresql"; sleep 2; done;']
 {{- end }}
-{{- if or .Values.kafka.deploy .Values.tags.kafka}}
+{{- if .Values.nuxeo.elasticsearch.enabled }}
+      - name: init-elasticsearch
+        image: busybox
+        command: ['sh', '-c', 'until nc -w1 {{ .Values.nuxeo.elasticsearch.host }} {{ .Values.nuxeo.elasticsearch.port }}; do echo "waiting for elastic"; sleep 2; done;']
+{{- end }}
+{{- if .Values.nuxeo.kafka.enabled }}
       - name: init-kafka
         image: busybox
-        command: ['sh', '-c', 'until nc -w1 {{ .Release.Name }}-kafka-headless 9092; do echo "waiting for kafka"; sleep 2; done;']
+        command: ['sh', '-c', 'until nc -w1 {{ .Values.nuxeo.kafka.host }} {{ .Values.nuxeo.kafka.port }}; do echo "waiting for kafka"; sleep 2; done;']
 {{- end }}
       securityContext:
         fsGroup: 1000
@@ -125,4 +124,3 @@ spec:
         {{- else }}
         emptyDir: {}
         {{- end }}
-{{- end }}

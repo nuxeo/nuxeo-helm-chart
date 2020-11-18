@@ -102,11 +102,6 @@ pipeline {
               sh """
                 helm init --client-only --stable-repo-url=https://charts.helm.sh/stable
 
-                helm repo add elastic https://helm.elastic.co/
-                helm repo add bitnami https://charts.bitnami.com/bitnami
-
-                helm dependency update ${CHART_NAME}
-
                 helm package ${CHART_NAME}
               """
 
@@ -126,7 +121,7 @@ pipeline {
               """
 
               // check running status
-              def runningStatus = sh(returnStatus: true, script: "./running-status.sh http://${TEST_SERVICE_DOMAIN}/nuxeo")
+              def runningStatus = sh(returnStatus: true, script: "test/running-status.sh http://${TEST_SERVICE_DOMAIN}/nuxeo")
               if (runningStatus != 0) {
                 currentBuild.result = 'FAILURE';
                 currentBuild.description = "Running status is not OK."

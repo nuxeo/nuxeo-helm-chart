@@ -1,4 +1,3 @@
-{{- if .Values.nuxeo.enable }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -15,47 +14,46 @@ data:
     nuxeo.stream.work.log.codec=avro
     nuxeo.stream.audit.log.codec=avro
     nuxeo.stream.pubsub.log.codec=avro
-{{- if or .Values.mongodb.deploy .Values.tags.mongodb }}
+{{- if .Values.nuxeo.mongodb.enabled }}
     nuxeo.templates=default,mongodb
-    nuxeo.mongodb.server=mongodb://{{ .Release.Name }}-mongodb:27017
-    nuxeo.mongodb.dbname={{ .Values.nuxeo.mongodb.dbname }}
+    nuxeo.mongodb.server={{ .Values.nuxeo.mongodb.protocol }}://{{ required "nuxeo.mongodb.host is required" .Values.nuxeo.mongodb.host }}:{{ .Values.nuxeo.mongodb.port }}
+    nuxeo.mongodb.dbname={{ template "nuxeo.fullname" . }}
 {{- end }}
-{{- if or .Values.postgresql.deploy .Values.tags.postgresql }}
+{{- if .Values.nuxeo.postgresql.enabled }}
     nuxeo.templates=default,postgresql
-    nuxeo.db.name={{ .Values.nuxeo.postgresql.dbname }}
+    nuxeo.db.host={{ required "nuxeo.postgresql.host is required" .Values.nuxeo.postgresql.host }}
+    nuxeo.db.port={{ .Values.nuxeo.postgresql.port }}
+    nuxeo.db.name={{ template "nuxeo.fullname" . }}
     nuxeo.db.user={{ .Values.nuxeo.postgresql.username }}
     nuxeo.db.password={{ .Values.nuxeo.postgresql.password }}
-    nuxeo.db.host={{ .Release.Name }}-postgresql
-    nuxeo.db.port=5432
 {{- end }}
-{{- if or .Values.elasticsearch.deploy .Values.tags.elasticsearch }}
-    elasticsearch.client=RestClient
+{{- if .Values.nuxeo.elasticsearch.enabled }}
+    elasticsearch.addressList={{ .Values.nuxeo.elasticsearch.protocol }}://{{ required "nuxeo.elasticsearch.host is required" .Values.nuxeo.elasticsearch.host }}:{{ .Values.nuxeo.elasticsearch.port }}
     elasticsearch.clusterName={{ .Values.nuxeo.elasticsearch.clusterName }}
-    elasticsearch.addressList=http://elasticsearch-master:9200
-    elasticsearch.indexName={{ .Values.nuxeo.elasticsearch.indexName }}
+    elasticsearch.indexName={{ template "nuxeo.fullname" . }}
     elasticsearch.indexNumberOfReplicas={{ .Values.nuxeo.elasticsearch.indexNumberOfReplicas }}
     elasticsearch.restClient.socketTimeoutMs={{ .Values.nuxeo.elasticsearch.restClient.socketTimeoutMs }}
     elasticsearch.restClient.connectionTimeoutMs={{ .Values.nuxeo.elasticsearch.restClient.connectionTimeoutMs }}
 {{- end }}
-{{- if or .Values.kafka.deploy .Values.tags.kafka}}
+{{- if .Values.nuxeo.kafka.enabled }}
     kafka.enabled=true
-    kafka.bootstrap.servers={{ .Release.Name }}-kafka-headless:9092
+    kafka.bootstrap.servers={{ required "nuxeo.kafka.host is required" .Values.nuxeo.kafka.host }}:{{ .Values.nuxeo.kafka.port }}
+    kafka.topicPrefix={{ template "nuxeo.fullname" . }}
     nuxeo.stream.work.enabled=true
     nuxeo.pubsub.provider=stream
 {{- end }}
-{{- if or .Values.redis.deploy .Values.tags.redis }}
-{{- if or .Values.mongodb.deploy .Values.tags.mongodb }}
+{{- if .Values.nuxeo.redis.enabled }}
+{{- if .Values.nuxeo.mongodb.enabled }}
     nuxeo.templates=default,mongodb,redis
-{{- else if or  .Values.postgresql.deploy  .Values.tags.postgresql }}
+{{- else if  .Values.nuxeo.postgresql.enabled }}
     nuxeo.templates=default,postgresql,redis
 {{- else }}
     nuxeo.templates=default,redis
 {{- end }}
-    nuxeo.redis.host={{ .Release.Name }}-redis-master
+    nuxeo.redis.host={{ .Values.nuxeo.redis.host }}
     nuxeo.work.queuing=redis
     nuxeo.redis.enabled=true
 {{- end }}
 {{- if .Values.nuxeo.customParams }}
 {{ .Values.nuxeo.customParams | indent 4 }}
-{{- end }}
 {{- end }}
