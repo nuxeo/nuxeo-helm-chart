@@ -56,24 +56,40 @@ nuxeo:
     enabled: false
     annotations:
       kubernetes.io/ingress.class: nginx
-  persistence:
-    enabled: false
-    storageClass: standard
-    size:
-      binaries: 10Gi
-      log: 10Gi
-    annotations: {}
   kafka:
     enabled: false
     port: 9092
     # host:
   redis:
     enabled: false
+  googleCloudStorage:
+    enabled: false
+    # gcpProject:
+    # credentials:
+    # bucket:
+    ## The bucket prefix needs to end with /
+    # bucketPrefix:
+  amazonS3:
+    enabled: false
+    # accessKeyId:
+    # secretAccessKey:
+    # region:
+    # bucket:
+    ## The bucket prefix needs to end with /
+    # bucketPrefix:
   customParams: |-
     # Custom parameters to be appended to nuxeo.conf
+  logs:
+    persistence:
+      enabled: false
+      # labels: {}
+      # annotations: {}
+      # storageClass:
+      # size:
   ## Custom environment variables to set in the container
   ## customEnvs allows to define environment variables from a value or a key of a ConfigMap
   customEnvs:
   ## customEnvsFrom allows to load the content of a ConfigMap as environment variables
   customEnvsFrom:
-
+  extraVolumeMounts: []
+  extraVolumes: []

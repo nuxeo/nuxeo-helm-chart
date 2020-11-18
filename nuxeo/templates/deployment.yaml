@@ -60,6 +60,10 @@ spec:
           successThreshold: {{ .Values.nuxeo.readinessProbe.successThreshold }}
           timeoutSeconds: {{ .Values.nuxeo.readinessProbe.timeoutSeconds }}
         env:
+        - name: POD_UID
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.uid
 {{- if .Values.nuxeo.clid }}
         - name: NUXEO_CLID
           valueFrom:
@@ -79,10 +83,15 @@ spec:
         volumeMounts:
           - name: nuxeoconf
             mountPath: /etc/nuxeo/conf.d/
-          - name: binaries
-            mountPath: /var/lib/nuxeo/binaries
           - name: log
             mountPath: /var/log/nuxeo
+          {{- if not (include "nuxeo.cloudProvider.enabled" .) }}
+          - name: binaries
+            mountPath: /var/lib/nuxeo/binaries
+          {{- end }}
+          {{- with .Values.nuxeo.extraVolumeMounts }}
+          {{- toYaml . | nindent 10 }}
+          {{- end }}
       initContainers:
 {{- if .Values.nuxeo.mongodb.enabled }}
       - name: init-mongodb
@@ -110,17 +119,17 @@ spec:
       - name: nuxeoconf
         configMap:
           name: {{ template "nuxeo.fullname" . }}-conf
-      - name: binaries
-        {{- if .Values.nuxeo.persistence.enabled }}
-        persistentVolumeClaim:
-          claimName: {{ template "nuxeo.fullname" . }}-binaries
-        {{- else }}
-        emptyDir: {}
-        {{- end }}
       - name: log
-        {{- if .Values.nuxeo.persistence.enabled }}
+        {{- if .Values.nuxeo.logs.persistence.enabled }}
         persistentVolumeClaim:
           claimName: {{ template "nuxeo.fullname" . }}-log
         {{- else }}
         emptyDir: {}
         {{- end }}
+      {{- if not (include "nuxeo.cloudProvider.enabled" .) }}
+      - name: binaries
+        emptyDir: {}
+      {{- end }}
+      {{- with .Values.nuxeo.extraVolumes }}
+      {{- toYaml . | nindent  6 }}
+      {{- end }}
