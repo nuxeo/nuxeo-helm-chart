@@ -1,0 +1,22 @@
+# Values overridden from the Kafka chart: https://github.com/bitnami/charts/blob/master/bitnami/kafka/values.yaml
+image:
+  tag: "2.6.0"
+replicaCount: 1
+persistence:
+  enabled: false
+serviceAccount:
+  create: false
+resources:
+  requests:
+    cpu: "500m"
+    memory: "1024Mi"
+  limits:
+    cpu: "1"
+    memory: "1536Mi"
+zookeeper:
+  image:
+    tag: "3.6.2"
+  replicaCount: 1
+  persistence:
+    enabled: false
+

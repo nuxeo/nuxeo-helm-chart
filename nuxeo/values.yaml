@@ -1,5 +1,4 @@
 nuxeo:
-  enable: true
   image:
     repository: docker.packages.nuxeo.com/nuxeo/nuxeo
     tag: latest
@@ -33,24 +32,26 @@ nuxeo:
     failureThreshold: 5
   terminationGracePeriodSeconds: 10
   mongodb:
-    dbname: nuxeo
-    backup:
-      enable: false
-      schedule: "0 0 */3 * *"
-      aws:
-        bucket: "mongo-backup-bucket"
-        secret: "mongo-backup-aws-secret"
+    enabled: false
+    protocol: mongodb
+    port: 27017
+    # host:
   postgresql:
-    dbname: nuxeo
-    username: nuxeo
-    password: nuxeo
+    enabled: false
+    port: 5432
+    # host:
+    # username:
+    # password:
   elasticsearch:
+    enabled: false
+    protocol: http
+    port: 9200
     clusterName: elasticsearch
-    indexName: nuxeo
     indexNumberOfReplicas: 0
     restClient:
       socketTimeoutMs: 300000
       connectionTimeoutMs: 300000
+    # host:
   ingress:
     enabled: false
     annotations:
@@ -62,6 +63,12 @@ nuxeo:
       binaries: 10Gi
       log: 10Gi
     annotations: {}
+  kafka:
+    enabled: false
+    port: 9092
+    # host:
+  redis:
+    enabled: false
   customParams: |-
     # Custom parameters to be appended to nuxeo.conf
   ## Custom environment variables to set in the container
@@ -70,106 +77,3 @@ nuxeo:
   ## customEnvsFrom allows to load the content of a ConfigMap as environment variables
   customEnvsFrom:
 
-## Values overridden from the MongoDB chart: https://github.com/bitnami/charts/blob/master/bitnami/mongodb/values.yaml
-mongodb:
-  image:
-    tag: "4.4.1"
-  usePassword: false
-  serviceAccount:
-    create: false
-  persistence:
-    enabled: false
-  resources:
-    requests:
-      cpu: 1
-      memory: 1Gi
-    limits:
-      cpu: 2
-      memory: 2Gi
-
-## Values overridden from the PostgreSQL chart: https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
-postgresql:
-  image:
-    tag: "13.0.0"
-  initdbScripts:
-    db-init.sql: |
-      CREATE ROLE nuxeo WITH PASSWORD 'nuxeo' LOGIN;
-      CREATE DATABASE nuxeo ENCODING 'UTF8' OWNER nuxeo;
-  persistence:
-    enabled: false
-  resources:
-    requests:
-      cpu: 1
-      memory: 1Gi
-    limits:
-      cpu: 2
-      memory: 2Gi
-
-## Values overridden from the Elasticsearch chart: https://github.com/elastic/helm-charts/blob/7.9.2/elasticsearch/values.yaml
-## These are for staging only
-elasticsearch:
-  image: "docker.elastic.co/elasticsearch/elasticsearch-oss"
-  clusterName: elasticsearch
-  replicas: 1
-  minimumMasterNodes: 1
-  resources:
-    requests:
-      cpu: "250m"
-      memory: "1024Mi"
-    limits:
-      cpu: "500m"
-      memory: "1024Mi"
-  esJavaOpts: "-Xmx380m -Xms380m"
-
-## Values overridden from the Kafka chart: https://github.com/bitnami/charts/blob/master/bitnami/kafka/values.yaml
-## These are for staging only, no need for 3 kafka and zoopkeper replicas
-kafka:
-  image:
-    tag: "2.6.0"
-  replicaCount: 1
-  persistence:
-    enabled: false
-  zookeeper:
-    image:
-      tag: "3.6.2"
-    replicaCount: 1
-    persistence:
-      enabled: false
-  serviceAccount:
-    create: false
-  resources:
-    requests:
-      cpu: 500m
-      memory: 1024Mi
-    limits:
-      cpu: 1
-      memory: 1536Mi
-
-## Values overridden from the Redis chart: https://github.com/bitnami/charts/blob/master/bitnami/redis/values.yaml
-## These are for staging only, no need for a cluster
-redis:
-  image:
-    tag: "6.0.8"
-  cluster:
-    enabled: false
-  usePassword: false
-  master:
-    persistence:
-      enabled: false
-    resources:
-      requests:
-        cpu: 100m
-        memory: 16Mi
-      limits:
-        cpu: 200m
-        memory: 64Mi
-
-## Tags used to control the deployment of the dependency subcharts when this chart is deployed directly.
-## When this chart is deployed as a dependecy of another chart, these dependencies are controlled by setting values
-## such as `nuxeo.mongodb.deploy` or `nuxeo.elasticsearch.deploy` to `true`.
-tags:
-  elasticsearch: false
-  kafka: false
-  mongodb: false
-  postgresql: false
-  redis: false
