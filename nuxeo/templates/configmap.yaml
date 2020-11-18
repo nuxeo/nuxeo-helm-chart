@@ -11,6 +11,7 @@ metadata:
 data:
   nuxeo.conf: |-
     # Additional nuxeo.conf parameters
+    nuxeo.virtual.host={{ .Values.nuxeo.virtualHost  }}
     nuxeo.stream.work.log.codec=avro
     nuxeo.stream.audit.log.codec=avro
     nuxeo.stream.pubsub.log.codec=avro
