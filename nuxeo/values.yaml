@@ -4,6 +4,7 @@ image:
   pullSecrets: []
   pullPolicy: Always
 replicaCount: 1
+clusterDomain: cluster.local
 # virtualHost:
 podLabels: {}
 podAnnotations: {}
