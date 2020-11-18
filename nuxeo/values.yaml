@@ -4,6 +4,9 @@ nuxeo:
     tag: latest
   replicaCount: 1
   # virtualHost:
+  nodeSelector: {}
+  affinity: {}
+  tolerations: []
   resources:
     requests:
       cpu: 0.4
