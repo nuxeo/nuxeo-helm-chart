@@ -54,6 +54,33 @@ data:
     nuxeo.work.queuing=redis
     nuxeo.redis.enabled=true
 {{- end }}
+{{- if .Values.nuxeo.googleCloudStorage.enabled }}
+    nuxeo.core.binarymanager=org.nuxeo.ecm.core.storage.gcp.GoogleStorageBinaryManager
+    nuxeo.gcp.project={{ .Values.nuxeo.googleCloudStorage.gcpProject }}
+    nuxeo.gcp.credentials={{ .Values.nuxeo.googleCloudStorage.credentials }}
+    nuxeo.gcp.storage.bucket= {{ .Values.nuxeo.googleCloudStorage.bucket }}
+    {{- if .Values.nuxeo.googleCloudStorage.bucketPrefix }}
+    nuxeo.gcp.storage.bucket_prefix={{ .Values.nuxeo.googleCloudStorage.bucketPrefix }}
+    {{- else }}
+    nuxeo.gcp.storage.bucket_prefix={{ template "nuxeo.fullname" . }}/
+    {{- end }}
+{{- end }}
+{{- if .Values.nuxeo.amazonS3.enabled }}
+    nuxeo.core.binarymanager=org.nuxeo.ecm.core.storage.sql.S3BinaryManager
+    nuxeo.aws.accessKeyId={{ .Values.nuxeo.amazonS3.accessKeyId }}
+    nuxeo.aws.secretKey={{ .Values.nuxeo.amazonS3.secretAccessKey }}
+    nuxeo.aws.region={{ .Values.nuxeo.amazonS3.region }}
+    nuxeo.s3storage.bucket= {{ .Values.nuxeo.amazonS3.bucket }}
+    {{- if .Values.amazonS3.nuxeo.bucketPrefix }}
+    nuxeo.s3storage.bucket_prefix={{ .Values.amazonS3.nuxeo.bucketPrefix }}
+    {{- else }}
+    nuxeo.s3storage.bucket_prefix={{ template "nuxeo.fullname" . }}/
+    {{- end }}
+{{- end }}
+{{- if or (gt (int .Values.nuxeo.replicaCount) 1) (include "nuxeo.cloudProvider.enabled" .) }}
+    nuxeo.cluster.enabled=true
+    nuxeo.cluster.nodeid=${env:POD_UID}
+{{- end }}
 {{- if .Values.nuxeo.customParams }}
 {{ .Values.nuxeo.customParams | indent 4 }}
 {{- end }}

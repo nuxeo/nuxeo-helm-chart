@@ -1,5 +1,23 @@
 
 {{- include "nuxeo.validateValues" . }}
+
+{{- if not (include "nuxeo.cloudProvider.enabled" .) }}
+
+-------------------------------------------------------------------------------
+WARNING
+
+  By not enabling any cloud provider for binary storage, binaries will be
+  stored in an EmptyDir volume, thus not surviving a pod restart.
+
+  Moreover, the application won't work if the deployment is scaled up in
+  Kubernetes.
+
+  To put the binaries in a persistent storage, please set either
+  nuxeo.googleCloudStorage.enabled=true or nuxeo.amazonS3.enabled=true.
+
+-------------------------------------------------------------------------------
+{{- end }}
+
 Get the application URL:
 
 $ kubectl get ingress {{ template "nuxeo.fullname" . }} -n {{ .Release.Namespace }}
