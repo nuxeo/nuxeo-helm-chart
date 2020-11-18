@@ -1,4 +1,4 @@
-{{- if .Values.nuxeo.ingress.enabled -}}
+{{- if .Values.ingress.enabled -}}
 {{- if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
 apiVersion: networking.k8s.io/v1beta1
 {{- else -}}
@@ -12,10 +12,10 @@ metadata:
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
-{{- with .Values.nuxeo.ingress.labels }}
+{{- with .Values.ingress.labels }}
 {{ toYaml . | indent 4 }}
 {{- end }}
-  {{- with .Values.nuxeo.ingress.annotations }}
+  {{- with .Values.ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
   {{- end }}
@@ -23,14 +23,14 @@ spec:
   rules:
     - http:
         paths:
-          - path: {{ .Values.nuxeo.ingress.path }}
+          - path: {{ .Values.ingress.path }}
             backend:
               serviceName: {{ template "nuxeo.fullname" . }}
-              servicePort: {{ .Values.nuxeo.service.externalPort}}
-      {{- with .Values.nuxeo.ingress.hostname }}
+              servicePort: {{ .Values.service.externalPort}}
+      {{- with .Values.ingress.hostname }}
       host: {{ toYaml . }}
       {{- end }}
-  {{- with .Values.nuxeo.ingress.tls }}
+  {{- with .Values.ingress.tls }}
   tls: {{- toYaml . | nindent 4 }}
   {{- end }}
 {{- end }}

@@ -1,4 +1,4 @@
-{{- if .Values.nuxeo.logs.persistence.enabled }}
+{{- if .Values.logs.persistence.enabled }}
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
@@ -8,16 +8,16 @@ metadata:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
-{{- with .Values.nuxeo.logs.persistence.labels }}
+{{- with .Values.logs.persistence.labels }}
 {{ toYaml . | indent 4 }}
 {{- end }}
   annotations:
-  {{- if .Values.nuxeo.logs.persistence.storageClass }}
-    volume.beta.kubernetes.io/storage-class: {{ .Values.nuxeo.logs.persistence.storageClass | quote }}
+  {{- if .Values.logs.persistence.storageClass }}
+    volume.beta.kubernetes.io/storage-class: {{ .Values.logs.persistence.storageClass | quote }}
   {{- else }}
     volume.alpha.kubernetes.io/storage-class: default
   {{- end }}
-  {{- with .Values.nuxeo.logs.persistence.annotations }}
+  {{- with .Values.logs.persistence.annotations }}
   {{ toYaml . | indent 4 }}
   {{- end }}
 spec:
@@ -25,5 +25,5 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: {{ required "nuxeo.logs.persistence.size is required" .Values.nuxeo.logs.persistence.size | quote }}
+      storage: {{ required "logs.persistence.size is required" .Values.logs.persistence.size | quote }}
 {{- end }}
