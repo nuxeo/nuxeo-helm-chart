@@ -57,10 +57,6 @@ nuxeo:
       socketTimeoutMs: 300000
       connectionTimeoutMs: 300000
     # host:
-  ingress:
-    enabled: false
-    annotations:
-      kubernetes.io/ingress.class: nginx
   kafka:
     enabled: false
     port: 9092
@@ -82,6 +78,13 @@ nuxeo:
     # bucket:
     ## The bucket prefix needs to end with /
     # bucketPrefix:
+  ingress:
+    enabled: false
+    # labels: {}
+    # annotations: {}
+    # hostname:
+    # path:
+    # tls:
   customParams: |-
     # Custom parameters to be appended to nuxeo.conf
   logs:
