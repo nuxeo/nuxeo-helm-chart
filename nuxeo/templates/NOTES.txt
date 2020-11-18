@@ -13,7 +13,7 @@ WARNING
   Kubernetes.
 
   To put the binaries in a persistent storage, please set either
-  nuxeo.googleCloudStorage.enabled=true or nuxeo.amazonS3.enabled=true.
+  googleCloudStorage.enabled=true or amazonS3.enabled=true.
 
 -------------------------------------------------------------------------------
 {{- end }}

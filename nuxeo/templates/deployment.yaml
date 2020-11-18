@@ -8,76 +8,76 @@ spec:
   selector:
     matchLabels:
       app: {{ template "nuxeo.fullname" . }}
-  replicas: {{ .Values.nuxeo.replicaCount }}
+  replicas: {{ .Values.replicaCount }}
   template:
     metadata:
       labels:
         app: {{ template "nuxeo.fullname" . }}
-{{- with .Values.nuxeo.podLabels }}
+{{- with .Values.podLabels }}
 {{ toYaml . | indent 8 }}
 {{- end }}
-      {{- with .Values.nuxeo.podAnnotations }}
+      {{- with .Values.podAnnotations }}
       annotations: {{ toYaml . | nindent 8 }}
       {{- end }}
     spec:
-      {{- with .Values.nuxeo.image.pullSecrets }}
+      {{- with .Values.image.pullSecrets }}
       imagePullSecrets: {{ toYaml . | nindent 6}}
       {{- end }}
       containers:
       - name: {{ .Chart.Name }}
         resources:
           requests:
-            memory: "{{ .Values.nuxeo.resources.requests.memory }}"
-            cpu: "{{ .Values.nuxeo.resources.requests.cpu }}"
+            memory: "{{ .Values.resources.requests.memory }}"
+            cpu: "{{ .Values.resources.requests.cpu }}"
           limits:
-            memory: "{{ .Values.nuxeo.resources.limits.memory }}"
-            cpu: "{{ .Values.nuxeo.resources.limits.cpu }}"
-        image: "{{ .Values.nuxeo.image.repository }}:{{ .Values.nuxeo.image.tag }}"
-{{- if .Values.nuxeo.image.pullPolicy }}
-        imagePullPolicy: {{ .Values.nuxeo.image.pullPolicy }}
+            memory: "{{ .Values.resources.limits.memory }}"
+            cpu: "{{ .Values.resources.limits.cpu }}"
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+{{- if .Values.image.pullPolicy }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
 {{- end}}
         ports:
-        - containerPort: {{ .Values.nuxeo.service.internalPort }}
+        - containerPort: {{ .Values.service.internalPort }}
         livenessProbe:
           httpGet:
-            path: {{ .Values.nuxeo.probePath }}
-            port: {{ .Values.nuxeo.service.internalPort }}
-          initialDelaySeconds: {{ .Values.nuxeo.livenessProbe.initialDelaySeconds }}
-          periodSeconds: {{ .Values.nuxeo.livenessProbe.periodSeconds }}
-          successThreshold: {{ .Values.nuxeo.livenessProbe.successThreshold }}
-          timeoutSeconds: {{ .Values.nuxeo.livenessProbe.timeoutSeconds }}
-          timeoutSeconds: {{ .Values.nuxeo.livenessProbe.failureThreshold }}
+            path: {{ .Values.probePath }}
+            port: {{ .Values.service.internalPort }}
+          initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+          successThreshold: {{ .Values.livenessProbe.successThreshold }}
+          timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+          timeoutSeconds: {{ .Values.livenessProbe.failureThreshold }}
         readinessProbe:
           httpGet:
-            path: {{ .Values.nuxeo.probePath }}
-            port: {{ .Values.nuxeo.service.internalPort }}
-          initialDelaySeconds: {{ .Values.nuxeo.readinessProbe.initialDelaySeconds }}
-          periodSeconds: {{ .Values.nuxeo.readinessProbe.periodSeconds }}
-          successThreshold: {{ .Values.nuxeo.readinessProbe.successThreshold }}
-          timeoutSeconds: {{ .Values.nuxeo.readinessProbe.timeoutSeconds }}
-          timeoutSeconds: {{ .Values.nuxeo.readinessProbe.failureThreshold }}
+            path: {{ .Values.probePath }}
+            port: {{ .Values.service.internalPort }}
+          initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+          successThreshold: {{ .Values.readinessProbe.successThreshold }}
+          timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
+          timeoutSeconds: {{ .Values.readinessProbe.failureThreshold }}
         env:
         - name: POD_UID
           valueFrom:
             fieldRef:
               fieldPath: metadata.uid
-{{- if .Values.nuxeo.clid }}
+{{- if .Values.clid }}
         - name: NUXEO_CLID
           valueFrom:
             secretKeyRef:
               name: {{ template "nuxeo.fullname" . }}-instance-clid
               key: CLID
 {{- end }}
-{{- if .Values.nuxeo.packages }}
+{{- if .Values.packages }}
         - name: NUXEO_PACKAGES
-          value: {{ .Values.nuxeo.packages }}
+          value: {{ .Values.packages }}
 {{- end }}
-{{- if .Values.nuxeo.customEnvs }}
-{{ toYaml .Values.nuxeo.customEnvs | indent 8 }}
+{{- if .Values.customEnvs }}
+{{ toYaml .Values.customEnvs | indent 8 }}
 {{- end }}
         envFrom:
-{{- if .Values.nuxeo.customEnvsFrom }}
-{{ toYaml .Values.nuxeo.customEnvsFrom | indent 8 }}
+{{- if .Values.customEnvsFrom }}
+{{ toYaml .Values.customEnvsFrom | indent 8 }}
 {{- end }}
         volumeMounts:
           - name: nuxeoconf
@@ -88,29 +88,29 @@ spec:
           - name: binaries
             mountPath: /var/lib/nuxeo/binaries
           {{- end }}
-          {{- with .Values.nuxeo.extraVolumeMounts }}
+          {{- with .Values.extraVolumeMounts }}
           {{- toYaml . | nindent 10 }}
           {{- end }}
       initContainers:
-{{- if .Values.nuxeo.mongodb.enabled }}
+{{- if .Values.mongodb.enabled }}
       - name: init-mongodb
         image: busybox
-        command: ['sh', '-c', 'until nc -w1 {{ .Values.nuxeo.mongodb.host }} {{ .Values.nuxeo.mongodb.port }}; do echo "waiting for mongodb"; sleep 2; done;']
+        command: ['sh', '-c', 'until nc -w1 {{ .Values.mongodb.host }} {{ .Values.mongodb.port }}; do echo "waiting for mongodb"; sleep 2; done;']
 {{- end }}
-{{- if .Values.nuxeo.postgresql.enabled }}
+{{- if .Values.postgresql.enabled }}
       - name: init-postgresql
         image: busybox
-        command: ['sh', '-c', 'until nc -w1 {{ .Values.nuxeo.postgresql.host }} {{ .Values.nuxeo.postgresql.port }}; do echo "waiting for postgresql"; sleep 2; done;']
+        command: ['sh', '-c', 'until nc -w1 {{ .Values.postgresql.host }} {{ .Values.postgresql.port }}; do echo "waiting for postgresql"; sleep 2; done;']
 {{- end }}
-{{- if .Values.nuxeo.elasticsearch.enabled }}
+{{- if .Values.elasticsearch.enabled }}
       - name: init-elasticsearch
         image: busybox
-        command: ['sh', '-c', 'until nc -w1 {{ .Values.nuxeo.elasticsearch.host }} {{ .Values.nuxeo.elasticsearch.port }}; do echo "waiting for elastic"; sleep 2; done;']
+        command: ['sh', '-c', 'until nc -w1 {{ .Values.elasticsearch.host }} {{ .Values.elasticsearch.port }}; do echo "waiting for elastic"; sleep 2; done;']
 {{- end }}
-{{- if .Values.nuxeo.kafka.enabled }}
+{{- if .Values.kafka.enabled }}
       - name: init-kafka
         image: busybox
-        command: ['sh', '-c', 'until nc -w1 {{ .Values.nuxeo.kafka.host }} {{ .Values.nuxeo.kafka.port }}; do echo "waiting for kafka"; sleep 2; done;']
+        command: ['sh', '-c', 'until nc -w1 {{ .Values.kafka.host }} {{ .Values.kafka.port }}; do echo "waiting for kafka"; sleep 2; done;']
 {{- end }}
       securityContext:
         fsGroup: 1000
@@ -119,7 +119,7 @@ spec:
         configMap:
           name: {{ template "nuxeo.fullname" . }}-conf
       - name: log
-        {{- if .Values.nuxeo.logs.persistence.enabled }}
+        {{- if .Values.logs.persistence.enabled }}
         persistentVolumeClaim:
           claimName: {{ template "nuxeo.fullname" . }}-log
         {{- else }}
@@ -129,18 +129,18 @@ spec:
       - name: binaries
         emptyDir: {}
       {{- end }}
-      {{- with .Values.nuxeo.extraVolumes }}
+      {{- with .Values.extraVolumes }}
       {{- toYaml . | nindent  6 }}
       {{- end }}
-      {{- with .Values.nuxeo.nodeSelector }}
+      {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.nuxeo.affinity }}
+      {{- with .Values.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.nuxeo.tolerations }}
+      {{- with .Values.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}

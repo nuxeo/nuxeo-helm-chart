@@ -60,7 +60,7 @@ helm package nuxeo
 helm install nuxeo nuxeo/nuxeo \
   --version=2.0.0 \
   --namespace=test-nuxeo \
-  --set=nuxeo.image.tag=11.x \
+  --set=image.tag=11.x \
   --values=values-nuxeo.yaml
 
 # cleanup

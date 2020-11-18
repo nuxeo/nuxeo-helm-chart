@@ -110,7 +110,7 @@ pipeline {
                 jx step helm install ${CHART_NAME} \
                   --name=${TEST_RELEASE} \
                   --namespace=${TEST_NAMESPACE} \
-                  --set=nuxeo.image.tag=11.x # TODO remove when NXP-28504 is done and the latest tag (default) is available
+                  --set=image.tag=11.x
               """
 
               // check deployment status, exits if not OK
