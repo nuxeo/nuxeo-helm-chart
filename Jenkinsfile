@@ -137,14 +137,19 @@ pipeline {
       post {
         always {
           container('jx-base') {
-            // uninstall the chart
-            sh """
-              jx step helm delete ${TEST_RELEASE} \
-                --namespace=${TEST_NAMESPACE} \
-                --purge
-            """
-            // clean up the test namespace
-            sh "kubectl delete namespace ${TEST_NAMESPACE} --ignore-not-found=true"
+            script {
+              try {
+                // uninstall the chart
+                sh """
+                  jx step helm delete ${TEST_RELEASE} \
+                    --namespace=${TEST_NAMESPACE} \
+                    --purge
+                """
+              } finally {
+                // clean up the test namespace
+                sh "kubectl delete namespace ${TEST_NAMESPACE} --ignore-not-found=true"
+              }
+            }
           }
         }
         success {
