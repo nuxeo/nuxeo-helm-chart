@@ -16,7 +16,7 @@ spec:
   ports:
   - port: {{ .Values.nuxeo.service.externalPort }}
     targetPort: {{ .Values.nuxeo.service.internalPort }}
-    protocol: TCP
+    protocol: {{ .Values.nuxeo.service.protocol }}
     name: http
   selector:
     app: {{ template "nuxeo.fullname" . }}
