@@ -3,31 +3,26 @@ kind: Deployment
 metadata:
   name: {{ template "nuxeo.fullname" . }}
   labels:
-    draft: {{ default "draft-app" .Values.nuxeo.draft }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
 spec:
   selector:
     matchLabels:
-      draft: {{ default "draft-app" .Values.nuxeo.draft }}
       app: {{ template "nuxeo.fullname" . }}
   replicas: {{ .Values.nuxeo.replicaCount }}
   template:
     metadata:
       labels:
-        draft: {{ default "draft-app" .Values.nuxeo.draft }}
         app: {{ template "nuxeo.fullname" . }}
 {{- with .Values.nuxeo.podLabels }}
 {{ toYaml . | indent 8 }}
 {{- end }}
-{{- if .Values.nuxeo.podAnnotations }}
-      annotations:
-{{ toYaml .Values.nuxeo.podAnnotations | indent 8 }}
-{{- end }}
+      {{- with .Values.nuxeo.podAnnotations }}
+      annotations: {{ toYaml . | nindent 8 }}
+      {{- end }}
     spec:
-{{- if .Values.nuxeo.image.pullSecrets }}
-      imagePullSecrets:
-      - name: {{ .Values.nuxeo.image.pullSecrets }}
-{{- end }}
+      {{- with .Values.nuxeo.image.pullSecrets }}
+      imagePullSecrets: {{ toYaml . | nindent 6}}
+      {{- end }}
       containers:
       - name: {{ .Chart.Name }}
         resources:
@@ -51,6 +46,7 @@ spec:
           periodSeconds: {{ .Values.nuxeo.livenessProbe.periodSeconds }}
           successThreshold: {{ .Values.nuxeo.livenessProbe.successThreshold }}
           timeoutSeconds: {{ .Values.nuxeo.livenessProbe.timeoutSeconds }}
+          timeoutSeconds: {{ .Values.nuxeo.livenessProbe.failureThreshold }}
         readinessProbe:
           httpGet:
             path: {{ .Values.nuxeo.probePath }}
@@ -59,6 +55,7 @@ spec:
           periodSeconds: {{ .Values.nuxeo.readinessProbe.periodSeconds }}
           successThreshold: {{ .Values.nuxeo.readinessProbe.successThreshold }}
           timeoutSeconds: {{ .Values.nuxeo.readinessProbe.timeoutSeconds }}
+          timeoutSeconds: {{ .Values.nuxeo.readinessProbe.failureThreshold }}
         env:
         - name: POD_UID
           valueFrom:
@@ -71,8 +68,10 @@ spec:
               name: {{ template "nuxeo.fullname" . }}-instance-clid
               key: CLID
 {{- end }}
+{{- if .Values.nuxeo.packages }}
         - name: NUXEO_PACKAGES
           value: {{ .Values.nuxeo.packages }}
+{{- end }}
 {{- if .Values.nuxeo.customEnvs }}
 {{ toYaml .Values.nuxeo.customEnvs | indent 8 }}
 {{- end }}

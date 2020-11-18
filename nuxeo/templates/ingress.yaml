@@ -15,10 +15,10 @@ metadata:
 {{- with .Values.nuxeo.ingress.labels }}
 {{ toYaml . | indent 4 }}
 {{- end }}
+  {{- with .Values.nuxeo.ingress.annotations }}
   annotations:
-    {{- range $key, $value := .Values.nuxeo.ingress.annotations }}
-      {{ $key }}: {{ $value | quote }}
-    {{- end }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 spec:
   rules:
     - http:

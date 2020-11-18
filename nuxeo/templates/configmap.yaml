@@ -10,7 +10,7 @@ metadata:
     role: config
 data:
   nuxeo.conf: |-
-    # Additional nuxeo.conf parameters
+    # Helm chart properties
     nuxeo.virtual.host={{ .Values.nuxeo.virtualHost  }}
     nuxeo.stream.work.log.codec=avro
     nuxeo.stream.audit.log.codec=avro
