@@ -2,8 +2,12 @@ nuxeo:
   image:
     repository: docker.packages.nuxeo.com/nuxeo/nuxeo
     tag: latest
+    pullSecrets: []
+    pullPolicy: Always
   replicaCount: 1
   # virtualHost:
+  podLabels: {}
+  podAnnotations: {}
   nodeSelector: {}
   affinity: {}
   tolerations: []
@@ -15,6 +19,7 @@ nuxeo:
       cpu: 1
       memory: 2Gi
   service:
+    labels: {}
     type: ClusterIP
     externalPort: 80
     internalPort: 8080
@@ -35,6 +40,8 @@ nuxeo:
     successThreshold: 1
     timeoutSeconds: 10
     failureThreshold: 5
+  # packages:
+  # clid:
   mongodb:
     enabled: false
     protocol: mongodb
@@ -84,8 +91,6 @@ nuxeo:
     # hostname:
     # path:
     # tls:
-  customParams: |-
-    # Custom parameters to be appended to nuxeo.conf
   logs:
     persistence:
       enabled: false
@@ -93,10 +98,12 @@ nuxeo:
       # annotations: {}
       # storageClass:
       # size:
+  ##  Custom parameters to be appended to nuxeo.conf
+  # customParams: |-
   ## Custom environment variables to set in the container
   ## customEnvs allows to define environment variables from a value or a key of a ConfigMap
-  customEnvs:
+  # customEnvs:
   ## customEnvsFrom allows to load the content of a ConfigMap as environment variables
-  customEnvsFrom:
+  # customEnvsFrom:
   extraVolumeMounts: []
   extraVolumes: []
