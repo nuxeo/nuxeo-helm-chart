@@ -125,7 +125,7 @@ elasticsearch:
 ## These are for staging only, no need for 3 kafka and zoopkeper replicas
 kafka:
   image:
-    tag: "2.4.1"
+    tag: "2.6.0"
   replicaCount: 1
   persistence:
     enabled: false
