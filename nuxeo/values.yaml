@@ -9,7 +9,7 @@ nuxeo:
   tolerations: []
   resources:
     requests:
-      cpu: 0.4
+      cpu: 0.5
       memory: 1Gi
     limits:
       cpu: 1
@@ -35,7 +35,6 @@ nuxeo:
     successThreshold: 1
     timeoutSeconds: 10
     failureThreshold: 5
-  terminationGracePeriodSeconds: 10
   mongodb:
     enabled: false
     protocol: mongodb
