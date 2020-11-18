@@ -133,3 +133,15 @@ spec:
       {{- with .Values.nuxeo.extraVolumes }}
       {{- toYaml . | nindent  6 }}
       {{- end }}
+      {{- with .Values.nuxeo.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.nuxeo.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.nuxeo.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
