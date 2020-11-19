@@ -127,3 +127,23 @@ nuxeo binary storage configuration:
   Please set either kafka.enabled=true or redis.enabled=true.
 {{- end -}}
 {{- end -}}
+
+{{/*
+Template for the secret manifest, using a dictionary as scope:
+- .: root context
+- key: secret name suffix
+- val: string data
+*/}}
+{{- define "nuxeo.secret" -}}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ template "nuxeo.fullname" .}}-{{ .key }}
+  labels:
+    app: {{ template "nuxeo.fullname" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+type: Opaque
+stringData: {{ .val | nindent 2 }}
+{{- end -}}
