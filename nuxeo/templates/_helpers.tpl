@@ -95,7 +95,9 @@ nuxeo clustering configuration:
 {{- end -}}
 {{- end -}}
 
-{{/* Validate binary storage configuration: can enable either Google Cloud Storage or Amazon S3 but not both. */}}
+{{/*
+Validate binary storage configuration: can enable either Google Cloud Storage or Amazon S3 but not both.
+*/}}
 {{- define "nuxeo.validateValues.binaryStorage" -}}
 {{- if and .Values.googleCloudStorage.enabled .Values.amazonS3.enabled -}}
 {{-   printf "\n" -}}
@@ -106,7 +108,9 @@ nuxeo binary storage configuration:
 {{- end -}}
 {{- end -}}
 
-{{/* Validate database configuration: can enable either MongoDB or PostgreSQL but not both. */}}
+{{/*
+Validate database configuration: can enable either MongoDB or PostgreSQL but not both.
+*/}}
 {{- define "nuxeo.validateValues.database" -}}
 {{- if and .Values.mongodb.enabled .Values.postgresql.enabled -}}
  {{-   printf "\n" -}}
@@ -117,7 +121,9 @@ nuxeo binary storage configuration:
 {{- end -}}
 {{- end -}}
 
-{{/* Validate Kafka/Redis mutual exclusion: can enable either kafka or Redis but not both . */}}
+{{/*
+Validate Kafka/Redis mutual exclusion: can enable either kafka or Redis but not both.
+*/}}
 {{- define "nuxeo.validateValues.kafkaRedis" -}}
 {{- if and .Values.kafka.enabled .Values.redis.enabled -}}
  {{-   printf "\n" -}}

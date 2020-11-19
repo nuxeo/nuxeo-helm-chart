@@ -35,7 +35,7 @@ spec:
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
 {{- if .Values.image.pullPolicy }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
-{{- end}}
+{{- end }}
         ports:
         - containerPort: {{ .Values.service.internalPort }}
         livenessProbe:
