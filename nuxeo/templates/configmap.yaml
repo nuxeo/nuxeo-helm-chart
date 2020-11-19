@@ -1,3 +1,4 @@
+{{- $credentials := ternary "" (printf "%s%s" .Values.mongodb.credentials "@") (empty .Values.mongodb.credentials) -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -17,7 +18,7 @@ data:
     nuxeo.stream.pubsub.log.codec=avro
 {{- if .Values.mongodb.enabled }}
     nuxeo.templates=default,mongodb
-    nuxeo.mongodb.server={{ .Values.mongodb.protocol }}://{{ required "mongodb.host is required" .Values.mongodb.host }}:{{ .Values.mongodb.port }}
+    nuxeo.mongodb.server={{ .Values.mongodb.protocol }}://{{ $credentials }}{{ required "mongodb.host is required" .Values.mongodb.host }}:{{ .Values.mongodb.port }}
     nuxeo.mongodb.dbname={{ template "nuxeo.fullname" . }}
 {{- end }}
 {{- if .Values.postgresql.enabled }}

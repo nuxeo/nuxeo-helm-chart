@@ -47,6 +47,7 @@ mongodb:
   protocol: mongodb
   port: 27017
   # host:
+  # credentials:
 postgresql:
   enabled: false
   port: 5432
