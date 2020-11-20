@@ -24,9 +24,6 @@ service:
   externalPort: 80
   internalPort: 8080
   protocol: TCP
-  annotations:
-    fabric8.io/expose: "true"
-    fabric8.io/ingress.annotations: "kubernetes.io/ingress.class: nginx"
 probePath: /nuxeo/runningstatus
 livenessProbe:
   initialDelaySeconds: 100
