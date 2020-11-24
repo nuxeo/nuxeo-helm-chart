@@ -127,7 +127,12 @@ spec:
         {{- end }}
       {{- if not (include "nuxeo.cloudProvider.enabled" .) }}
       - name: binaries
+        {{- if .Values.persistentVolumeStorage.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ template "nuxeo.fullname" . }}-binaries
+        {{- else }}
         emptyDir: {}
+        {{- end }}
       {{- end }}
       {{- with .Values.extraVolumes }}
       {{- toYaml . | nindent  6 }}

@@ -96,15 +96,19 @@ nuxeo clustering configuration:
 {{- end -}}
 
 {{/*
-Validate binary storage configuration: can enable either Google Cloud Storage or Amazon S3 but not both.
+Validate binary storage configuration: only one type of storage can be enabled.
 */}}
 {{- define "nuxeo.validateValues.binaryStorage" -}}
-{{- if and .Values.googleCloudStorage.enabled .Values.amazonS3.enabled -}}
+{{- if or (or (and .Values.googleCloudStorage.enabled .Values.amazonS3.enabled) (and .Values.googleCloudStorage.enabled .Values.persistentVolumeStorage.enabled)) (and .Values.amazonS3.enabled .Values.persistentVolumeStorage.enabled) -}}
 {{-   printf "\n" -}}
 nuxeo binary storage configuration:
 
-  Google Cloud Storage and Amazon S3 cloud providers cannot be enabled at the same time.
-  Please set either googleCloudStorage.enabled=true or amazonS3.enabled=true.
+  Only one type of binary storage can be enabled among:
+    - Google Cloud Storage
+    - Amazon S3
+    - PersistentVolume
+
+  Please set googleCloudStorage.enabled=true or amazonS3.enabled=true or persistentVolumeStorage.enabled=true.
 {{- end -}}
 {{- end -}}
 
@@ -113,8 +117,8 @@ Validate database configuration: can enable either MongoDB or PostgreSQL but not
 */}}
 {{- define "nuxeo.validateValues.database" -}}
 {{- if and .Values.mongodb.enabled .Values.postgresql.enabled -}}
- {{-   printf "\n" -}}
- nuxeo database configuration:
+{{-   printf "\n" -}}
+nuxeo database configuration:
 
   MongoDB and PostgreSQL databases cannot be enabled at the same time.
   Please set either mongodb.enabled=true or postgresql.enabled=true.
@@ -126,8 +130,8 @@ Validate Kafka/Redis mutual exclusion: can enable either kafka or Redis but not 
 */}}
 {{- define "nuxeo.validateValues.kafkaRedis" -}}
 {{- if and .Values.kafka.enabled .Values.redis.enabled -}}
- {{-   printf "\n" -}}
- kafka and redis mutual exclusion:
+{{-   printf "\n" -}}
+kafka and redis mutual exclusion:
 
   Kafka and Redis cannot be enabled at the same time.
   Please set either kafka.enabled=true or redis.enabled=true.
@@ -136,9 +140,9 @@ Validate Kafka/Redis mutual exclusion: can enable either kafka or Redis but not 
 
 {{/*
 Template for the secret manifest, using a dictionary as scope:
-- .: root context
-- key: secret name suffix
-- val: string data
+  - .: root context
+  - key: secret name suffix
+  - val: string data
 */}}
 {{- define "nuxeo.secret" -}}
 apiVersion: v1

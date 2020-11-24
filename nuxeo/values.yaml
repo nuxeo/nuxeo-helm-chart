@@ -82,6 +82,12 @@ amazonS3:
   # bucket:
   ## The bucket prefix needs to end with /
   # bucketPrefix:
+persistentVolumeStorage:
+  enabled: false
+  # labels: {}
+  # annotations: {}
+  # storageClass:
+  # size:
 ingress:
   enabled: false
   # labels: {}
