@@ -1,6 +1,7 @@
 
 {{- include "nuxeo.validateValues" . }}
 
+{{- $persistentVolumeStorage := .Values.persistentVolumeStorage.enabled }}
 {{- $fullname := include "nuxeo.fullname" . }}
 {{- $releaseNamespace := .Release.Namespace }}
 {{- $clusterDomain := .Values.clusterDomain }}
@@ -11,14 +12,21 @@
 
 -------------------------------------------------------------------------------
 WARNING
+{{- if $persistentVolumeStorage }}
+
+  By enabling a persistent volume for binary storage, since it is mounted with
+  the ReadWriteOnce access mode, the deployment won't be able to scale up in
+  Kubernetes.
+{{- else }}
 
   By not enabling any cloud provider for binary storage, binaries will be
-  stored in an EmptyDir volume, thus not surviving a pod restart.
+  stored in an emptyDir volume, thus not surviving a pod restart.
 
   Moreover, the application won't work if the deployment is scaled up in
   Kubernetes.
+{{- end }}
 
-  To put the binaries in a persistent storage, please set either
+  Please enable a cloud provider for binary storage by setting either
   googleCloudStorage.enabled=true or amazonS3.enabled=true.
 
 -------------------------------------------------------------------------------
