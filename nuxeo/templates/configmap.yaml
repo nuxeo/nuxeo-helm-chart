@@ -10,7 +10,7 @@ metadata:
     heritage: "{{ .Release.Service }}"
     role: config
 data:
-  nuxeo.conf: |-
+  nuxeo.conf: |
     # Helm chart properties
     nuxeo.virtual.host={{ .Values.virtualHost  }}
     nuxeo.stream.work.log.codec=avro
