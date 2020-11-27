@@ -102,18 +102,22 @@ pipeline {
                 --namespace=${TEST_NAMESPACE} \
                 --set=image.tag=11.x
             """
-            // check deployment status, exit if not OK
-            sh """
-              kubectl rollout status deployment ${TEST_K8S_RESSOURCE} \
-                --namespace=${TEST_NAMESPACE} \
-                --timeout=${TEST_ROLLOUT_STATUS_TIMEOUT}
-            """
-            // check running status
-            def runningStatus = sh(returnStatus: true, script: "test/running-status.sh http://${TEST_SERVICE_DOMAIN}/nuxeo")
-            if (runningStatus != 0) {
-              currentBuild.result = 'FAILURE'
-              currentBuild.description = "Running status is not OK."
-              error(currentBuild.description)
+            try {
+              // check deployment status, exit if not OK
+              sh """
+                kubectl rollout status deployment ${TEST_K8S_RESSOURCE} \
+                  --namespace=${TEST_NAMESPACE} \
+                  --timeout=${TEST_ROLLOUT_STATUS_TIMEOUT}
+              """
+              // check running status
+              sh "test/running-status.sh http://${TEST_SERVICE_DOMAIN}/nuxeo"
+            } catch (e) {
+              sh """
+                kubectl --namespace=${TEST_NAMESPACE} get all,configmaps,endpoints,ingresses
+                kubectl --namespace=${TEST_NAMESPACE} describe pod --selector=app=${TEST_K8S_RESSOURCE}
+                kubectl --namespace=${TEST_NAMESPACE} logs --selector=app=${TEST_K8S_RESSOURCE} --all-containers --tail=1000
+              """
+              throw e
             }
 
             def archive = "${CHART_NAME}-${BUILD_VERSION}.tgz"
