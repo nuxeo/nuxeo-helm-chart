@@ -81,7 +81,15 @@ spec:
 {{- end }}
         volumeMounts:
           - name: nuxeoconf
-            mountPath: /etc/nuxeo/conf.d/
+            mountPath: /etc/nuxeo/conf.d/00-nuxeo.conf
+            subPath: 00-nuxeo.conf
+          {{- range $key, $val := .Values.customProperties }}
+          {{- with $ }}
+          - name: nuxeoconf-{{ $key }}
+            mountPath: /etc/nuxeo/conf.d/nuxeo-{{ $key }}.conf
+            subPath: nuxeo-{{ $key }}.conf
+          {{- end }}
+          {{- end }}
           - name: log
             mountPath: /var/log/nuxeo
           {{- if not (include "nuxeo.cloudProvider.enabled" .) }}
@@ -118,6 +126,13 @@ spec:
       - name: nuxeoconf
         configMap:
           name: {{ template "nuxeo.fullname" . }}-conf
+      {{- range $key, $val := .Values.customProperties }}
+      {{- with $ }}
+      - name: nuxeoconf-{{ $key }}
+        configMap:
+          name: {{ template "nuxeo.fullname" . }}-conf-{{ $key }}
+      {{- end }}
+      {{- end }}
       - name: log
         {{- if .Values.logs.persistence.enabled }}
         persistentVolumeClaim:

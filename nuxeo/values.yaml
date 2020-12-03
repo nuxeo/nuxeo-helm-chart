@@ -102,13 +102,37 @@ logs:
     # annotations: {}
     # storageClass:
     # size:
-##  Custom parameters to be appended to nuxeo.conf
-# customParams: |
+
+## Custom properties to be appended to nuxeo.conf.
+## This is a map to allow merging several sets of properties from multiple values files.
+## The keys MUST be lowercase since they're used as a ConfigMap name.
+## The property sets are sorted by key when appended to nuxeo.conf.
+## For instance, with the `customProperties` value below and an extra-values.yaml file containing:
+## ```
+## customProperties:
+##   set2: |
+##     key1=override
+##     key3=value3
+## ```
+## running `helm install ... --values=extra-values.yaml` will result inside nuxeo.conf in:
+## ```
+## key1=value1
+## key2=value2
+## key1=override
+## key3=value3
+## ```
+# customProperties:
+#   set1: |
+#     key1=value1
+#     key2=value2
+
 ## Custom environment variables to set in the container
 ## customEnvs allows to define environment variables from a value or a key of a ConfigMap
 # customEnvs:
+
 ## customEnvsFrom allows to load the content of a ConfigMap as environment variables
 # customEnvsFrom:
+
 extraVolumeMounts: []
 extraVolumes: []
 extraSecrets: {}
