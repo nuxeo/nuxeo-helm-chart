@@ -10,7 +10,7 @@ metadata:
     heritage: "{{ .Release.Service }}"
     role: config
 data:
-  nuxeo.conf: |
+  00-nuxeo.conf: |
     # Helm chart properties
     nuxeo.virtual.host={{ .Values.virtualHost  }}
     nuxeo.stream.work.log.codec=avro
@@ -83,6 +83,22 @@ data:
     nuxeo.cluster.enabled=true
     nuxeo.cluster.nodeid=${env:POD_UID}
 {{- end }}
-{{- if .Values.customParams }}
-{{ .Values.customParams | indent 4 }}
+{{- range $key, $val := .Values.customProperties }}
+{{- with $ }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "nuxeo.fullname" . }}-conf-{{ $key }}
+  labels:
+    app: {{ template "nuxeo.fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+    role: config
+data:
+  nuxeo-{{ $key }}.conf: |
+    # Helm chart properties: {{ $key }}
+{{ $val | indent 4 }}
+{{- end }}
 {{- end }}
