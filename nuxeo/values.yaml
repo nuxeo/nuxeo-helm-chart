@@ -133,6 +133,12 @@ logs:
 ## customEnvsFrom allows to load the content of a ConfigMap as environment variables
 # customEnvsFrom:
 
+metrics:
+  enabled: true
+  stackDriver:
+    enabled: false
+    # gcpProjectId:
+
 extraVolumeMounts: []
 extraVolumes: []
 extraSecrets: {}

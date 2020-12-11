@@ -79,6 +79,11 @@ data:
     nuxeo.s3storage.bucket_prefix={{ template "nuxeo.fullname" . }}/
     {{- end }}
 {{- end }}
+    metrics.enabled={{ .Values.metrics.enabled }}
+{{- if .Values.metrics.stackDriver.enabled }}
+    metrics.stackdriver.enabled={{ .Values.metrics.stackDriver.enabled }}
+    metrics.stackdriver.gcpProjectId={{ .Values.metrics.stackDriver.gcpProjectId }}
+{{- end }}
 {{- if or (gt (int .Values.replicaCount) 1) (include "nuxeo.cloudProvider.enabled" .) }}
     nuxeo.cluster.enabled=true
     nuxeo.cluster.nodeid=${env:POD_UID}
