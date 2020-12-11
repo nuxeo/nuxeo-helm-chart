@@ -41,30 +41,31 @@ readinessProbe:
 # clid:
 mongodb:
   enabled: false
-  protocol: mongodb
-  port: 27017
-  # host:
+  # protocol: mongodb
   # credentials:
+  # url:
+  # host:
+  # port: 27017
 postgresql:
   enabled: false
-  port: 5432
   # host:
+  # port: 5432
   # username:
   # password:
 elasticsearch:
   enabled: false
-  protocol: http
-  port: 9200
-  clusterName: elasticsearch
-  indexNumberOfReplicas: 0
-  restClient:
-    socketTimeoutMs: 300000
-    connectionTimeoutMs: 300000
+  # protocol: http
   # host:
+  # port: 9200
+  # clusterName: elasticsearch
+  # indexNumberOfReplicas: 0
+  # restClient:
+  #   socketTimeoutMs: 300000
+  #   connectionTimeoutMs: 300000
 kafka:
   enabled: false
-  port: 9092
   # host:
+  # port: 9092
 redis:
   enabled: false
 googleCloudStorage:
