@@ -70,7 +70,7 @@ redis:
   enabled: false
 googleCloudStorage:
   enabled: false
-  # gcpProject:
+  # gcpProjectId:
   # credentials:
   # bucket:
   ## The bucket prefix needs to end with /
