@@ -18,19 +18,23 @@ data:
     nuxeo.stream.pubsub.log.codec=avro
 {{- if .Values.mongodb.enabled }}
     nuxeo.templates=default,mongodb
-    nuxeo.mongodb.server={{ .Values.mongodb.protocol }}://{{ $credentials }}{{ required "mongodb.host is required" .Values.mongodb.host }}:{{ .Values.mongodb.port }}
+{{- if .Values.mongodb.url }}
+    nuxeo.mongodb.server={{ .Values.mongodb.protocol }}://{{ $credentials }}{{ .Values.mongodb.url }}
+{{- else}}
+    nuxeo.mongodb.server={{ .Values.mongodb.protocol }}://{{ $credentials }}{{ .Values.mongodb.host }}:{{ .Values.mongodb.port }}
+{{- end }}
     nuxeo.mongodb.dbname={{ template "nuxeo.fullname" . }}
 {{- end }}
 {{- if .Values.postgresql.enabled }}
     nuxeo.templates=default,postgresql
-    nuxeo.db.host={{ required "postgresql.host is required" .Values.postgresql.host }}
+    nuxeo.db.host={{ .Values.postgresql.host }}
     nuxeo.db.port={{ .Values.postgresql.port }}
     nuxeo.db.name={{ template "nuxeo.fullname" . }}
     nuxeo.db.user={{ .Values.postgresql.username }}
     nuxeo.db.password={{ .Values.postgresql.password }}
 {{- end }}
 {{- if .Values.elasticsearch.enabled }}
-    elasticsearch.addressList={{ .Values.elasticsearch.protocol }}://{{ required "elasticsearch.host is required" .Values.elasticsearch.host }}:{{ .Values.elasticsearch.port }}
+    elasticsearch.addressList={{ .Values.elasticsearch.protocol }}://{{ .Values.elasticsearch.host }}:{{ .Values.elasticsearch.port }}
     elasticsearch.clusterName={{ .Values.elasticsearch.clusterName }}
     elasticsearch.indexName={{ template "nuxeo.fullname" . }}
     elasticsearch.indexNumberOfReplicas={{ .Values.elasticsearch.indexNumberOfReplicas }}
@@ -39,7 +43,7 @@ data:
 {{- end }}
 {{- if .Values.kafka.enabled }}
     kafka.enabled=true
-    kafka.bootstrap.servers={{ required "kafka.host is required" .Values.kafka.host }}:{{ .Values.kafka.port }}
+    kafka.bootstrap.servers={{ .Values.kafka.host }}:{{ .Values.kafka.port }}
     kafka.topicPrefix={{ template "nuxeo.fullname" . }}
     nuxeo.stream.work.enabled=true
     nuxeo.pubsub.provider=stream
