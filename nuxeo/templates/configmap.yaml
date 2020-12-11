@@ -51,7 +51,7 @@ data:
 {{- if .Values.redis.enabled }}
 {{- if .Values.mongodb.enabled }}
     nuxeo.templates=default,mongodb,redis
-{{- else if  .Values.postgresql.enabled }}
+{{- else if .Values.postgresql.enabled }}
     nuxeo.templates=default,postgresql,redis
 {{- else }}
     nuxeo.templates=default,redis
@@ -62,7 +62,7 @@ data:
 {{- end }}
 {{- if .Values.googleCloudStorage.enabled }}
     nuxeo.core.binarymanager=org.nuxeo.ecm.core.storage.gcp.GoogleStorageBinaryManager
-    nuxeo.gcp.project={{ .Values.googleCloudStorage.gcpProject }}
+    nuxeo.gcp.project={{ .Values.googleCloudStorage.gcpProjectId }}
     nuxeo.gcp.credentials={{ .Values.googleCloudStorage.credentials }}
     nuxeo.gcp.storage.bucket= {{ .Values.googleCloudStorage.bucket }}
     {{- if .Values.googleCloudStorage.bucketPrefix }}

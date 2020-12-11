@@ -23,10 +23,12 @@ spec:
   rules:
     - http:
         paths:
-          - path: {{ .Values.ingress.path }}
-            backend:
+          - backend:
               serviceName: {{ template "nuxeo.fullname" . }}
               servicePort: {{ .Values.service.externalPort}}
+            {{- if .Values.ingress.path }}
+            path: {{ .Values.ingress.path }}
+            {{- end }}
       {{- with .Values.ingress.hostname }}
       host: {{ toYaml . }}
       {{- end }}
