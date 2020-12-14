@@ -2,7 +2,7 @@ image:
   repository: docker.packages.nuxeo.com/nuxeo/nuxeo
   tag: latest
   pullSecrets: []
-  pullPolicy: Always
+  # pullPolicy:
 ## Nuxeo architecture, among:
 ## - singleNode: a single Nuxeo node with workers and stream processing enabled
 ## - api-worker:
