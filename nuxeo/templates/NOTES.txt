@@ -1,12 +1,15 @@
 
 {{- include "nuxeo.validateValues" . }}
 
+{{- $architecture := include "nuxeo.architecture" . }}
 {{- $persistentVolumeStorage := .Values.persistentVolumeStorage.enabled }}
 {{- $fullname := include "nuxeo.fullname" . }}
 {{- $releaseNamespace := .Release.Namespace }}
 {{- $clusterDomain := .Values.clusterDomain }}
 
 ** Please be patient while the nuxeo chart is being deployed **
+
+Nuxeo architecture: {{ $architecture }}.
 
 {{- if not (include "nuxeo.cloudProvider.enabled" .) }}
 

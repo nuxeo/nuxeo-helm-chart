@@ -1,10 +1,18 @@
 {{- $credentials := ternary "" (printf "%s%s" .Values.mongodb.credentials "@") (empty .Values.mongodb.credentials) -}}
+{{- range splitList "," (include "nuxeo.nodeTypes" .) }}
+{{- $nuxeoNodeType := . -}}
+{{- $nuxeoFullnameSuffix := ternary "" (printf "-%s" $nuxeoNodeType) (eq $nuxeoNodeType "single") -}}
+{{- $workerNode := (eq $nuxeoNodeType "worker") -}}
+{{- with $ }}
+---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ template "nuxeo.fullname" . }}-conf
+  name: {{ template "nuxeo.fullname" . }}-conf{{ $nuxeoFullnameSuffix }}
   labels:
     app: {{ template "nuxeo.fullname" . }}
+    nuxeoNode: {{ $nuxeoNodeType }}
+    tier: {{ ternary "backend" "frontend" $workerNode }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
@@ -91,6 +99,17 @@ data:
 {{- if or (gt (int .Values.replicaCount) 1) (include "nuxeo.cloudProvider.enabled" .) }}
     nuxeo.cluster.enabled=true
     nuxeo.cluster.nodeid=${env:POD_UID}
+{{- end }}
+{{- if eq $nuxeoNodeType "api" }}
+    # {{ $nuxeoNodeType }} node: disable workers and stream processing
+    nuxeo.stream.processing.enabled=false
+    nuxeo.work.processing.enabled=false
+{{- else }}
+    # {{ $nuxeoNodeType }} node: enable workers and stream processing
+    nuxeo.stream.processing.enabled=true
+    nuxeo.work.processing.enabled=true
+{{- end }}
+{{- end }}
 {{- end }}
 {{- range $key, $val := .Values.customProperties }}
 {{- with $ }}

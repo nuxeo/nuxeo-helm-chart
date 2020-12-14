@@ -42,6 +42,13 @@ Compile all warnings into a single message, and call fail.
 {{- end -}}
 
 {{/*
+Return the Nuxeo architecure, "singleNode" by default.
+*/}}
+{{- define "nuxeo.architecture" -}}
+    {{- default "singleNode" .Values.architecture -}}
+{{- end -}}
+
+{{/*
 Return true if a cloud provider is enabled for binary storage.
 */}}
 {{- define "nuxeo.cloudProvider.enabled" -}}
@@ -156,4 +163,15 @@ metadata:
     heritage: {{ .Release.Service }}
 type: Opaque
 stringData: {{ .val | nindent 2 }}
+{{- end -}}
+
+{{/*
+Return the list of node types depending on the architecture.
+*/}}
+{{- define "nuxeo.nodeTypes" -}}
+{{- if eq (include "nuxeo.architecture" .) "api-worker" -}}
+    api,worker
+{{- else -}}
+    single
+{{- end -}}
 {{- end -}}

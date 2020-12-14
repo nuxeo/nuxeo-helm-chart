@@ -20,3 +20,4 @@ spec:
     name: http
   selector:
     app: {{ template "nuxeo.fullname" . }}
+    tier: frontend

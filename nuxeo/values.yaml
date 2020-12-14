@@ -3,7 +3,14 @@ image:
   tag: latest
   pullSecrets: []
   pullPolicy: Always
+## Nuxeo architecture, among:
+## - singleNode: a single Nuxeo node with workers and stream processing enabled
+## - api-worker:
+##   - `replicaCount` API nodes: handling HTTP requests, with workers and stream processing disabled
+##   - `workerCount` worker nodes: not handling HTTP requests, with workers and stream processing enabled
+architecture: singleNode
 replicaCount: 1
+# workerCount: 1
 clusterDomain: cluster.local
 # virtualHost:
 podLabels: {}
