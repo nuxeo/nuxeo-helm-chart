@@ -100,7 +100,7 @@ pipeline {
               kubectl create namespace ${TEST_NAMESPACE}
               helm3 install ${TEST_RELEASE} ${CHART_NAME} \
                 --namespace=${TEST_NAMESPACE} \
-                --set=image.tag=11.x
+                --values=ci/values.yaml
             """
             try {
               // check deployment status, exit if not OK
