@@ -25,9 +25,12 @@ spec:
 {{- with .Values.podLabels }}
 {{ toYaml . | indent 8 }}
 {{- end }}
-      {{- with .Values.podAnnotations }}
-      annotations: {{ toYaml . | nindent 8 }}
-      {{- end }}
+      annotations:
+        checksum/configmap: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+{{- with .Values.podAnnotations }}
+{{ toYaml . | indent 8 }}
+{{- end }}
     spec:
       {{- with .Values.image.pullSecrets }}
       imagePullSecrets: {{ toYaml . | nindent 6}}
