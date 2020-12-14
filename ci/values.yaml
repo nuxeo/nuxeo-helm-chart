@@ -1,0 +1,9 @@
+image:
+  tag: "11.x"
+nodeSelector:
+  team: platform
+tolerations:
+- effect: NoSchedule
+  key: team
+  operator: Equal
+  value: platform
