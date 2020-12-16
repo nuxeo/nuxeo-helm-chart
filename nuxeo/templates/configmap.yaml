@@ -92,9 +92,17 @@ data:
     {{- end }}
 {{- end }}
     metrics.enabled={{ .Values.metrics.enabled }}
-{{- if .Values.metrics.stackDriver.enabled }}
-    metrics.stackdriver.enabled={{ .Values.metrics.stackDriver.enabled }}
+{{- if .Values.metrics.enabled }}
+    metrics.streams.enabled={{ .Values.metrics.streams.enabled }}
+    {{- if .Values.metrics.stackDriver.enabled }}
+    metrics.stackdriver.enabled=true
     metrics.stackdriver.gcpProjectId={{ .Values.metrics.stackDriver.gcpProjectId }}
+    {{- end }}
+    {{- if .Values.metrics.stackDriver.tracing.enabled }}
+    tracing.stackdriver.enabled=true
+    tracing.stackdriver.gcpProjectId={{ .Values.metrics.stackDriver.gcpProjectId }}
+    tracing.stackdriver.timeout={{ .Values.metrics.stackDriver.tracing.timeout }}
+    {{- end }}
 {{- end }}
 {{- if or (gt (int .Values.replicaCount) 1) (include "nuxeo.cloudProvider.enabled" .) }}
     nuxeo.cluster.enabled=true

@@ -142,10 +142,19 @@ logs:
 # customEnvsFrom:
 
 metrics:
+  ## Enable global metrics, also needed for metrics reporters and tracing systems such a Stackdriver
   enabled: true
+  streams:
+    ## Enable stream metrics reporter for Nuxeo Stream introspection
+    enabled: true
   stackDriver:
+    ## Enable Stackdriver metrics reporter
     enabled: false
     # gcpProjectId:
+    tracing:
+      ## Enable Stackdriver tracing system
+      enabled: false
+      # timeout: 30s
 
 extraVolumeMounts: []
 extraVolumes: []
