@@ -42,6 +42,26 @@ Compile all warnings into a single message, and call fail.
 {{- end -}}
 
 {{/*
+Return true if the deployment needs to be rolled.
+*/}}
+{{- define "nuxeo.deployment.roll" -}}
+{{- if .Values.image.pullPolicy -}}
+  {{- if eq "Always" .Values.image.pullPolicy -}}
+    {{- true -}}
+  {{- else -}}
+    {{- false -}}
+  {{- end -}}
+{{- else -}}
+  {{- if eq "latest" (toString .Values.image.tag) -}}
+    {{- true -}}
+  {{- else -}}
+    {{- false -}}
+  {{- end -}}
+{{- end -}}
+
+{{- end -}}
+
+{{/*
 Return the Nuxeo architecure, "singleNode" by default.
 */}}
 {{- define "nuxeo.architecture" -}}

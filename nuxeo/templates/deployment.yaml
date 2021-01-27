@@ -28,6 +28,7 @@ spec:
       annotations:
         checksum/configmap: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
         checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+        rollme: {{ ternary (randAlphaNum 5 | quote) "unchanged" (eq "true" (include "nuxeo.deployment.roll" .)) }}
 {{- with .Values.podAnnotations }}
 {{ toYaml . | indent 8 }}
 {{- end }}
