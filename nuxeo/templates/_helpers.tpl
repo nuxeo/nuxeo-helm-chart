@@ -166,23 +166,24 @@ kafka and redis mutual exclusion:
 {{- end -}}
 
 {{/*
-Template for the secret manifest, using a dictionary as scope:
+Template for an Opaque secret manifest, using a dictionary as scope:
   - .: root context
-  - key: secret name suffix
-  - val: string data
+  - name: secret name
+  - data: secret data, map of key value pairs
+  - dataType: "data" or "stringData", depending on whether the data values are arbitrary or base64-encoded strings
 */}}
 {{- define "nuxeo.secret" -}}
 apiVersion: v1
 kind: Secret
 metadata:
-  name: {{ template "nuxeo.fullname" .}}-{{ .key }}
+  name: {{ .name }}
   labels:
     app: {{ template "nuxeo.fullname" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 type: Opaque
-stringData: {{ .val | nindent 2 }}
+{{ .dataType }}: {{ toYaml .data | nindent 2 }}
 {{- end -}}
 
 {{/*
