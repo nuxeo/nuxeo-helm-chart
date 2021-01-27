@@ -2,6 +2,7 @@
 {{- include "nuxeo.validateValues" . }}
 
 {{- $architecture := include "nuxeo.architecture" . }}
+{{- $deploymentRoll := include "nuxeo.deployment.roll" . }}
 {{- $persistentVolumeStorage := .Values.persistentVolumeStorage.enabled }}
 {{- $fullname := include "nuxeo.fullname" . }}
 {{- $releaseNamespace := .Release.Namespace }}
@@ -10,6 +11,7 @@
 ** Please be patient while the nuxeo chart is being deployed **
 
 Nuxeo architecture: {{ $architecture }}.
+Roll deployment: {{ $deploymentRoll }}.
 
 {{- if not (include "nuxeo.cloudProvider.enabled" .) }}
 
