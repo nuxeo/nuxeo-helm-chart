@@ -44,7 +44,14 @@ readinessProbe:
   successThreshold: 1
   timeoutSeconds: 10
   failureThreshold: 5
+## List of Nuxeo packages to install at startup, separated by a space.
+## For instance:
+## ```
+## packages: nuxeo-web-ui nuxeo-drive
+## ```
 # packages:
+## Nuxeo CLID, required for package installation.
+## Can be multiline, using |-.
 # clid:
 mongodb:
   enabled: false
