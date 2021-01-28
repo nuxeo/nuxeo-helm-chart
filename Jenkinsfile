@@ -81,6 +81,7 @@ pipeline {
     TEST_SERVICE_DOMAIN = "${TEST_K8S_RESSOURCE}.${TEST_NAMESPACE}.svc.cluster.local"
     TEST_ROLLOUT_STATUS_TIMEOUT = '5m'
     BUILD_VERSION = getBuildVersion("${CHART_DESCRIPTOR}")
+    CHART_ARCHIVE = "${CHART_NAME}-${BUILD_VERSION}.tgz"
   }
   stages {
     stage('Helm package') {
@@ -120,11 +121,10 @@ pipeline {
               throw e
             }
 
-            def archive = "${CHART_NAME}-${BUILD_VERSION}.tgz"
-            echo "Upload chart archive ${archive}"
+            echo "Upload chart archive ${CHART_ARCHIVE}"
             // upload package to the ChartMuseum
             withCredentials([usernameColonPassword(credentialsId: 'jenkins-x-chartmuseum', variable: 'CHARTMUSEUM_AUTH')]) {
-              sh "curl --fail -u '${CHARTMUSEUM_AUTH}' --data-binary '@${archive}' ${CHART_REPOSITORY}/api/charts"
+              sh 'curl --fail -u $CHARTMUSEUM_AUTH --data-binary @$CHART_ARCHIVE $CHART_REPOSITORY/api/charts'
             }
           }
         }
