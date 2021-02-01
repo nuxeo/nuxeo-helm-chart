@@ -48,6 +48,17 @@ data:
     elasticsearch.indexNumberOfReplicas={{ .Values.elasticsearch.indexNumberOfReplicas }}
     elasticsearch.restClient.socketTimeoutMs={{ .Values.elasticsearch.restClient.socketTimeoutMs }}
     elasticsearch.restClient.connectionTimeoutMs={{ .Values.elasticsearch.restClient.connectionTimeoutMs }}
+    {{- if .Values.elasticsearch.basicAuth.enabled }}
+    elasticsearch.restClient.username={{ .Values.elasticsearch.basicAuth.username }}
+    elasticsearch.restClient.password={{ .Values.elasticsearch.basicAuth.password }}
+    {{- end }}
+    {{- if .Values.elasticsearch.httpReadOnly.enabled }}
+    {{- if .Values.elasticsearch.basicAuth.enabled }}
+    elasticsearch.httpReadOnly.baseUrl={{ .Values.elasticsearch.protocol }}://{{ .Values.elasticsearch.basicAuth.username }}:{{ .Values.elasticsearch.basicAuth.password }}@{{ .Values.elasticsearch.host }}:{{ .Values.elasticsearch.port }}
+    {{- else }}
+    elasticsearch.httpReadOnly.baseUrl={{ .Values.elasticsearch.protocol }}://{{ .Values.elasticsearch.host }}:{{ .Values.elasticsearch.port }}
+    {{- end }}
+    {{- end }}
 {{- end }}
 {{- if .Values.kafka.enabled }}
     kafka.enabled=true

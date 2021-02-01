@@ -76,6 +76,14 @@ elasticsearch:
   restClient:
     socketTimeoutMs: 300000
     connectionTimeoutMs: 300000
+  ## To configure Basic Authentication, see https://doc.nuxeo.com/nxdoc/cloud/elasticsearch-setup/#basic-authentication.
+  basicAuth:
+    enabled: false
+    # username:
+    # password:
+  httpReadOnly:
+    ## Alows to enable the Elasticsearch Passthrough, see https://doc.nuxeo.com/nxdoc/cloud/elasticsearch-passthrough/.
+    enabled: false
 kafka:
   enabled: false
   # host:
