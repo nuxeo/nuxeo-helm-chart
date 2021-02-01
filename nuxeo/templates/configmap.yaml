@@ -25,7 +25,7 @@ data:
     nuxeo.stream.audit.log.codec=avro
     nuxeo.stream.pubsub.log.codec=avro
 {{- if .Values.mongodb.enabled }}
-    nuxeo.templates=default,mongodb
+    nuxeo.append.templates.mongodb=mongodb
 {{- if .Values.mongodb.url }}
     nuxeo.mongodb.server={{ .Values.mongodb.protocol }}://{{ $credentials }}{{ .Values.mongodb.url }}
 {{- else}}
@@ -34,7 +34,7 @@ data:
     nuxeo.mongodb.dbname={{ template "nuxeo.fullname" . }}
 {{- end }}
 {{- if .Values.postgresql.enabled }}
-    nuxeo.templates=default,postgresql
+    nuxeo.append.templates.postgresql=postgresql
     nuxeo.db.host={{ .Values.postgresql.host }}
     nuxeo.db.port={{ .Values.postgresql.port }}
     nuxeo.db.name={{ template "nuxeo.fullname" . }}
@@ -57,13 +57,7 @@ data:
     nuxeo.pubsub.provider=stream
 {{- end }}
 {{- if .Values.redis.enabled }}
-{{- if .Values.mongodb.enabled }}
-    nuxeo.templates=default,mongodb,redis
-{{- else if .Values.postgresql.enabled }}
-    nuxeo.templates=default,postgresql,redis
-{{- else }}
-    nuxeo.templates=default,redis
-{{- end }}
+    nuxeo.append.templates.redis=redis
     nuxeo.redis.host={{ .Values.redis.host }}
     nuxeo.work.queuing=redis
     nuxeo.redis.enabled=true
