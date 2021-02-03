@@ -6,6 +6,8 @@ This chart bootstraps a [Nuxeo](https://github.com/nuxeo/nuxeo/tree/master/docke
 The `nuxeo` chart is not production-ready by default.
 It suits for a development or staging environment such as preview.
 
+Currently, there is a single version of this chart for all the versions of Nuxeo.
+
 The code samples below rely on the [Helm 3](https://helm.sh/docs/helm/helm/) command line.
 
 ## Scope
@@ -17,29 +19,10 @@ By default, this chart deploys the strict minimum to have Nuxeo running with:
 - Elasticsearch embedded.
 - Chronicle Queue for the WorkManager and Nuxeo Streams.
 
-You can have a look at the [nuxeo-k8s-install.sh](test/nuxeo-k8s-install.sh) script sample to  make a "real" deployment of Nuxeo in Kubernetes, relying on:
+To make a "real" deployment of Nuxeo in Kubernetes, you can have a look at:
 
-- MongoDB database.
-- Elasticsearch cluster.
-- Kafka cluster.
-
-It installs the external services in a given namespace and Nuxeo in another namespace, configuring to rely on these external services.
-See the related values files for:
-
-- [MongoDB](test/values-mongodb.yaml)
-- [PostgreSQL](test/values-postgresql.yaml)
-- [Elasticsearch](test/values-elasticsearch.yaml)
-- [Kafka](test/values-kafka.yaml)
-- [Nuxeo](test/values-nuxeo.yaml) itself
-
-These are just sample values, the referenced charts need a fine-grained configuration to be suitable for production, see the available values of the related Helm charts:
-
-- [MongoDB](https://github.com/bitnami/charts/blob/master/bitnami/mongodb/values-production.yaml)
-- [PostgreSQL](https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values-production.yaml)
-- [Elasticsearch](https://github.com/elastic/helm-charts/blob/master/elasticsearch/values.yaml)
-- [Kafka](https://github.com/bitnami/charts/blob/master/bitnami/kafka/values-production.yaml)
-
-Currently, there is a single version of this chart for all the versions of Nuxeo.
+- The different parameters in the [values.yaml](nuxeo/values.yaml) file.
+- The [Helmfile](#helmfile) used in the Platform CI for preview.
 
 ## TL;DR
 
@@ -135,3 +118,27 @@ When a pull request is merged to master:
 See the [Jenkinsfile](./Jenkinsfile) for more details.
 
 The major and minor versions can be incremented manually.
+
+## Helmfile
+
+The Platform CI uses a [helmfile](https://github.com/nuxeo/nuxeo/tree/master/ci/helm/helmfile.yaml) to deploy Nuxeo in a preview environment, along with the following external services:
+
+- MongoDB
+- Elasticsearch
+- Kafka
+
+Nuxeo is configured to rely on these external services.
+
+The `helmfile.yaml` requires the following environment variables:
+
+- `NAMESPACE`: the namespace into which install the releases of Nuxeo, MongoDB, Elasticsearch and Kafka.
+- `DOCKER_REGISTRY`: the registry from which to pull the `nuxeo/nuxeo` Docker image.
+- `VERSION`: the tag of the `nuxeo/nuxeo` Docker image to pull.
+
+**Note:** the values used to deploy the external services are just sample values. The referenced charts need a fine-grained configuration to be suitable for production, see the available values of the related Helm charts:
+
+- [MongoDB](https://github.com/bitnami/charts/blob/master/bitnami/mongodb/values.yaml)
+- [Elasticsearch](https://github.com/elastic/helm-charts/blob/master/elasticsearch/values.yaml)
+- [Kafka](https://github.com/bitnami/charts/blob/master/bitnami/kafka/values.yaml)
+
+You can have a look at the [Helmfile](https://github.com/roboll/helmfile) documentation.
