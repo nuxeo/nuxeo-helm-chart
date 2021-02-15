@@ -173,6 +173,8 @@ metrics:
       enabled: false
       # timeout: 30s
 
+## List of extra containers to run along with the nuxeo one, aka sidecar containers.
+extraContainers: []
 extraVolumeMounts: []
 extraVolumes: []
 ## Extra Opaque secrets to deploy, using non base64-encoded strings.
