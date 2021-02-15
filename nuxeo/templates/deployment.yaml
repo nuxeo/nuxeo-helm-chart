@@ -51,6 +51,10 @@ spec:
 {{- end }}
         ports:
         - containerPort: {{ .Values.service.internalPort }}
+          name: tomcat
+        {{- with .Values.extraContainerPorts -}}
+        {{ toYaml . | nindent 8 }}
+        {{- end }}
         livenessProbe:
           httpGet:
             path: {{ .Values.probePath }}
