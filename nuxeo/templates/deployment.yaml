@@ -124,6 +124,9 @@ spec:
           {{- with .Values.extraVolumeMounts }}
           {{- toYaml . | nindent 10 }}
           {{- end }}
+      {{- with .Values.extraContainers }}
+      {{- toYaml . | nindent 6 }}
+      {{- end }}
       initContainers:
 {{- if and .Values.mongodb.enabled .Values.mongodb.host }}
       - name: init-mongodb
