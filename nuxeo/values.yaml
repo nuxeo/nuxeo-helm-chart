@@ -31,6 +31,8 @@ service:
   externalPort: 80
   internalPort: 8080
   protocol: TCP
+  ## List of extra service ports.
+  extraPorts: []
 ## List of extra `containerPort`s for the nuxeo container.
 # extraContainerPorts:
 probePath: /nuxeo/runningstatus
