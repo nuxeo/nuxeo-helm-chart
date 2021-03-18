@@ -14,7 +14,7 @@ dependencies:
     tags:
       - postgresql
   - name: elasticsearch
-    version: 1.26.2
+    version: ~1.32.0
     repository: https://kubernetes-charts.storage.googleapis.com/
     condition: nuxeo.elasticsearch.deploy
     alias: elasticsearch
