@@ -52,8 +52,7 @@ pipeline {
               sh """
                 echo 'Build Helm chart'
                 helm init --client-only --stable-repo-url=https://charts.helm.sh/stable
-                helm repo add kubernetes-charts https://kubernetes-charts.storage.googleapis.com/
-                helm repo add kubernetes-charts-incubator http://storage.googleapis.com/kubernetes-charts-incubator
+                helm repo add incubator-charts https://charts.helm.sh/incubator
                 helm dependency update .
                 helm package .
                 echo 'Release Helm chart'
