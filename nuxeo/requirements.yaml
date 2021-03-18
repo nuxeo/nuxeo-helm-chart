@@ -1,35 +1,35 @@
 dependencies:
   - name: mongodb
     version: ~7.8.0
-    repository: https://kubernetes-charts.storage.googleapis.com/
+    repository: https://charts.helm.sh/stable
     condition: nuxeo.mongodb.deploy
     alias: mongodb
     tags:
       - mongodb
   - name: postgresql
     version: ~6.3.9
-    repository: https://kubernetes-charts.storage.googleapis.com/
+    repository: https://charts.helm.sh/stable
     condition: nuxeo.postgresql.deploy
     alias: postgresql
     tags:
       - postgresql
   - name: elasticsearch
     version: ~1.32.0
-    repository: https://kubernetes-charts.storage.googleapis.com/
+    repository: https://charts.helm.sh/stable
     condition: nuxeo.elasticsearch.deploy
     alias: elasticsearch
     tags:
       - elasticsearch
   - name: kafka
     version: ~0.19.0
-    repository: http://storage.googleapis.com/kubernetes-charts-incubator
+    repository: https://charts.helm.sh/incubator
     condition: nuxeo.kafka.deploy
     alias: kafka
     tags:
       - kafka
   - name: redis
     version: ~9.1.12
-    repository: https://kubernetes-charts.storage.googleapis.com/
+    repository: https://charts.helm.sh/stable
     alias: redis
     condition: nuxeo.redis.deploy
     tags:

@@ -180,7 +180,7 @@ minikube addons enable storage-provisioner
 helm init --history-max 200
 
 # Enable incubator repository needed for Kafka
-helm repo add incubator http://storage.googleapis.com/kubernetes-charts-incubator
+helm repo add incubator https://charts.helm.sh/incubator
 helm repo update
 
 # Test the dashboard
