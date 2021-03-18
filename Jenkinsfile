@@ -51,7 +51,7 @@ pipeline {
             withCredentials([usernameColonPassword(credentialsId: 'jenkins-x-chartmuseum', variable: 'CHARTMUSEUM_AUTH')]) {
               sh """
                 echo 'Build Helm chart'
-                helm init --client-only
+                helm init --client-only --stable-repo-url=https://charts.helm.sh/stable
                 helm repo add kubernetes-charts https://kubernetes-charts.storage.googleapis.com/
                 helm repo add kubernetes-charts-incubator http://storage.googleapis.com/kubernetes-charts-incubator
                 helm dependency update .
