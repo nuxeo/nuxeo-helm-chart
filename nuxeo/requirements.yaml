@@ -8,7 +8,7 @@ dependencies:
       - elasticsearch
   - name: kafka
     version: ~0.20.8
-    repository: http://storage.googleapis.com/kubernetes-charts-incubator
+    repository: https://charts.helm.sh/incubator
     condition: nuxeo.kafka.deploy
     alias: kafka
     tags:
