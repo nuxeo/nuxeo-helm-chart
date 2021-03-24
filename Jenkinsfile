@@ -151,7 +151,9 @@ pipeline {
               }
 
               // upload package to the ChartMuseum
-              sh "curl --fail -u '${CHARTMUSEUM_AUTH}' --data-binary '@${CHART_NAME}-${nextVersion}.tgz' ${CHART_REPOSITORY}/api/charts"
+              withEnv(["CHART_ARCHIVE=${CHART_NAME}-${nextVersion}.tgz"]) {
+                sh 'curl --fail -u $CHARTMUSEUM_AUTH --data-binary @$CHART_ARCHIVE $CHART_REPOSITORY/api/charts'
+              }
             }
           }
         }
