@@ -85,7 +85,8 @@ pipeline {
               //   - Writes a VERSION file that is read to upload the chart package and create a Git tag in the next stage.
               sh """
                 git checkout 1.0.x_10.10
-                jx step next-version --dir=${CHART_NAME} --filename=Chart.yaml
+                RELEASE_VERSION=\$(jx-release-version -same-release -folder ${CHART_NAME})
+                jx step next-version --dir=${CHART_NAME} --filename=Chart.yaml --version="\$RELEASE_VERSION"
               """
             } else {
               // Update chart version to a PR version.
