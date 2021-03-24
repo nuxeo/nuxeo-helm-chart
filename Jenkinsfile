@@ -123,6 +123,12 @@ pipeline {
               """
 
               // install the chart into a test namespace that will be cleaned up afterwards
+              sh "kubectl create namespace ${TEST_NAMESPACE}"
+              sh "kubectl --namespace=platform get secret kubernetes-docker-cfg -ojsonpath='{.data.\\.dockerconfigjson}' | base64 --decode > /tmp/config.json"
+              sh """kubectl create secret generic kubernetes-docker-cfg \
+                  --namespace=${TEST_NAMESPACE} \
+                  --from-file=.dockerconfigjson=/tmp/config.json \
+                  --type=kubernetes.io/dockerconfigjson --dry-run -o yaml | kubectl apply -f -"""
               sh """
                 jx step helm install ${CHART_NAME} \
                   --name=${TEST_RELEASE} \
