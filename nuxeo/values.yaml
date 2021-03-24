@@ -2,7 +2,7 @@ nuxeo:
   enable: true
   image:
     repository: docker-private.packages.nuxeo.com/nuxeo/nuxeo
-    tag: 10.10-HF41
+    tag: 10.10-HF43
     pullSecrets: "kubernetes-docker-cfg"
   replicaCount: 1
   resources:
