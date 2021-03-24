@@ -1,8 +1,8 @@
 nuxeo:
   enable: true
   image:
-    repository: docker.packages.nuxeo.com/nuxeo/nuxeo
-    tag: latest
+    repository: docker-private.packages.nuxeo.com/nuxeo/nuxeo
+    tag: 10.10-HF41
   replicaCount: 1
   resources:
     requests:

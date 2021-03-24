@@ -77,14 +77,14 @@ pipeline {
         setGitHubBuildStatus('helm-release', 'Build and release Helm chart', 'PENDING')
         container('jx-base') {
           script {
-            if (BRANCH_NAME == 'master') {
+            if (BRANCH_NAME == '1.0.x_10.10') {
               // Update chart version to the next semantic version.
               // This also:
               //   - Adds a release commit that is pushed to master by the next stage.
               //     That's why we need to locally checkout the master branch first since we're on a detached head.
               //   - Writes a VERSION file that is read to upload the chart package and create a Git tag in the next stage.
               sh """
-                git checkout master
+                git checkout 1.0.x_10.10
                 jx step next-version --dir=${CHART_NAME} --filename=Chart.yaml
               """
             } else {
@@ -100,10 +100,9 @@ pipeline {
             script {
               // initialize Helm and package chart
               sh """
-                helm init --client-only
+                helm init --client-only --stable-repo-url=https://charts.helm.sh/stable
 
-                helm repo add kubernetes-charts https://kubernetes-charts.storage.googleapis.com/
-                helm repo add kubernetes-charts-incubator http://storage.googleapis.com/kubernetes-charts-incubator
+                helm repo add kubernetes-charts-incubator https://charts.helm.sh/incubator
                 helm repo add bitnami https://charts.bitnami.com/bitnami
 
                 helm dependency update ${CHART_NAME}
@@ -115,8 +114,7 @@ pipeline {
               sh """
                 jx step helm install ${CHART_NAME} \
                   --name=${TEST_RELEASE} \
-                  --namespace=${TEST_NAMESPACE} \
-                  --set=nuxeo.image.tag=11.x # TODO remove when NXP-28504 is done and the latest tag (default) is available
+                  --namespace=${TEST_NAMESPACE}
               """
 
               // check deployment status, exits if not OK
@@ -163,7 +161,7 @@ pipeline {
     }
     stage('GitHub release') {
       when {
-        branch 'master'
+        branch '1.0.x_10.10'
       }
       steps {
         container('jx-base') {
@@ -179,8 +177,8 @@ pipeline {
               jx step git credentials
               git config credential.helper store
 
-              # push release commit added by the revious stage to master
-              git push origin master:master
+              # push release commit added by the revious stage to 1.0.x_10.10
+              git push origin 1.0.x_10.10:1.0.x_10.10
 
               # Git tag
               git tag ${nextVersion}

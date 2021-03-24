@@ -173,8 +173,8 @@ The following tables lists some of the configurable parameters of this chart and
 | Parameter                   | Description                             | Default                                 |
 | --------------------------- | --------------------------------------- | --------------------------------------- |
 | `nuxeo.enable`              | Enable Nuxeo                            | `true`                                  |
-| `nuxeo.image.repository`    | Nuxeo image name                        | `docker.packages.nuxeo.com/nuxeo/nuxeo` |
-| `nuxeo.image.tag`           | Nuxeo image tag                         | `latest`                                |
+| `nuxeo.image.repository`    | Nuxeo image name                        | `docker-private.packages.nuxeo.com/nuxeo/nuxeo` |
+| `nuxeo.image.tag`           | Nuxeo image tag                         | `10.10-HF41`                                |
 | `nuxeo.persistence.enabled` | Enable persistence of binaries and logs | `false`                                 |
 
 ## Using Minikube
