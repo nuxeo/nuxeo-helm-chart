@@ -80,6 +80,9 @@ spec:
         volumeMounts:
           - name: nuxeoconf
             mountPath: /etc/nuxeo/conf.d/
+          # Nuxeo 10.10 compliance
+          - name: nuxeoconf
+            mountPath: /docker-entrypoint-initnuxeo.d/
           - name: binaries
             mountPath: /var/lib/nuxeo/binaries
           - name: log
