@@ -39,6 +39,17 @@ String getNextVersion() {
   return sh(returnStdout: true, script: 'head -n 1 VERSION')
 }
 
+/**
+ * Normalize a string as a K8s namespace.
+ * The pattern is '[a-z0-9]([-a-z0-9]*[a-z0-9])?' with a max length of 63 characters.
+ */
+static String normalizeNS(String namespace) {
+  namespace = namespace.trim().substring(0, Math.min(namespace.length(), 63)).toLowerCase().replaceAll("[^-a-z0-9]", "-")
+  assert namespace ==~ /[a-z0-9]([-a-z0-9]*[a-z0-9])?/
+  assert namespace.length() <= 63
+  return namespace
+}
+
 def nextVersion
 
 pipeline {
@@ -48,7 +59,7 @@ pipeline {
   environment {
     CHART_NAME = 'nuxeo'
     CHART_REPOSITORY = 'http://jenkins-x-chartmuseum:8080'
-    TEST_NAMESPACE = "nuxeo-helm-chart-${BRANCH_NAME}-${BUILD_NUMBER}".toLowerCase()
+    TEST_NAMESPACE = normalizeNS("nuxeo-helm-chart-${BRANCH_NAME}-${BUILD_NUMBER}")
     TEST_RELEASE = 'test-release'
     TEST_K8S_RESSOURCE = "${TEST_RELEASE}-${CHART_NAME}"
     TEST_SERVICE_DOMAIN = "${TEST_K8S_RESSOURCE}.${TEST_NAMESPACE}.svc.cluster.local"
