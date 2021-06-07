@@ -111,7 +111,7 @@ pipeline {
                   --timeout=${TEST_ROLLOUT_STATUS_TIMEOUT}
               """
               // check running status
-              sh "test/running-status.sh http://${TEST_SERVICE_DOMAIN}/nuxeo"
+              sh "ci/running-status.sh http://${TEST_SERVICE_DOMAIN}/nuxeo"
             } catch (e) {
               sh """
                 kubectl --namespace=${TEST_NAMESPACE} get all,configmaps,endpoints,ingresses
