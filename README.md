@@ -22,7 +22,7 @@ By default, this chart deploys the strict minimum to have Nuxeo running with:
 To make a "real" deployment of Nuxeo in Kubernetes, you can have a look at:
 
 - The different parameters in the [values.yaml](nuxeo/values.yaml) file.
-- The [Helmfile](#helmfile) used in the Platform CI for preview.
+- The [Full Deployment](#full-deployment) section.
 
 ## TL;DR
 
@@ -119,26 +119,29 @@ See the [Jenkinsfile](./Jenkinsfile) for more details.
 
 The major and minor versions can be incremented manually.
 
-## Helmfile
+## Full Deployment
 
-The Platform CI uses a [helmfile](https://github.com/nuxeo/nuxeo/tree/master/ci/helm/helmfile.yaml) to deploy Nuxeo in a preview environment, along with the following external services:
+To deploy Nuxeo along with MongoDB, Elasticsearch and Kafka, one way is to use [Helmfile](https://github.com/roboll/helmfile) to deploy multiple charts. You can have a look at this [helmfile](./examples/helmfile.yaml) sample.
 
-- MongoDB
-- Elasticsearch
-- Kafka
+To run it, you need to:
 
-Nuxeo is configured to rely on these external services.
+- Install the [helmfile](https://github.com/roboll/helmfile#installation) command line.
+- Clone this repository or download the [examples](./examples) directory.
+- In the `examples` directory, run:
 
-The `helmfile.yaml` requires the following environment variables:
+```shell
+helmfile --namepsace=NAMESPACE sync
+```
 
-- `NAMESPACE`: the namespace into which install the releases of Nuxeo, MongoDB, Elasticsearch and Kafka.
-- `DOCKER_REGISTRY`: the registry from which to pull the `nuxeo/nuxeo` Docker image.
-- `VERSION`: the tag of the `nuxeo/nuxeo` Docker image to pull.
+`NAMESPACE` is the target Kubernetes namespace for the various Helm releases.
 
-**Note:** the values used to deploy the external services are just sample values. The referenced charts need a fine-grained configuration to be suitable for production, see the available values of the related Helm charts:
+The parameters of the `nuxeo` chart, such as the Nuxeo image, can be configured in the [values-nuxeo.yaml.gotmpl](./examples/values-nuxeo.yaml.gotmpl) file.
 
-- [MongoDB](https://github.com/bitnami/charts/blob/master/bitnami/mongodb/values.yaml)
-- [Elasticsearch](https://github.com/elastic/helm-charts/blob/master/elasticsearch/values.yaml)
-- [Kafka](https://github.com/bitnami/charts/blob/master/bitnami/kafka/values.yaml)
+The parameters of the `mongodb`, `elasticsearch` and `kafka` charts can be configured in the [values-CHART.yaml](./examples) files.
 
-You can have a look at the [Helmfile](https://github.com/roboll/helmfile) documentation.
+**Note:** these values are just sample values. The related charts need a fine-grained configuration to be suitable for production, see the available values for each one of them:
+
+- [nuxeo](nuxeo/values.yaml)
+- [mongodb](https://github.com/bitnami/charts/blob/master/bitnami/mongodb/values.yaml)
+- [elasticsearch](https://github.com/elastic/helm-charts/blob/master/elasticsearch/values.yaml)
+- [kafka](https://github.com/bitnami/charts/blob/master/bitnami/kafka/values.yaml)
