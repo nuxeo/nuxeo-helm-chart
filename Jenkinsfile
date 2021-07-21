@@ -69,7 +69,7 @@ void updateVersion(version) {
 
 pipeline {
   agent {
-    label "jenkins-jx-base"
+    label "jenkins-base"
   }
   environment {
     CHART_NAME = 'nuxeo'
@@ -87,7 +87,7 @@ pipeline {
     stage('Helm package') {
       steps {
         setGitHubBuildStatus('package', 'Package and upload Helm chart', 'PENDING')
-        container('jx-base') {
+        container('base') {
           script {
             currentBuild.description = "${BUILD_VERSION}"
             updateVersion("${BUILD_VERSION}")
@@ -131,7 +131,7 @@ pipeline {
       }
       post {
         always {
-          container('jx-base') {
+          container('base') {
             script {
               try {
                 // uninstall the chart
@@ -162,7 +162,7 @@ pipeline {
       }
       steps {
         setGitHubBuildStatus('release', 'Release', 'PENDING')
-        container('jx-base') {
+        container('base') {
           script {
             sh """
               # add release commit and tag
