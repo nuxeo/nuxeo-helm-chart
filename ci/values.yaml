@@ -1,5 +1,7 @@
 image:
-  tag: "11.x"
+  tag: "2021.x"
+  pullSecrets:
+  - name: kubernetes-docker-cfg
 nodeSelector:
   team: platform
 tolerations:
