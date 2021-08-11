@@ -1,7 +1,7 @@
 {{- $localDomain := printf "%s.svc.cluster.local" .Namespace -}}
 ## See https://github.com/nuxeo/nuxeo-helm-chart/blob/master/nuxeo/values.yaml
 image:
-  tag: "11.x"
+  tag: "2021.x"
 mongodb:
   enabled: true
   host: {{ printf "mongodb.%s" $localDomain }}
