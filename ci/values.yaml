@@ -2,6 +2,8 @@ image:
   tag: "2021.x"
   pullSecrets:
   - name: kubernetes-docker-cfg
+ingress:
+  enabled: true
 nodeSelector:
   team: platform
 tolerations:
