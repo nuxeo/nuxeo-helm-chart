@@ -94,6 +94,9 @@ kafka:
   port: 9092
 redis:
   enabled: false
+## Image pull policy for the the busybox init containers.
+initContainers:
+  imagePullPolicy: IfNotPresent
 googleCloudStorage:
   enabled: false
   # gcpProjectId:

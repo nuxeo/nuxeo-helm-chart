@@ -131,21 +131,25 @@ spec:
 {{- if and .Values.mongodb.enabled .Values.mongodb.host }}
       - name: init-mongodb
         image: busybox
+        imagePullPolicy: {{ .Values.initContainers.imagePullPolicy }}
         command: ['sh', '-c', 'until nc -w1 {{ .Values.mongodb.host }} {{ .Values.mongodb.port }}; do echo "waiting for mongodb"; sleep 2; done;']
 {{- end }}
 {{- if .Values.postgresql.enabled }}
       - name: init-postgresql
         image: busybox
+        imagePullPolicy: {{ .Values.initContainers.imagePullPolicy }}
         command: ['sh', '-c', 'until nc -w1 {{ .Values.postgresql.host }} {{ .Values.postgresql.port }}; do echo "waiting for postgresql"; sleep 2; done;']
 {{- end }}
 {{- if .Values.elasticsearch.enabled }}
       - name: init-elasticsearch
         image: busybox
+        imagePullPolicy: {{ .Values.initContainers.imagePullPolicy }}
         command: ['sh', '-c', 'until nc -w1 {{ .Values.elasticsearch.host }} {{ .Values.elasticsearch.port }}; do echo "waiting for elastic"; sleep 2; done;']
 {{- end }}
 {{- if .Values.kafka.enabled }}
       - name: init-kafka
         image: busybox
+        imagePullPolicy: {{ .Values.initContainers.imagePullPolicy }}
         command: ['sh', '-c', 'until nc -w1 {{ .Values.kafka.host }} {{ .Values.kafka.port }}; do echo "waiting for kafka"; sleep 2; done;']
 {{- end }}
       securityContext:
