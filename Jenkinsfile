@@ -97,8 +97,15 @@ pipeline {
 
             echo 'Test chart'
             // install the chart into a test namespace that will be cleaned up afterwards
+            sh "kubectl create namespace ${TEST_NAMESPACE}"
+            sh "kubectl --namespace=platform get secret kubernetes-docker-cfg -ojsonpath='{.data.\\.dockerconfigjson}' | base64 --decode > /tmp/config.json"
             sh """
-              kubectl create namespace ${TEST_NAMESPACE}
+              kubectl create secret generic kubernetes-docker-cfg \
+                --namespace=${TEST_NAMESPACE} \
+                --from-file=.dockerconfigjson=/tmp/config.json \
+                --type=kubernetes.io/dockerconfigjson --dry-run -o yaml | kubectl apply -f -
+            """
+            sh """
               helm3 install ${TEST_RELEASE} ${CHART_NAME} \
                 --namespace=${TEST_NAMESPACE} \
                 --values=ci/values.yaml
