@@ -74,7 +74,7 @@ pipeline {
   environment {
     CHART_NAME = 'nuxeo'
     CHART_DESCRIPTOR = "${CHART_NAME}/Chart.yaml"
-    CHART_REPOSITORY = 'http://jenkins-x-chartmuseum:8080'
+    CHART_SERVICE = 'http://chartmuseum:8080'
     TEST_NAMESPACE = "nuxeo-helm-chart-${BRANCH_NAME}-${BUILD_NUMBER}".toLowerCase()
     TEST_RELEASE = 'test-release'
     TEST_K8S_RESSOURCE = "${TEST_RELEASE}-${CHART_NAME}"
@@ -130,8 +130,8 @@ pipeline {
 
             echo "Upload chart archive ${CHART_ARCHIVE}"
             // upload package to the ChartMuseum
-            withCredentials([usernameColonPassword(credentialsId: 'jenkins-x-chartmuseum', variable: 'CHARTMUSEUM_AUTH')]) {
-              sh 'curl --fail -u $CHARTMUSEUM_AUTH --data-binary @$CHART_ARCHIVE $CHART_REPOSITORY/api/charts'
+            withCredentials([usernameColonPassword(credentialsId: 'chartmuseum', variable: 'CHARTMUSEUM_AUTH')]) {
+              sh 'curl --fail -u $CHARTMUSEUM_AUTH --data-binary @$CHART_ARCHIVE $CHART_SERVICE/api/charts'
             }
           }
         }
