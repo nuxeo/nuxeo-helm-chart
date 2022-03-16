@@ -131,7 +131,7 @@ pipeline {
             echo "Upload chart archive ${CHART_ARCHIVE}"
             // upload package to the ChartMuseum
             withCredentials([usernameColonPassword(credentialsId: 'chartmuseum', variable: 'CHARTMUSEUM_AUTH')]) {
-              sh 'curl --fail -u $CHARTMUSEUM_AUTH --data-binary @$CHART_ARCHIVE $CHART_SERVICE/api/charts'
+              sh 'curl -u $CHARTMUSEUM_AUTH --data-binary @$CHART_ARCHIVE $CHART_SERVICE/api/charts'
             }
           }
         }
