@@ -1,6 +1,6 @@
-{{- $isAfter123 := (semverCompare ">=1.23.0" .Capabilities.KubeVersion.GitVersion) -}}
+{{- $isAPIv1 := (.Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress") -}}
 {{- if .Values.ingress.enabled -}}
-apiVersion: {{ ternary "networking.k8s.io/v1" "networking.k8s.io/v1beta1" $isAfter123 }}
+apiVersion: {{ ternary "networking.k8s.io/v1" "networking.k8s.io/v1beta1" $isAPIv1 }}
 kind: Ingress
 metadata:
   name: {{ template "nuxeo.fullname" . }}
@@ -21,7 +21,7 @@ spec:
     - http:
         paths:
           - backend:
-              {{- if $isAfter123 }}
+              {{- if $isAPIv1 }}
               service:
                 name: {{ template "nuxeo.fullname" . }}
                 port:
@@ -33,7 +33,7 @@ spec:
             {{- if .Values.ingress.path }}
             path: {{ .Values.ingress.path }}
             {{- end }}
-            {{- if $isAfter123 }}
+            {{- if $isAPIv1 }}
             pathType: ImplementationSpecific
             {{- end }}
       {{- with .Values.ingress.hostname }}
