@@ -1,0 +1,9 @@
+helmDefaults:
+  timeout: 300
+  wait: true
+
+releases:
+  - name: test-release
+    chart: ./../../nuxeo
+    values:
+      - values.yaml
