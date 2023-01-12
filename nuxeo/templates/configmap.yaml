@@ -85,7 +85,7 @@ data:
     {{- end }}
 {{- end }}
 {{- if .Values.amazonS3.enabled }}
-    nuxeo.core.binarymanager=org.nuxeo.ecm.core.storage.sql.S3BinaryManager
+    nuxeo.core.binarymanager=org.nuxeo.ecm.blob.s3.S3BlobProvider
     nuxeo.aws.accessKeyId={{ .Values.amazonS3.accessKeyId }}
     nuxeo.aws.secretKey={{ .Values.amazonS3.secretAccessKey }}
     nuxeo.aws.region={{ .Values.amazonS3.region }}
