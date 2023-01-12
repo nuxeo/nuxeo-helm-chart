@@ -1,0 +1,79 @@
+ENTRYPOINT: Initialize server configuration without /etc/nuxeo/nuxeo.conf
+ENTRYPOINT: Move /opt/nuxeo/server/bin/nuxeo.conf to /etc/nuxeo/nuxeo.conf
+ENTRYPOINT: Append required properties to /etc/nuxeo/nuxeo.conf
+nuxeo.data.dir=/var/lib/nuxeo
+nuxeo.log.dir=/var/log/nuxeo
+nuxeo.tmp.dir=/tmp
+nuxeo.pid.dir=/var/pid/nuxeo
+# Set java.io.tmpdir = ${nuxeo.tmp.dir}
+launcher.override.java.tmpdir=true
+ENTRYPOINT: Append properties from /etc/nuxeo/conf.d/00-docker.conf to /etc/nuxeo/nuxeo.conf
+ENTRYPOINT: Append properties from /etc/nuxeo/conf.d/00-nuxeo.conf to /etc/nuxeo/nuxeo.conf
+ENTRYPOINT: Looking for shell scripts in /docker-entrypoint-initnuxeo.d
+Nuxeo home:          /opt/nuxeo/server
+Nuxeo configuration: /etc/nuxeo/nuxeo.conf
+Include template: /opt/nuxeo/server/templates/common-base
+Include template: /opt/nuxeo/server/templates/common
+Include template: /opt/nuxeo/server/templates/default
+No current configuration, generating files...
+FreeMarker variables: ignored 'java.version.date' conflicting with 'java.version'
+Configuration files generated.
+Server started with process ID: 118
+Go to http://localhost:8080/nuxeo
+2023-01-12 16:05:16 INFO [main] org.apache.catalina.startup.Catalina.load Server initialization in [1609] milliseconds
+# Running Nuxeo Preprocessor ...
+Preprocessing: /opt/nuxeo/server/nxserver
+Done.
+# Preprocessing done.
+2023-01-12T16:05:22,126 INFO  [FrameworkLoader] 
+======================================================================
+= Starting Nuxeo Framework
+======================================================================
+  * Distribution Version = 2021.32.3
+  * Distribution Date = 202301111945
+  * Server home = /opt/nuxeo/server
+  * Runtime home = /opt/nuxeo/server/nxserver
+  * Data Directory = /var/lib/nuxeo
+  * Log Directory = /var/log/nuxeo
+  * Configuration Directory = /opt/nuxeo/server/nxserver/config
+  * Temp Directory = /tmp
+======================================================================
+Warning: Nashorn engine is planned to be removed from a future JDK release
+2023-01-12T16:05:31,502 WARN  [CommandLineExecutorComponent] Command not available: ffmpeg-info (command ffprobe not found in system path (descriptor CommandLineDescriptor[available=false,command=ffprobe,enabled=true,installErrorMessage=<null>,installationDirective=You need to install ffmpeg from http://ffmpeg.org (apt-get install ffmpeg),name=ffmpeg-info,parameterString=#{inFilePath},readOutput=true,testParameterString=,tester=<null>,timeout=<null>,winCommand=<null>,winParameterString=<null>,winTestParameterString=]). You need to install ffmpeg from http://ffmpeg.org (apt-get install ffmpeg))
+2023-01-12T16:05:31,507 WARN  [CommandLineExecutorComponent] Command not available: ffmpeg-screenshot (command ffmpeg not found in system path (descriptor CommandLineDescriptor[available=false,command=ffmpeg,enabled=true,installErrorMessage=<null>,installationDirective=You need to install ffmpeg from http://ffmpeg.org (apt-get install ffmpeg),name=ffmpeg-screenshot,parameterString=-y -ss #{position} -i #{inFilePath} -vframes 1 -f image2 #{outFilePath},readOutput=true,testParameterString=,tester=<null>,timeout=<null>,winCommand=<null>,winParameterString=<null>,winTestParameterString=]). You need to install ffmpeg from http://ffmpeg.org (apt-get install ffmpeg))
+2023-01-12T16:05:31,511 WARN  [CommandLineExecutorComponent] Command not available: ffmpeg-screenshot-resize (command ffmpeg not found in system path (descriptor CommandLineDescriptor[available=false,command=ffmpeg,enabled=true,installErrorMessage=<null>,installationDirective=You need to install ffmpeg from http://ffmpeg.org (apt-get install ffmpeg),name=ffmpeg-screenshot-resize,parameterString=-y -ss #{position} -i #{inFilePath} -vframes 1 -f image2 -s #{width}x#{height} #{outFilePath},readOutput=true,testParameterString=,tester=<null>,timeout=<null>,winCommand=<null>,winParameterString=<null>,winTestParameterString=]). You need to install ffmpeg from http://ffmpeg.org (apt-get install ffmpeg))
+2023-01-12T16:05:31,515 WARN  [CommandLineExecutorComponent] Command not available: ffmpeg-towebm (command ffmpeg not found in system path (descriptor CommandLineDescriptor[available=false,command=ffmpeg,enabled=true,installErrorMessage=<null>,installationDirective=You need to install ffmpeg from http://ffmpeg.org (apt-get install ffmpeg),name=ffmpeg-towebm,parameterString=-i #{inFilePath} -s #{width}x#{height} -acodec libvorbis -v 0 #{outFilePath},readOutput=true,testParameterString=,tester=<null>,timeout=<null>,winCommand=<null>,winParameterString=<null>,winTestParameterString=]). You need to install ffmpeg from http://ffmpeg.org (apt-get install ffmpeg))
+2023-01-12T16:05:31,519 WARN  [CommandLineExecutorComponent] Command not available: ffmpeg-tomp4 (command ffmpeg not found in system path (descriptor CommandLineDescriptor[available=false,command=ffmpeg,enabled=true,installErrorMessage=<null>,installationDirective=You need to install ffmpeg from http://ffmpeg.org (apt-get install ffmpeg),name=ffmpeg-tomp4,parameterString=-i #{inFilePath} -s #{width}x#{height} -acodec aac -strict -2 -pix_fmt yuv420p -vcodec libx264 -v 0 #{outFilePath},readOutput=true,testParameterString=,tester=<null>,timeout=<null>,winCommand=<null>,winParameterString=-i #{inFilePath} -s #{width}x#{height} -pix_fmt yuv420p -vcodec libx264 -v 0 #{outFilePath},winTestParameterString=]). You need to install ffmpeg from http://ffmpeg.org (apt-get install ffmpeg))
+2023-01-12T16:05:31,522 WARN  [CommandLineExecutorComponent] Command not available: ffmpeg-toogg (command ffmpeg not found in system path (descriptor CommandLineDescriptor[available=false,command=ffmpeg,enabled=true,installErrorMessage=<null>,installationDirective=You need to install ffmpeg from http://ffmpeg.org (apt-get install ffmpeg),name=ffmpeg-toogg,parameterString=-i #{inFilePath} -s #{width}x#{height} -acodec libvorbis -v 0 #{outFilePath},readOutput=true,testParameterString=,tester=<null>,timeout=<null>,winCommand=<null>,winParameterString=<null>,winTestParameterString=]). You need to install ffmpeg from http://ffmpeg.org (apt-get install ffmpeg))
+2023-01-12T16:05:31,525 WARN  [CommandLineExecutorComponent] Command not available: ffmpeg-toavi (command ffmpeg not found in system path (descriptor CommandLineDescriptor[available=false,command=ffmpeg,enabled=true,installErrorMessage=<null>,installationDirective=You need to install ffmpeg.,name=ffmpeg-toavi,parameterString=-i #{inFilePath} -s #{width}x#{height} -q:v 0 -c:v mpeg4 -c:a ac3 #{outFilePath},readOutput=true,testParameterString=,tester=<null>,timeout=<null>,winCommand=<null>,winParameterString=<null>,winTestParameterString=]). You need to install ffmpeg.)
+2023-01-12T16:05:31,543 WARN  [CommandLineExecutorComponent] Command not available: videoClosedCaptionsExtractor (command ccextractor not found in system path (descriptor CommandLineDescriptor[available=false,command=ccextractor,enabled=true,installErrorMessage=<null>,installationDirective=You need to install ccextractor.,name=videoClosedCaptionsExtractor,parameterString=#{sourceFilePath} -out=#{outFormat} -trim -o #{outFilePath},readOutput=true,testParameterString=,tester=<null>,timeout=<null>,winCommand=<null>,winParameterString=<null>,winTestParameterString=]). You need to install ccextractor.)
+2023-01-12T16:05:31,546 WARN  [CommandLineExecutorComponent] Command not available: videoPartClosedCaptionsExtractor (command ccextractor not found in system path (descriptor CommandLineDescriptor[available=false,command=ccextractor,enabled=true,installErrorMessage=<null>,installationDirective=You need to install ccextractor.,name=videoPartClosedCaptionsExtractor,parameterString=#{sourceFilePath} -out=#{outFormat} -startat #{startAt} -endat #{endAt} -trim -o #{outFilePath},readOutput=true,testParameterString=,tester=<null>,timeout=<null>,winCommand=<null>,winParameterString=<null>,winTestParameterString=]). You need to install ccextractor.)
+2023-01-12T16:05:31,603 WARN  [CommandLineExecutorComponent] Command not available: videoConcat (command ffmpeg not found in system path (descriptor CommandLineDescriptor[available=false,command=ffmpeg,enabled=true,installErrorMessage=<null>,installationDirective=You need to install ffmpeg.,name=videoConcat,parameterString=-y -f concat -safe 0 -i #{listFilePath} -c copy #{outFilePath},readOutput=true,testParameterString=,tester=<null>,timeout=<null>,winCommand=<null>,winParameterString=<null>,winTestParameterString=]). You need to install ffmpeg.)
+2023-01-12T16:05:31,607 WARN  [CommandLineExecutorComponent] Command not available: videoSlicerByCopy (command ffmpeg not found in system path (descriptor CommandLineDescriptor[available=false,command=ffmpeg,enabled=true,installErrorMessage=<null>,installationDirective=You need to install ffmpeg.,name=videoSlicerByCopy,parameterString=-y -i #{sourceFilePath} -ss #{startAt} -t #{duration} -c copy #{outFilePath},readOutput=true,testParameterString=,tester=<null>,timeout=<null>,winCommand=<null>,winParameterString=<null>,winTestParameterString=]). You need to install ffmpeg.)
+2023-01-12T16:05:31,610 WARN  [CommandLineExecutorComponent] Command not available: videoSlicer (command ffmpeg not found in system path (descriptor CommandLineDescriptor[available=false,command=ffmpeg,enabled=true,installErrorMessage=<null>,installationDirective=You need to install ffmpeg.,name=videoSlicer,parameterString=-y -i #{sourceFilePath} -ss #{startAt} -t #{duration} #{outFilePath},readOutput=true,testParameterString=,tester=<null>,timeout=<null>,winCommand=<null>,winParameterString=<null>,winTestParameterString=]). You need to install ffmpeg.)
+2023-01-12T16:05:31,613 WARN  [CommandLineExecutorComponent] Command not available: videoSlicerStartAt (command ffmpeg not found in system path (descriptor CommandLineDescriptor[available=false,command=ffmpeg,enabled=true,installErrorMessage=<null>,installationDirective=You need to install ffmpeg.,name=videoSlicerStartAt,parameterString=-y -i #{sourceFilePath} -ss #{startAt} #{outFilePath},readOutput=true,testParameterString=,tester=<null>,timeout=<null>,winCommand=<null>,winParameterString=<null>,winTestParameterString=]). You need to install ffmpeg.)
+2023-01-12T16:05:31,617 WARN  [CommandLineExecutorComponent] Command not available: videoSlicerSegments (command ffmpeg not found in system path (descriptor CommandLineDescriptor[available=false,command=ffmpeg,enabled=true,installErrorMessage=<null>,installationDirective=You need to install ffmpeg.,name=videoSlicerSegments,parameterString=-y -i #{sourceFilePath} -map 0 -c copy -f segment -segment_time #{duration} -reset_timestamps 1
+        #{outFilePath},readOutput=true,testParameterString=,tester=<null>,timeout=<null>,winCommand=<null>,winParameterString=<null>,winTestParameterString=]). You need to install ffmpeg.)
+2023-01-12T16:05:31,621 WARN  [CommandLineExecutorComponent] Command not available: videoWatermarkWithPicture (command ffmpeg not found in system path (descriptor CommandLineDescriptor[available=false,command=ffmpeg,enabled=true,installErrorMessage=<null>,installationDirective=You need to install ffmpeg.,name=videoWatermarkWithPicture,parameterString=-y -i #{sourceFilePath} -i #{pictureFilePath} -filter_complex #{filterComplex} #{outFilePath},readOutput=true,testParameterString=,tester=<null>,timeout=<null>,winCommand=<null>,winParameterString=<null>,winTestParameterString=]). You need to install ffmpeg.)
+WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access using Lookup on net.openhft.chronicle.core.Jvm (file:/opt/nuxeo/server/nxserver/lib/chronicle-core-2.20.21.jar) to class java.lang.reflect.AccessibleObject
+WARNING: Please consider reporting this to the maintainers of net.openhft.chronicle.core.Jvm
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release
+2023-01-12T16:05:40,544 WARN  [ElasticSearchEmbeddedNode] Elasticsearch embedded configuration is ONLY for testing purpose. You need to create a dedicated Elasticsearch cluster for production.
+2023-01-12T16:05:46,636 WARN  [DanglingIndicesState] gateway.auto_import_dangling_indices is disabled, dangling indices will not be automatically detected or imported and must be managed manually
+2023-01-12T16:05:55,919 ERROR [RuntimeService] NUXEO INSTANCE REGISTRATION FILE IS MISSING
+
+***** This Nuxeo instance is not registered *****
+This Nuxeo instance can only be used for development and will be stopped if used in production
+
+2023-01-12T16:05:56,119 WARN  [JmxReporter] Creating Jmx reporter
+2023-01-12T16:05:56,209 WARN  [StreamMetricsNuxeoReporter] Reporting Stream Metrics to: internal/metrics
+2023-01-12T16:05:56,402 WARN  [StreamMetricsComputation] Instance elected to report stream metrics
+2023-01-12T16:05:56,664 WARN  [StreamIntrospectionComputation] Instance elected to introspect Nuxeo Stream activity
+2023-01-12T16:05:59,211 INFO  [OSGiRuntimeService] Nuxeo Platform Started
+======================================================================
+= Component Loading Status: Pending: 0 / Missing: 0 / Unstarted: 0 / Total: 550
+======================================================================
+2023-01-12 16:06:04 INFO [main] org.apache.catalina.startup.Catalina.start Server startup in [47616] milliseconds
+2023-01-12T16:06:56,702 WARN  [SingleChronicleQueue] Took 64 ms to performClose
