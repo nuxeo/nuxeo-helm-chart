@@ -4,8 +4,6 @@ image:
   - name: kubernetes-docker-cfg
 ingress:
   enabled: true
-  annotations:
-    kubernetes.io/ingress.class: "nginx"
 nodeSelector:
   team: platform
 tolerations:
