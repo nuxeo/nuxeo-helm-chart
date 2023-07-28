@@ -6,4 +6,4 @@ releases:
   - name: test-release
     chart: ./../../nuxeo
     values:
-      - values.yaml
+      - values/values.yaml.gotmpl

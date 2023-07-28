@@ -1,0 +1,22 @@
+image:
+  tag: "2021.x"
+  pullSecrets:
+  - name: kubernetes-docker-cfg
+podLabels:
+  {{ tpl (readFile "labels.yaml.gotmpl") . | nindent 2 }}
+  dev.nuxeo.com/app: nuxeo
+  dev.nuxeo.com/resource: pod
+service:
+  labels:
+    {{ tpl (readFile "labels.yaml.gotmpl") . | nindent 4 }}
+    dev.nuxeo.com/app: nuxeo
+    dev.nuxeo.com/resource: service
+ingress:
+  enabled: true
+nodeSelector:
+  team: platform
+tolerations:
+- effect: NoSchedule
+  key: team
+  operator: Equal
+  value: platform
