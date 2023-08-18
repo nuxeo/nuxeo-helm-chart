@@ -242,3 +242,14 @@ Return the list of node types depending on the architecture.
     single
 {{- end -}}
 {{- end -}}
+
+{{/*
+Returns the name of the service account to use
+*/}}
+{{- define "nuxeo.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create -}}
+    {{ default (include "nuxeo.fullname" .) .Values.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
