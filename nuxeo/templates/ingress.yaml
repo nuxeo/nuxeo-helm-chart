@@ -4,11 +4,7 @@ apiVersion: {{ ternary "networking.k8s.io/v1" "networking.k8s.io/v1beta1" $isAPI
 kind: Ingress
 metadata:
   name: {{ template "nuxeo.fullname" . }}
-  labels:
-    app: {{ template "nuxeo.name" . }}
-    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+  labels: {{- include "nuxeo.labels" . | nindent 4 }}
 {{- with .Values.ingress.labels }}
 {{ toYaml . | indent 4 }}
 {{- end }}

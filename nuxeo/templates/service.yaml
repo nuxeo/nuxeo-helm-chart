@@ -2,8 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ template "nuxeo.fullname" . }}
-  labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
+  labels: {{- include "nuxeo.labels" . | nindent 4 }}
 {{- with .Values.service.labels }}
 {{ toYaml . | indent 4 }}
 {{- end }}
@@ -21,6 +20,4 @@ spec:
   {{- with .Values.service.extraPorts }}
   {{- toYaml . | nindent 2 }}
   {{- end }}
-  selector:
-    app: {{ template "nuxeo.fullname" . }}
-    tier: frontend
+  selector: {{- include "nuxeo.selectorLabels" . | nindent 4 }}

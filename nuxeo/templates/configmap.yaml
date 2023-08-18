@@ -1,21 +1,15 @@
+{{- $dot := . -}}
 {{- $credentials := ternary "" (printf "%s%s" .Values.mongodb.credentials "@") (empty .Values.mongodb.credentials) -}}
 {{- range splitList "," (include "nuxeo.nodeTypes" .) }}
 {{- $nuxeoNodeType := . -}}
-{{- $nuxeoFullnameSuffix := ternary "" (printf "-%s" $nuxeoNodeType) (eq $nuxeoNodeType "single") -}}
-{{- $workerNode := (eq $nuxeoNodeType "worker") -}}
+{{- $data := dict "Values" $dot.Values "Chart" $dot.Chart "Release" $dot.Release "nuxeoNodeType" $nuxeoNodeType -}}
 {{- with $ }}
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ template "nuxeo.fullname" . }}-conf{{ $nuxeoFullnameSuffix }}
-  labels:
-    app: {{ template "nuxeo.fullname" . }}
-    nuxeoNode: {{ $nuxeoNodeType }}
-    tier: {{ ternary "backend" "frontend" $workerNode }}
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    release: "{{ .Release.Name }}"
-    heritage: "{{ .Release.Service }}"
+  name: {{ template "nuxeo.fullname" (merge (dict "suffix" "-conf") $data) }}
+  labels: {{- include "nuxeo.labels" $data | nindent 4 }}
     role: config
 data:
   00-nuxeo.conf: |
@@ -131,11 +125,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ template "nuxeo.fullname" . }}-conf-{{ $key }}
-  labels:
-    app: {{ template "nuxeo.fullname" . }}
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    release: "{{ .Release.Name }}"
-    heritage: "{{ .Release.Service }}"
+  labels: {{- include "nuxeo.labels" . | nindent 4 }}
     role: config
 data:
   nuxeo-{{ $key }}.conf: |
