@@ -94,7 +94,7 @@ kafka:
   port: 9092
 redis:
   enabled: false
-## Image pull policy for the the busybox init containers.
+## Image pull policy for the busybox init containers.
 initContainers:
   imagePullPolicy: IfNotPresent
 googleCloudStorage:
@@ -112,6 +112,10 @@ amazonS3:
   # bucket:
   ## The bucket prefix needs to end with /
   # bucketPrefix:
+serviceAccount:
+  create: true
+  # The custom name of the service account to use
+  # name:
 persistentVolumeStorage:
   enabled: false
   # labels: {}

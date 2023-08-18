@@ -30,6 +30,7 @@ spec:
       {{- with .Values.image.pullSecrets }}
       imagePullSecrets: {{ toYaml . | nindent 6}}
       {{- end }}
+      serviceAccountName: {{ include "nuxeo.serviceAccountName" . }}
       containers:
       - name: {{ .Chart.Name }}
         resources:
