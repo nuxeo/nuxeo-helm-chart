@@ -1,27 +1,21 @@
+{{- $dot := . -}}
 {{- range splitList "," (include "nuxeo.nodeTypes" .) }}
 {{- $nuxeoNodeType := . -}}
-{{- $nuxeoFullnameSuffix := ternary "" (printf "-%s" $nuxeoNodeType) (eq $nuxeoNodeType "single") -}}
-{{- $workerNode := (eq $nuxeoNodeType "worker") -}}
+{{- $data := dict "Values" $dot.Values "Chart" $dot.Chart "Release" $dot.Release "nuxeoNodeType" $nuxeoNodeType -}}
 {{- with $ }}
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ template "nuxeo.fullname" . }}{{ $nuxeoFullnameSuffix }}
-  labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
+  name: {{ template "nuxeo.fullname" $data }}
+  labels: {{- include "nuxeo.labels" $data | nindent 4 }}
 spec:
   selector:
-    matchLabels:
-      app: {{ template "nuxeo.fullname" . }}
-      nuxeoNode: {{ $nuxeoNodeType }}
-  replicas: {{ ternary (default 1 .Values.workerCount) .Values.replicaCount $workerNode }}
+    matchLabels: {{- include "nuxeo.selectorLabels" $data | nindent 6 }}
+  replicas: {{ ternary (default 1 .Values.workerCount) .Values.replicaCount (eq $nuxeoNodeType "worker") }}
   template:
     metadata:
-      labels:
-        app: {{ template "nuxeo.fullname" . }}
-        nuxeoNode: {{ $nuxeoNodeType }}
-        tier: {{ ternary "backend" "frontend" $workerNode }}
+      labels: {{- include "nuxeo.labels" $data | nindent 8 }}
 {{- with .Values.podLabels }}
 {{ toYaml . | indent 8 }}
 {{- end }}
@@ -157,7 +151,7 @@ spec:
       volumes:
       - name: nuxeoconf
         configMap:
-          name: {{ template "nuxeo.fullname" . }}-conf{{ $nuxeoFullnameSuffix }}
+          name: {{ template "nuxeo.fullname" (merge (dict "suffix" "-conf") $data) }}
       {{- range $key, $val := .Values.customProperties }}
       {{- with $ }}
       - name: nuxeoconf-{{ $key }}

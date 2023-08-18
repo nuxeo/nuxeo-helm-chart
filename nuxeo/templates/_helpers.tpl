@@ -12,16 +12,66 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 If release name contains chart name it will be used as a full name.
 */}}
 {{- define "nuxeo.fullname" -}}
+{{- $fullname := include "nuxeo.fullname.without.nodeType" . -}}
+{{- with .nuxeoNodeType }}
+{{- $fullname = printf "%s%s" $fullname (ternary "" (printf "-%s" .) (eq . "single")) -}}
+{{- end -}}
+{{- $fullname -}}
+{{- end -}}
+
+{{- define "nuxeo.fullname.without.nodeType" -}}
+{{- $fullname := "" -}}
 {{- if .Values.fullnameOverride -}}
-{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
+{{- $fullname = .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
 {{- $name := default .Chart.Name .Values.nameOverride -}}
 {{- if contains $name .Release.Name }}
-{{- .Release.Name | trunc 63 | trimSuffix "-" }}
+{{- $fullname = .Release.Name | trunc 63 | trimSuffix "-" }}
 {{- else }}
-{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- $fullname = printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 {{- end -}}
+{{- with .suffix }}
+{{- $fullname = printf "%s%s" $fullname . -}}
+{{- end -}}
+{{- $fullname -}}
+{{- end -}}
+
+
+{{/*
+Create chart name and version as used by the chart label.
+*/}}
+{{- define "nuxeo.chart" -}}
+{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Common labels
+*/}}
+{{- define "nuxeo.labels" -}}
+app.kubernetes.io/name: {{ include "nuxeo.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- with .nuxeoNodeType }}
+app.kubernetes.io/component: {{ . }}
+{{- end }}
+app.kubernetes.io/version: {{ .Values.image.tag | quote }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+helm.sh/chart: {{ include "nuxeo.chart" . }}
+{{ include "nuxeo.selectorLabels" . }}
+chart: {{ include "nuxeo.chart" .  | quote }}
+release: {{ .Release.Name | quote }}
+heritage: {{ .Release.Service | quote }}
+{{- end -}}
+
+{{/*
+Selector labels
+*/}}
+{{- define "nuxeo.selectorLabels" -}}
+app: {{ include "nuxeo.fullname.without.nodeType" . }}
+{{- with .nuxeoNodeType }}
+nuxeoNode: {{ . }}
+{{- end }}
+tier: {{ ternary "backend" "frontend" (eq (default "single" .nuxeoNodeType) "worker") }}
 {{- end -}}
 
 {{/*
@@ -177,11 +227,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: {{ .name }}
-  labels:
-    app: {{ template "nuxeo.fullname" . }}
-    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+  labels: {{- template "nuxeo.labels" . | nindent 4 }}
 type: Opaque
 {{ .dataType }}: {{ toYaml .data | nindent 2 }}
 {{- end -}}

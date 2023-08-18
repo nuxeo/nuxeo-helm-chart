@@ -3,11 +3,7 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: {{ template "nuxeo.fullname" . }}-binaries
-  labels:
-    app: {{ template "nuxeo.fullname" . }}
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    release: "{{ .Release.Name }}"
-    heritage: "{{ .Release.Service }}"
+  labels: {{- include "nuxeo.labels" . | nindent 4 }}
 {{- with .Values.persistentVolumeStorage.labels }}
 {{ toYaml . | indent 4 }}
 {{- end }}
@@ -33,11 +29,7 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: {{ template "nuxeo.fullname" . }}-log
-  labels:
-    app: {{ template "nuxeo.fullname" . }}
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    release: "{{ .Release.Name }}"
-    heritage: "{{ .Release.Service }}"
+  labels: {{- include "nuxeo.labels" . | nindent 4 }}
 {{- with .Values.logs.persistence.labels }}
 {{ toYaml . | indent 4 }}
 {{- end }}
