@@ -1,6 +1,6 @@
 # Nuxeo Helm Chart
 
-This chart bootstraps a [Nuxeo](https://github.com/nuxeo/nuxeo-lts/tree/2021/docker) deployment on a [Kubernetes](https://kubernetes.io/) cluster using the [Helm](https://helm.sh/) package manager.
+This chart bootstraps a [Nuxeo](https://github.com/nuxeo/nuxeo-lts/tree/2023/docker/nuxeo) deployment on a [Kubernetes](https://kubernetes.io/) cluster using the [Helm](https://helm.sh/) package manager.
 
 > WARNING
 The `nuxeo` chart is not production-ready by default.
@@ -89,7 +89,7 @@ helm get manifest RELEASE_NAME
 For example, to pull another nuxeo image:
 
 ```shell
-helm upgrade RELEASE_NAME NUXEO_CHART --set image.tag=2021.x
+helm upgrade RELEASE_NAME NUXEO_CHART --set image.tag=2023.x
 ```
 
 ## Uninstalling the Chart
@@ -105,7 +105,7 @@ The following tables lists some of the configurable parameters of this chart and
 | Parameter                   | Description                             | Default                                         |
 | --------------------------- | --------------------------------------- | ----------------------------------------------- |
 | `nuxeo.image.repository`    | Nuxeo image name                        | `docker-private.packages.nuxeo.com/nuxeo/nuxeo` |
-| `nuxeo.image.tag`           | Nuxeo image tag                         | `2021`                                          |
+| `nuxeo.image.tag`           | Nuxeo image tag                         | `2023`                                          |
 
 ## Versioning and Releasing
 

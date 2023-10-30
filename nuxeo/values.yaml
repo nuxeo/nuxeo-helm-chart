@@ -1,6 +1,6 @@
 image:
   repository: docker-private.packages.nuxeo.com/nuxeo/nuxeo
-  tag: 2021
+  tag: 2023
   pullSecrets: []
   # pullPolicy:
 ## Nuxeo architecture, among:
