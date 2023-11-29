@@ -227,7 +227,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: {{ .name }}
-  labels: {{- template "nuxeo.labels" . | nindent 4 }}
+  labels: {{- include "nuxeo.labels" . | nindent 4 }}
 type: Opaque
 {{ .dataType }}: {{ toYaml .data | nindent 2 }}
 {{- end -}}
