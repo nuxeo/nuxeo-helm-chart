@@ -9,6 +9,9 @@ image:
 ##   - `replicaCount` API nodes: handling HTTP requests, with workers and stream processing disabled
 ##   - `workerCount` worker nodes: not handling HTTP requests, with workers and stream processing enabled
 architecture: singleNode
+strategy:
+  # Can be replaced by Recreate. Useful to sequence a pod upgrade and avoid any pvc issue with two overlapping instances.
+  type: RollingUpdate
 replicaCount: 1
 # workerCount: 1
 clusterDomain: cluster.local
