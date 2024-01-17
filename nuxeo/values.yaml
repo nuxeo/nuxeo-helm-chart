@@ -30,6 +30,7 @@ resources:
     memory: 2Gi
 service:
   labels: {}
+  annotations: {}
   type: ClusterIP
   externalPort: 80
   internalPort: 8080
@@ -117,6 +118,7 @@ amazonS3:
   # bucketPrefix:
 serviceAccount:
   create: true
+  annotations: {}
   # The custom name of the service account to use
   # name:
 persistentVolumeStorage:
