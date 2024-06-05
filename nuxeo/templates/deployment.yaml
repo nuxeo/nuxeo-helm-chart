@@ -35,6 +35,10 @@ spec:
       serviceAccountName: {{ include "nuxeo.serviceAccountName" . }}
       containers:
       - name: {{ .Chart.Name }}
+        {{- with .Values.containerSecurityContext }}
+        securityContext:
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
         resources:
           requests:
             memory: "{{ .Values.resources.requests.memory }}"
@@ -149,8 +153,10 @@ spec:
         imagePullPolicy: {{ .Values.initContainers.imagePullPolicy }}
         command: ['sh', '-c', 'until nc -w1 {{ .Values.kafka.host }} {{ .Values.kafka.port }}; do echo "waiting for kafka"; sleep 2; done;']
 {{- end }}
+      {{- with .Values.podSecurityContext }}
       securityContext:
-        fsGroup: 1000
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       volumes:
       - name: nuxeoconf
         configMap:

@@ -208,3 +208,7 @@ extraVolumes: []
 # extraStringSecrets: {}
 ## Same as `extraStringSecrets` except that the secret data uses base64-encoded strings (`data` field).
 # extraSecrets: {}
+
+podSecurityContext:
+  fsGroup: 1000
+containerSecurityContext: {}
