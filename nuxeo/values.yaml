@@ -212,3 +212,18 @@ extraVolumes: []
 podSecurityContext:
   fsGroup: 1000
 containerSecurityContext: {}
+
+## PodDisruptionBudget configuration.
+podDisruptionBudget: {
+  ## The minimum number of pods that must be available during a disruption.
+  ## Can be an absolute number (integer) or a percentage (string).
+  ## If set, `maxUnavailable` must not be present.
+  ## Example values: 1, 50%.
+  # minAvailable: "50%"
+
+  ## The maximum number of pods that can be unavailable during a disruption.
+  ## Can be an absolute number (integer) or a percentage (string).
+  ## If set, `minAvailable` must not be present.
+  ## Example values: 1, 50%.
+  # maxUnavailable: 1
+}

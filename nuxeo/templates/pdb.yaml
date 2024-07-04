@@ -1,0 +1,18 @@
+{{- if or .Values.podDisruptionBudget.minAvailable .Values.podDisruptionBudget.maxUnavailable }}
+{{- range splitList "," (include "nuxeo.nodeTypes" .) }}
+{{- $nuxeoNodeType := . -}}
+{{- $data := dict "Values" $.Values "Chart" $.Chart "Release" $.Release "nuxeoNodeType" $nuxeoNodeType -}}
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ template "nuxeo.fullname" $data }}
+  labels:
+    {{- include "nuxeo.labels" $data | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "nuxeo.selectorLabels" $data | nindent 6 }}
+  {{- toYaml $data.Values.podDisruptionBudget | nindent 2 }}
+{{- end }}
+{{- end }}
