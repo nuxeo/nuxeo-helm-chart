@@ -21,6 +21,27 @@ String getChartVersion(chart) {
   }
 }
 
+def buildTestStage(String environment) {
+  return {
+    stage("Deploy ${environment} environment") {
+      container('base') {
+        nxWithGitHubStatus(context: "tests/${environment}", message: "Test the ${environment} deployment") {
+          def testNamespace = "${CURRENT_NAMESPACE}-nuxeo-helm-chart-${BRANCH_NAME}-${BUILD_NUMBER}-${environment}".toLowerCase()
+          nxWithHelmfileDeployment(namespace: testNamespace, environment: environment,
+              secrets: [[name: 'platform-tls', namespace: 'platform'], [name: 'instance-clid', namespace: 'platform']]) {
+            def ingressUrl = "https://${NAMESPACE}.platform.dev.nuxeo.com/nuxeo"
+            def serviceUrl = "http://nuxeo.${NAMESPACE}.svc.cluster.local/nuxeo"
+            // check running status
+            sh "ci/scripts/running-status.sh ${serviceUrl}"
+            // check ingress
+            sh "ci/scripts/running-status.sh ${ingressUrl}"
+          }
+        }
+      }
+    }
+  }
+}
+
 pipeline {
   agent {
     label "jenkins-base"
@@ -34,8 +55,7 @@ pipeline {
     CHART_NAME = 'nuxeo'
     CHART_DESCRIPTOR = "${CHART_NAME}/Chart.yaml"
     CHART_SERVICE = 'http://chartmuseum:8080'
-    TEST_RELEASE = 'test-release'
-    TEST_K8S_RESSOURCE = "${TEST_RELEASE}-${CHART_NAME}"
+    CURRENT_NAMESPACE = nxK8s.getCurrentNamespace()
     VERSION = nxUtils.getVersion(baseVersion: getChartVersion("${CHART_NAME}"), tagPrefix: '')
     CHART_ARCHIVE = "${CHART_NAME}-${VERSION}.tgz"
   }
@@ -43,7 +63,7 @@ pipeline {
     stage('Helm package') {
       steps {
         container('base') {
-          nxWithGitHubStatus(context: 'package', message: 'Package and upload Helm chart') {
+          nxWithGitHubStatus(context: 'package', message: 'Package the Helm Chart') {
             script {
               currentBuild.description = "${VERSION}"
               echo "Update chart to version ${VERSION}"
@@ -51,17 +71,6 @@ pipeline {
 
               echo "Package chart version: ${VERSION}"
               sh "helm3 package ${CHART_NAME}"
-
-              echo 'Test chart'
-              // install the chart into a test namespace that will be cleaned up afterwards
-              nxWithHelmfileDeployment() {
-                // check running status
-                sh "ci/running-status.sh http://${TEST_K8S_RESSOURCE}.${NAMESPACE}.svc.cluster.local/nuxeo"
-              }
-
-              echo "Upload chart archive ${CHART_ARCHIVE}"
-              // upload package to the ChartMuseum
-              nxUtils.uploadDataBinary(credentialsId: 'chartmuseum', url: "${CHART_SERVICE}/api/charts", file: env.CHART_ARCHIVE)
             }
           }
         }
@@ -69,6 +78,30 @@ pipeline {
       post {
         always {
           archiveArtifacts artifacts: "${CHART_ARCHIVE}"
+        }
+      }
+    }
+    stage('Test chart') {
+      steps {
+        script {
+          def stages = [:]
+          for (env in ['default', 'cluster']) {
+            stages["Deploy ${env} environment"] = buildTestStage(env)
+          }
+          parallel stages
+        }
+      }
+    }
+    stage('Upload Helm Chart Package') {
+      steps {
+        container('base') {
+          nxWithGitHubStatus(context: 'upload', message: 'Upload the Helm Chart Package') {
+            script {
+              echo "Upload chart archive ${CHART_ARCHIVE}"
+              // upload package to the ChartMuseum
+              nxUtils.uploadDataBinary(credentialsId: 'chartmuseum', url: "${CHART_SERVICE}/api/charts", file: env.CHART_ARCHIVE)
+            }
+          }
         }
       }
     }

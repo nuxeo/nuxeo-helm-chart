@@ -1,0 +1,58 @@
+image:
+  tag: "3.6.0"
+kraft:
+  enabled: false
+controller:
+  # required to allow Zookeeper mode
+  replicaCount: 0
+listeners:
+  client:
+    protocol: PLAINTEXT
+  interbroker:
+    protocol: PLAINTEXT
+broker:
+  replicaCount: 1
+  persistence:
+    enabled: false
+  initContainers:
+  - name: init-zookeeper
+    image: busybox
+    imagePullPolicy: IfNotPresent
+    command: ['sh', '-c', 'until nc -w1 {{"{{"}} printf "%s%s" (include "kafka.zookeeper.fullname" .) (tpl .Values.zookeeperChrootPath .) | quote {{"}}"}} {{"{{"}} .Values.zookeeper.service.ports.client {{"}}"}}; do echo "waiting for zookeeper"; sleep 2; done;']
+  resources:
+    requests:
+      cpu: "500m"
+      memory: "1Gi"
+    limits:
+      memory: "1Gi"
+  heapOpts: "-Xmx512m -Xms512m"
+  podLabels:
+    {{ tpl (readFile "labels.yaml.gotmpl") . | nindent 4 }}
+    dev.nuxeo.com/app: kafka
+    dev.nuxeo.com/resource: pod
+  pdb:
+    create: true
+    minAvailable: 1
+    maxUnavailable: ""
+{{ readFile "values-tolerations-nodeselector.yaml" | indent 2 }}
+serviceAccount:
+  create: false
+zookeeper:
+  enabled: true
+  image:
+    tag: "3.6.2"
+  replicaCount: 1
+  persistence:
+    enabled: false
+  heapSize: "256"
+  resources:
+    requests:
+      cpu: "500m"
+      memory: "512Mi"
+    limits:
+      memory: "512Mi"
+  podLabels:
+    {{ tpl (readFile "labels.yaml.gotmpl") . | nindent 4 }}
+    dev.nuxeo.com/app: zookeeper
+    dev.nuxeo.com/resource: pod
+{{ readFile "values-tolerations-nodeselector.yaml" | indent 2 }}
