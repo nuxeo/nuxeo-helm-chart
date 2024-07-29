@@ -1,49 +1,33 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Values.image.tag }}
 
 {{- include "nuxeo.validateValues" . }}
 
 {{- $architecture := include "nuxeo.architecture" . }}
 {{- $deploymentRoll := include "nuxeo.deployment.roll" . }}
-{{- $persistentVolumeStorage := .Values.persistentVolumeStorage.enabled }}
 {{- $fullname := include "nuxeo.fullname" . }}
 {{- $releaseNamespace := .Release.Namespace }}
 {{- $clusterDomain := .Values.clusterDomain }}
+
 
 ** Please be patient while the nuxeo chart is being deployed **
 
 Nuxeo architecture: {{ $architecture }}.
 Roll deployment: {{ $deploymentRoll }}.
 
-{{- if not (include "nuxeo.cloudProvider.enabled" .) }}
-
--------------------------------------------------------------------------------
-WARNING
-{{- if $persistentVolumeStorage }}
-
-  By enabling a persistent volume for binary storage, since it is mounted with
-  the ReadWriteOnce access mode, the deployment won't be able to scale up in
-  Kubernetes.
-{{- else }}
-
-  By not enabling any cloud provider for binary storage, binaries will be
-  stored in an emptyDir volume, thus not surviving a pod restart.
-
-  Moreover, the application won't work if the deployment is scaled up in
-  Kubernetes.
-{{- end }}
-
-  Please enable a cloud provider for binary storage by setting either
-  googleCloudStorage.enabled=true or amazonS3.enabled=true.
-
--------------------------------------------------------------------------------
-{{- end }}
+{{- include "nuxeo.warnings.message" . }}
 
 Nuxeo can be accessed via port {{ .Values.service.externalPort }} on the following DNS name from within your cluster:
 
   {{ $fullname }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}
+{{- if .Values.ingress.enabled }}
 
-{{- if le (int .Values.replicaCount) 1 }}
+Nuxeo can be accessed on the following DNS name:
+
+  {{ .Values.ingress.hostname }}
+{{- end }}
 
 To print the application logs:
 
-  kubectl logs -n {{ $releaseNamespace }} -f $(kubectl get pods -n {{ $releaseNamespace }} --selector=app={{ $fullname }} --output=jsonpath='{.items[*].metadata.name}')
-{{- end }}
+  kubectl logs -n {{ $releaseNamespace }} -f -l app.kubernetes.io/instance={{ $fullname }} --prefix

@@ -1,9 +1,53 @@
+repositories:
+- name: opensearch
+  url: https://opensearch-project.github.io/helm-charts/
+
 helmDefaults:
   timeout: 300
   wait: true
 
 releases:
-  - name: test-release
-    chart: ./../../nuxeo
+- name: nuxeo
+  chart: ./../../nuxeo
+  {{ if eq .Environment.Name "cluster" }}
+  needs:
+  - minio
+  - mongodb
+  - opensearch
+  - kafka
+  {{ end }}
+  values:
+  - values/values-nuxeo.yaml.gotmpl
+  - values/{{ .Environment.Name }}/values-nuxeo.yaml.gotmpl
+- name: minio
+  chart: oci://registry-1.docker.io/bitnamicharts/minio
+  version: 14.6.29
+  condition: minio.enabled
+  values:
+  - values/values-minio.yaml.gotmpl
+- name: mongodb
+  chart: oci://registry-1.docker.io/bitnamicharts/mongodb
+  version: 13.3.1
+  condition: mongodb.enabled
+  values:
+  - values/values-mongodb.yaml.gotmpl
+- name: opensearch
+  chart: opensearch/opensearch
+  version: 1.16.0
+  condition: opensearch.enabled
+  values:
+  - values/values-opensearch.yaml.gotmpl
+- name: kafka
+  chart: oci://registry-1.docker.io/bitnamicharts/kafka
+  version: 26.4.3
+  condition: kafka.enabled
+  values:
+  - values/values-kafka.yaml.gotmpl
+
+environments:
+  default:
     values:
-      - values/values.yaml.gotmpl
+    - environments/default.yaml
+  cluster:
+    values:
+    - environments/cluster.yaml
