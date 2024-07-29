@@ -1,0 +1,20 @@
+image:
+  tag: "2024.7.26"
+auth:
+  rootUser: minio
+  rootPassword: minio-secret
+commonLabels:
+  {{ tpl (readFile "labels.yaml.gotmpl") . | nindent 2 }}
+  dev.nuxeo.com/app: minio
+persistence:
+  enabled: false
+serviceAccount:
+  create: false
+defaultBuckets: nuxeo-binary-store
+resources:
+  requests:
+    cpu: "500m"
+    memory: "2Gi"
+  limits:
+    memory: "2Gi"
+{{ readFile "values-tolerations-nodeselector.yaml" }}

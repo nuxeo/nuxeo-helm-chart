@@ -1,0 +1,23 @@
+image:
+  tag: 1.3.6
+clusterName: opensearch
+replicas: 1
+singleNode: true
+persistence:
+  enabled: false
+resources:
+  requests:
+    cpu: "500m"
+    memory: "2Gi"
+  limits:
+    memory: "2Gi"
+opensearchJavaOpts: "-Xmx1g -Xms1g"
+config:
+  opensearch.yml:
+    plugins:
+      security:
+        disabled: true
+labels:
+  {{ tpl (readFile "labels.yaml.gotmpl") . | nindent 2 }}
+  dev.nuxeo.com/app: opensearch
+{{ readFile "values-tolerations-nodeselector.yaml" }}

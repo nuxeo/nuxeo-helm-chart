@@ -42,9 +42,9 @@ spec:
         resources: {{- toYaml . | nindent 10 }}
         {{- end }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-{{- if .Values.image.pullPolicy }}
-        imagePullPolicy: {{ .Values.image.pullPolicy }}
-{{- end }}
+        {{- with .Values.image.pullPolicy }}
+        imagePullPolicy: {{ toYaml . }}
+        {{- end }}
         ports:
         - containerPort: {{ .Values.service.internalPort }}
           name: tomcat
@@ -104,16 +104,16 @@ spec:
               name: {{ template "nuxeo.fullname" . }}-instance-clid
               key: CLID
 {{- end }}
-{{- if .Values.packages }}
+{{- with .Values.packages }}
         - name: NUXEO_PACKAGES
-          value: {{ .Values.packages }}
+          value: {{ toYaml . }}
 {{- end }}
-{{- if .Values.customEnvs }}
-{{ toYaml .Values.customEnvs | indent 8 }}
+{{- with .Values.customEnvs }}
+{{ toYaml . | indent 8 }}
 {{- end }}
         envFrom:
-{{- if .Values.customEnvsFrom }}
-{{ toYaml .Values.customEnvsFrom | indent 8 }}
+{{- with .Values.customEnvsFrom }}
+{{ toYaml . | indent 8 }}
 {{- end }}
         volumeMounts:
           - name: nuxeoconf
@@ -128,7 +128,7 @@ spec:
           {{- end }}
           - name: log
             mountPath: /var/log/nuxeo
-          {{- if not (include "nuxeo.cloudProvider.enabled" .) }}
+          {{- if not (include "nuxeo.binary.cloudProvider.enabled" .) }}
           - name: binaries
             mountPath: /var/lib/nuxeo/binaries
           {{- end }}
@@ -185,7 +185,7 @@ spec:
         {{- else }}
         emptyDir: {}
         {{- end }}
-      {{- if not (include "nuxeo.cloudProvider.enabled" .) }}
+      {{- if not (include "nuxeo.binary.cloudProvider.enabled" .) }}
       - name: binaries
         {{- if .Values.persistentVolumeStorage.enabled }}
         persistentVolumeClaim:

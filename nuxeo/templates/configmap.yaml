@@ -14,11 +14,25 @@ metadata:
 data:
   00-nuxeo.conf: |
     # Helm chart properties
+    nuxeo.pod.name=${env:POD_NAME}
+    nuxeo.pod.namespace=${env:POD_NAMESPACE}
+    nuxeo.pod.uid=${env:POD_UID}
     nuxeo.healthcheck.refresh.interval.seconds={{ min .Values.livenessProbe.periodSeconds .Values.readinessProbe.periodSeconds .Values.startupProbe.periodSeconds }}
+    {{- if .Values.ingress.enabled }}
+      {{- if .Values.ingress.tls }}
+    nuxeo.virtual.host=https://{{ .Values.ingress.hostname }}/
+      {{- else }}
+    nuxeo.virtual.host=http://{{ .Values.ingress.hostname }}/
+      {{- end }}
+    {{- else if .Values.virtualHost }}
     nuxeo.virtual.host={{ .Values.virtualHost  }}
+    {{- end }}
     nuxeo.stream.work.log.codec=avro
     nuxeo.stream.audit.log.codec=avro
     nuxeo.stream.pubsub.log.codec=avro
+    {{- if not .Values.logs.persistence.enabled }}
+    nuxeo.append.templates.docker=docker
+    {{- end }}
 {{- if .Values.mongodb.enabled }}
     nuxeo.append.templates.mongodb=mongodb
 {{- if .Values.mongodb.url }}
@@ -104,7 +118,7 @@ data:
     tracing.stackdriver.timeout={{ .Values.metrics.stackDriver.tracing.timeout }}
     {{- end }}
 {{- end }}
-{{- if or (gt (int .Values.replicaCount) 1) (include "nuxeo.cloudProvider.enabled" .) }}
+{{- if or (gt (int .Values.replicaCount) 1) (include "nuxeo.clustering.enabled" .) }}
     nuxeo.cluster.enabled=true
     nuxeo.cluster.nodeid=${env:POD_UID}
 {{- end }}

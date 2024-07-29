@@ -7,21 +7,17 @@ metadata:
 {{- with .Values.persistentVolumeStorage.labels }}
 {{ toYaml . | indent 4 }}
 {{- end }}
-  annotations:
-  {{- if .Values.persistentVolumeStorage.storageClass }}
-    volume.beta.kubernetes.io/storage-class: {{ .Values.persistentVolumeStorage.storageClass | quote }}
-  {{- else }}
-    volume.alpha.kubernetes.io/storage-class: default
-  {{- end }}
 {{- with .Values.persistentVolumeStorage.annotations }}
-{{ toYaml . | indent 4 }}
+  annotations: {{ toYaml . | nindent 4 }}
 {{- end }}
 spec:
-  accessModes:
-    - ReadWriteOnce
+  accessModes: {{- toYaml .Values.persistentVolumeStorage.accessModes | nindent 4 }}
   resources:
     requests:
       storage: {{ required "persistentVolumeStorage.size is required" .Values.persistentVolumeStorage.size | quote }}
+  {{- with .Values.persistentVolumeStorage.storageClass }}
+  storageClassName: {{ toYaml . }}
+  {{- end }}
 {{- end }}
 {{- if .Values.logs.persistence.enabled }}
 ---
@@ -33,19 +29,15 @@ metadata:
 {{- with .Values.logs.persistence.labels }}
 {{ toYaml . | indent 4 }}
 {{- end }}
-  annotations:
-  {{- if .Values.logs.persistence.storageClass }}
-    volume.beta.kubernetes.io/storage-class: {{ .Values.logs.persistence.storageClass | quote }}
-  {{- else }}
-    volume.alpha.kubernetes.io/storage-class: default
-  {{- end }}
 {{- with .Values.logs.persistence.annotations }}
-{{ toYaml . | indent 4 }}
+  annotations: {{ toYaml . | nindent 4 }}
 {{- end }}
 spec:
-  accessModes:
-    - ReadWriteOnce
+  accessModes: {{- toYaml .Values.logs.persistence.accessModes | nindent 4 }}
   resources:
     requests:
       storage: {{ required "logs.persistence.size is required" .Values.logs.persistence.size | quote }}
+  {{- with .Values.logs.persistence.storageClass }}
+  storageClassName: {{ toYaml . }}
+  {{- end }}
 {{- end }}
