@@ -36,16 +36,11 @@ spec:
       containers:
       - name: {{ .Chart.Name }}
         {{- with .Values.containerSecurityContext }}
-        securityContext:
-          {{- toYaml . | nindent 10 }}
+        securityContext: {{- toYaml . | nindent 10 }}
         {{- end }}
-        resources:
-          requests:
-            memory: "{{ .Values.resources.requests.memory }}"
-            cpu: "{{ .Values.resources.requests.cpu }}"
-          limits:
-            memory: "{{ .Values.resources.limits.memory }}"
-            cpu: "{{ .Values.resources.limits.cpu }}"
+        {{- with .Values.resources }}
+        resources: {{- toYaml . | nindent 10 }}
+        {{- end }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
 {{- if .Values.image.pullPolicy }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
