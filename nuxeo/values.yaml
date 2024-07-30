@@ -39,18 +39,29 @@ service:
 ## List of extra `containerPort`s for the nuxeo container.
 # extraContainerPorts:
 probePath: /nuxeo/runningstatus
+# Nuxeo pods will be restarted if probe fails during 1 minute
 livenessProbe:
-  initialDelaySeconds: 100
-  periodSeconds: 20
+  # deprecated since 3.1.0, this parameter is now ignored by Kubernetes due to the startup probe
+  # initialDelaySeconds:
+  periodSeconds: 5
   successThreshold: 1
-  failureThreshold: 5
   timeoutSeconds: 10
+  failureThreshold: 12
+# Nuxeo pods will stop receiving traffic if probe fails during 15s
 readinessProbe:
-  periodSeconds: 20
-  initialDelaySeconds: 100
+  # deprecated since 3.1.0, this parameter is now ignored by Kubernetes due to the startup probe
+  # initialDelaySeconds:
+  periodSeconds: 5
   successThreshold: 1
   timeoutSeconds: 10
-  failureThreshold: 5
+  failureThreshold: 3
+# Nuxeo pods will be started if probe succeeds once 30s after container startup
+startupProbe:
+  initialDelaySeconds: 30
+  periodSeconds: 5
+  successThreshold: 1
+  timeoutSeconds: 10
+  failureThreshold: 20
 ## List of Nuxeo packages to install at startup, separated by a space.
 ## For instance:
 ## ```
