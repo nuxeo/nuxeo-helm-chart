@@ -55,7 +55,9 @@ spec:
           httpGet:
             path: {{ .Values.probePath }}
             port: {{ .Values.service.internalPort }}
-          initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+          {{- with .Values.livenessProbe.initialDelaySeconds }}
+          initialDelaySeconds: {{ toYaml . }}
+          {{- end }}
           periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
           successThreshold: {{ .Values.livenessProbe.successThreshold }}
           timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
@@ -64,11 +66,24 @@ spec:
           httpGet:
             path: {{ .Values.probePath }}
             port: {{ .Values.service.internalPort }}
-          initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+          {{- with .Values.readinessProbe.initialDelaySeconds }}
+          initialDelaySeconds: {{ toYaml . }}
+          {{- end }}
           periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
           successThreshold: {{ .Values.readinessProbe.successThreshold }}
           timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
           failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+        startupProbe:
+          httpGet:
+            path: {{ .Values.probePath }}
+            port: {{ .Values.service.internalPort }}
+          {{- with .Values.startupProbe.initialDelaySeconds }}
+          initialDelaySeconds: {{ toYaml . }}
+          {{- end }}
+          periodSeconds: {{ .Values.startupProbe.periodSeconds }}
+          successThreshold: {{ .Values.startupProbe.successThreshold }}
+          timeoutSeconds: {{ .Values.startupProbe.timeoutSeconds }}
+          failureThreshold: {{ .Values.startupProbe.failureThreshold }}
         env:
         - name: POD_NAME
           valueFrom:
