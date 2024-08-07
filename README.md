@@ -27,7 +27,7 @@ To make a "real" deployment of Nuxeo in Kubernetes, you can have a look at:
 ## TL;DR
 
 ```shell
-helm repo add nuxeo https://chartmuseum.platform.dev.nuxeo.com/
+helm repo add nuxeo https://packages.nuxeo.com/repository/helm-releases-public/
 helm install my-release nuxeo/nuxeo
 ```
 
@@ -43,7 +43,7 @@ The `nuxeo` chart can be installed either:
 To install the chart from the Nuxeo chart respository, add this repository to the Helm configuration:
 
 ```shell
-helm repo add nuxeo https://chartmuseum.platform.dev.nuxeo.com/
+helm repo add nuxeo https://packages.nuxeo.com/repository/helm-releases-public/
 ```
 
 Then, use `nuxeo/nuxeo` as a replacement of `NUXEO_CHART` in the commands below.
@@ -112,7 +112,7 @@ The following tables lists some of the configurable parameters of this chart and
 When a pull request is merged to master:
 
 - The [patch version](nuxeo/Chart.yaml#L4) of the chart is automatically incremented.
-- The chart is released to the Platform CI's [ChartMuseum](https://chartmuseum.platform.dev.nuxeo.com/).
+- The chart is released to the Nuxeo's [ChartMuseum](https://packages.nuxeo.com/repository/helm-releases-public/).
 - A GitHub [tag](https://github.com/nuxeo/nuxeo-helm-chart/tags) is created.
 
 See the [Jenkinsfile](./Jenkinsfile) for more details.
