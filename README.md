@@ -2,10 +2,6 @@
 
 This chart bootstraps a [Nuxeo](https://github.com/nuxeo/nuxeo-lts/tree/2023/docker/nuxeo) deployment on a [Kubernetes](https://kubernetes.io/) cluster using the [Helm](https://helm.sh/) package manager.
 
-> WARNING
-The `nuxeo` chart is not production-ready by default.
-It suits for a development or staging environment such as preview.
-
 Currently, there is a single version of this chart for all the versions of Nuxeo.
 
 The code samples below rely on the [Helm 3](https://helm.sh/docs/helm/helm/) command line.
@@ -16,10 +12,10 @@ By default, this chart deploys the strict minimum to have Nuxeo running with:
 
 - [emptyDir](https://kubernetes.io/docs/concepts/storage/volumes/#emptydir) volume for binaries.
 - H2 database.
-- Elasticsearch embedded.
-- Chronicle Queue for the WorkManager and Nuxeo Streams.
+- Opensearch embedded.
+- Memory-only WorkManager and Nuxeo Streams.
 
-To make a "real" deployment of Nuxeo in Kubernetes, you can have a look at:
+To make a production-ready deployment of Nuxeo in Kubernetes, you can have a look at:
 
 - The different parameters in the [values.yaml](nuxeo/values.yaml) file.
 - The [Full Deployment](#full-deployment) section.
@@ -121,27 +117,28 @@ The major and minor versions can be incremented manually.
 
 ## Full Deployment
 
-To deploy Nuxeo along with MongoDB, Elasticsearch and Kafka, one way is to use [Helmfile](https://github.com/roboll/helmfile) to deploy multiple charts. You can have a look at this [helmfile](./examples/helmfile.yaml) sample.
+To deploy Nuxeo along with MinIO, MongoDB, Opensearch and Kafka, one way is to use [Helmfile](https://github.com/helmfile/helmfile) to deploy multiple charts. You can have a look at the [helmfile](./ci/helm/helmfile.yaml) used to test and validate a Nuxeo cluster deployment.
 
 To run it, you need to:
 
-- Install the [helmfile](https://github.com/roboll/helmfile#installation) command line.
-- Clone this repository or download the [examples](./examples) directory.
-- In the `examples` directory, run:
+- Install the [helmfile](https://github.com/helmfile/helmfile#installation) command line.
+- Clone this repository or download the [helm](./ci/helm) directory.
+- In the `ci/helm` directory, run:
 
 ```shell
-helmfile --namepsace=NAMESPACE sync
+helmfile --namespace=NAMESPACE --environment=cluster sync
 ```
 
 `NAMESPACE` is the target Kubernetes namespace for the various Helm releases.
 
-The parameters of the `nuxeo` chart, such as the Nuxeo image, can be configured in the [values-nuxeo.yaml.gotmpl](./examples/values-nuxeo.yaml.gotmpl) file.
+The parameters of the `nuxeo` chart, such as the Nuxeo image, can be configured in the [values-nuxeo.yaml.gotmpl](./ci/helm/values/values-nuxeo.yaml.gotmpl) and [values-nuxeo.yaml.gotmpl](./ci/helm/values/cluster/values-nuxeo.yaml.gotmpl) files.
 
-The parameters of the `mongodb`, `elasticsearch` and `kafka` charts can be configured in the [values-CHART.yaml](./examples) files.
+The parameters of the `minio`, `mongodb`, `opensearch` and `kafka` charts can be configured in the [values-CHART.yaml](./ci/helm/values) files.
 
 **Note:** these values are just sample values. The related charts need a fine-grained configuration to be suitable for production, see the available values for each one of them:
 
 - [nuxeo](nuxeo/values.yaml)
-- [mongodb](https://github.com/bitnami/charts/blob/master/bitnami/mongodb/values.yaml)
-- [elasticsearch](https://github.com/elastic/helm-charts/blob/master/elasticsearch/values.yaml)
-- [kafka](https://github.com/bitnami/charts/blob/master/bitnami/kafka/values.yaml)
+- [minio](https://github.com/bitnami/charts/blob/main/bitnami/minio/values.yaml)
+- [mongodb](https://github.com/bitnami/charts/blob/main/bitnami/mongodb/values.yaml)
+- [opensearch](https://github.com/opensearch-project/helm-charts/blob/main/charts/opensearch/values.yaml)
+- [kafka](https://github.com/bitnami/charts/blob/main/bitnami/kafka/values.yaml)
