@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-library identifier: "platform-ci-shared-library@v0.0.11"
+library identifier: "platform-ci-shared-library@v0.0.32"
 
 String getChartVersion(chart) {
   container('base') {
@@ -54,7 +54,7 @@ pipeline {
   environment {
     CHART_NAME = 'nuxeo'
     CHART_DESCRIPTOR = "${CHART_NAME}/Chart.yaml"
-    CHART_SERVICE = 'http://chartmuseum:8080'
+    CHART_REPOSITORY = 'https://packages.nuxeo.com/repository/helm-releases-public/'
     CURRENT_NAMESPACE = nxK8s.getCurrentNamespace()
     VERSION = nxUtils.getVersion(baseVersion: getChartVersion("${CHART_NAME}"), tagPrefix: '')
     CHART_ARCHIVE = "${CHART_NAME}-${VERSION}.tgz"
@@ -98,8 +98,8 @@ pipeline {
           nxWithGitHubStatus(context: 'upload', message: 'Upload the Helm Chart Package') {
             script {
               echo "Upload chart archive ${CHART_ARCHIVE}"
-              // upload package to the ChartMuseum
-              nxUtils.uploadDataBinary(credentialsId: 'chartmuseum', url: "${CHART_SERVICE}/api/charts", file: env.CHART_ARCHIVE)
+              // upload package to the public ChartMuseum
+              nxUtils.uploadFile(credentialsId: 'packages.nuxeo.com-auth', url: "${CHART_REPOSITORY}", file: env.CHART_ARCHIVE)
             }
           }
         }
