@@ -79,12 +79,20 @@ mongodb:
   # url:
   # host:
   port: 27017
+  initContainer:
+    repository: busybox
+    tag: latest
+    imagePullPolicy: IfNotPresent
 postgresql:
   enabled: false
   # host:
   port: 5432
   # username:
   # password:
+  initContainer:
+    repository: busybox
+    tag: latest
+    imagePullPolicy: IfNotPresent
 elasticsearch:
   enabled: false
   protocol: http
@@ -103,15 +111,22 @@ elasticsearch:
   httpReadOnly:
     ## Allows to enable the Elasticsearch Pass-through, see https://doc.nuxeo.com/nxdoc/cloud/elasticsearch-passthrough/.
     enabled: false
+  initContainer:
+    repository: busybox
+    tag: latest
+    imagePullPolicy: IfNotPresent
 kafka:
   enabled: false
   # host:
   port: 9092
+  initContainer:
+    repository: busybox
+    tag: latest
+    imagePullPolicy: IfNotPresent
 redis:
   enabled: false
-## Image pull policy for the busybox init containers.
-initContainers:
-  imagePullPolicy: IfNotPresent
+## Extra init containers.
+initContainers: []
 googleCloudStorage:
   enabled: false
   # gcpProjectId:
