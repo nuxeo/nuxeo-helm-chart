@@ -32,9 +32,10 @@ def buildTestStage(String environment) {
             def ingressUrl = "https://${NAMESPACE}.platform.dev.nuxeo.com/nuxeo"
             def serviceUrl = "http://nuxeo.${NAMESPACE}.svc.cluster.local/nuxeo"
             // check running status
-            sh "ci/scripts/running-status.sh ${serviceUrl}"
+            int retryCount = 5
+            sh "ci/scripts/running-status.sh ${serviceUrl} ${retryCount}"
             // check ingress
-            sh "ci/scripts/running-status.sh ${ingressUrl}"
+            sh "ci/scripts/running-status.sh ${ingressUrl} ${retryCount}"
           }
         }
       }
