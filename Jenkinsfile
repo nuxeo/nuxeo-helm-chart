@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-library identifier: "platform-ci-shared-library@v0.0.11"
+library identifier: "platform-ci-shared-library@v0.0.32"
 
 String getChartVersion(chart) {
   container('base') {
@@ -54,10 +54,13 @@ pipeline {
   environment {
     CHART_NAME = 'nuxeo'
     CHART_DESCRIPTOR = "${CHART_NAME}/Chart.yaml"
-    CHART_SERVICE = 'http://chartmuseum:8080'
     CURRENT_NAMESPACE = nxK8s.getCurrentNamespace()
     VERSION = nxUtils.getVersion(baseVersion: getChartVersion("${CHART_NAME}"), tagPrefix: '')
     CHART_ARCHIVE = "${CHART_NAME}-${VERSION}.tgz"
+    CHART_REPO_INTERNAL = 'http://chartmuseum:8080/api/charts'
+    CHART_REPO_INTERNAL_CREDENTIALS = 'chartmuseum'
+    CHART_REPO_PUBLIC = 'https://packages.nuxeo.com/repository/helm-releases-public/'
+    CHART_REPO_PUBLIC_CREDENTIALS = 'packages.nuxeo.com-auth'
   }
   stages {
     stage('Helm package') {
@@ -98,8 +101,11 @@ pipeline {
           nxWithGitHubStatus(context: 'upload', message: 'Upload the Helm Chart Package') {
             script {
               echo "Upload chart archive ${CHART_ARCHIVE}"
-              // upload package to the ChartMuseum
-              nxUtils.uploadDataBinary(credentialsId: 'chartmuseum', url: "${CHART_SERVICE}/api/charts", file: env.CHART_ARCHIVE)
+              if (nxUtils.isPullRequest()) {
+                nxUtils.uploadDataBinary(credentialsId: "${CHART_REPO_INTERNAL_CREDENTIALS}", url: "${CHART_REPO_INTERNAL}", file: env.CHART_ARCHIVE)
+              } else {
+                nxUtils.uploadFile(credentialsId: "${CHART_REPO_PUBLIC_CREDENTIALS}", url: "${CHART_REPO_PUBLIC}", file: env.CHART_ARCHIVE)
+              }
             }
           }
         }
