@@ -2,7 +2,7 @@ image:
   repository: docker-private.packages.nuxeo.com/nuxeo/nuxeo
   tag: 2023
   pullSecrets: []
-  # pullPolicy:
+  pullPolicy: IfNotPresent
 ## Nuxeo architecture, among:
 ## - singleNode: a single Nuxeo node with workers and stream processing enabled
 ## - api-worker:
@@ -15,6 +15,7 @@ strategy:
 replicaCount: 1
 # workerCount: 1
 clusterDomain: cluster.local
+# deprecated since 3.1.0, virtual host nuxeo.conf property is now retrieved from ingress configuration
 # virtualHost:
 podLabels: {}
 podAnnotations: {}
@@ -24,9 +25,8 @@ tolerations: []
 resources:
   requests:
     cpu: 0.5
-    memory: 1Gi
+    memory: 2Gi
   limits:
-    cpu: 1
     memory: 2Gi
 service:
   labels: {}
@@ -38,29 +38,40 @@ service:
   ## List of extra service ports.
   extraPorts: []
 ## List of extra `containerPort`s for the nuxeo container.
-# extraContainerPorts:
+extraContainerPorts: []
 probePath: /nuxeo/runningstatus
+# Nuxeo pods will be restarted if probe fails during 1 minute
 livenessProbe:
-  initialDelaySeconds: 100
-  periodSeconds: 20
+  # deprecated since 3.1.0, this parameter is now ignored by Kubernetes due to the startup probe
+  # initialDelaySeconds:
+  periodSeconds: 5
   successThreshold: 1
-  failureThreshold: 5
   timeoutSeconds: 10
+  failureThreshold: 12
+# Nuxeo pods will stop receiving traffic if probe fails during 15s
 readinessProbe:
-  periodSeconds: 20
-  initialDelaySeconds: 100
+  # deprecated since 3.1.0, this parameter is now ignored by Kubernetes due to the startup probe
+  # initialDelaySeconds:
+  periodSeconds: 5
   successThreshold: 1
   timeoutSeconds: 10
-  failureThreshold: 5
+  failureThreshold: 3
+# Nuxeo pods will be started if probe succeeds once 30s after container startup
+startupProbe:
+  initialDelaySeconds: 30
+  periodSeconds: 5
+  successThreshold: 1
+  timeoutSeconds: 10
+  failureThreshold: 20
 ## List of Nuxeo packages to install at startup, separated by a space.
 ## For instance:
 ## ```
 ## packages: nuxeo-web-ui nuxeo-drive
 ## ```
-# packages:
+packages: ""
 ## Nuxeo CLID, required for package installation.
 ## Can be multiline, using |-.
-# clid:
+clid: ""
 mongodb:
   enabled: false
   protocol: mongodb
@@ -68,12 +79,20 @@ mongodb:
   # url:
   # host:
   port: 27017
+  initContainer:
+    repository: busybox
+    tag: latest
+    imagePullPolicy: IfNotPresent
 postgresql:
   enabled: false
   # host:
   port: 5432
   # username:
   # password:
+  initContainer:
+    repository: busybox
+    tag: latest
+    imagePullPolicy: IfNotPresent
 elasticsearch:
   enabled: false
   protocol: http
@@ -90,17 +109,24 @@ elasticsearch:
     # username:
     # password:
   httpReadOnly:
-    ## Alows to enable the Elasticsearch Passthrough, see https://doc.nuxeo.com/nxdoc/cloud/elasticsearch-passthrough/.
+    ## Allows to enable the Elasticsearch Pass-through, see https://doc.nuxeo.com/nxdoc/cloud/elasticsearch-passthrough/.
     enabled: false
+  initContainer:
+    repository: busybox
+    tag: latest
+    imagePullPolicy: IfNotPresent
 kafka:
   enabled: false
   # host:
   port: 9092
+  initContainer:
+    repository: busybox
+    tag: latest
+    imagePullPolicy: IfNotPresent
 redis:
   enabled: false
-## Image pull policy for the busybox init containers.
-initContainers:
-  imagePullPolicy: IfNotPresent
+## Extra init containers.
+initContainers: []
 googleCloudStorage:
   enabled: false
   # gcpProjectId:
@@ -123,24 +149,29 @@ serviceAccount:
   # name:
 persistentVolumeStorage:
   enabled: false
-  # labels: {}
-  # annotations: {}
-  # storageClass:
-  # size:
+  storageClass: ""
+  accessModes:
+  - ReadWriteOnce
+  size: 2Gi
+  annotations: {}
+  labels: {}
 ingress:
   enabled: false
-  # labels: {}
-  # annotations: {}
-  # hostname:
-  # path:
-  # tls:
+  className: ""
+  annotations: {}
+  labels: {}
+  hostname: ""
+  path: ""
+  tls: []
 logs:
   persistence:
     enabled: false
-    # labels: {}
-    # annotations: {}
-    # storageClass:
-    # size:
+    storageClass: ""
+    accessModes:
+    - ReadWriteOnce
+    size: 2Gi
+    annotations: {}
+    labels: {}
 
 ## Custom properties to be appended to nuxeo.conf.
 ## This is a map to allow merging several sets of properties from multiple values files.
@@ -160,17 +191,17 @@ logs:
 ## key1=override
 ## key3=value3
 ## ```
-# customProperties:
+customProperties: {}
 #   set1: |
 #     key1=value1
 #     key2=value2
 
 ## Custom environment variables to set in the container
 ## customEnvs allows to define environment variables from a value or a key of a ConfigMap
-# customEnvs:
+customEnvs: []
 
 ## customEnvsFrom allows to load the content of a ConfigMap as environment variables
-# customEnvsFrom:
+customEnvsFrom: []
 
 metrics:
   ## Enable global metrics, also needed for metrics reporters and tracing systems such a Stackdriver

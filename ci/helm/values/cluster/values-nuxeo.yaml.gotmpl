@@ -1,0 +1,31 @@
+{{- $localDomain := printf "%s.svc.cluster.local" .Namespace -}}
+architecture: "api-worker"
+replicaCount: 1
+workerCount: 1
+packages: amazon-s3-online-storage
+customEnvs:
+- name: NUXEO_CLID
+  valueFrom:
+    secretKeyRef:
+      name: instance-clid
+      key: instance.clid
+amazonS3:
+  enabled: true
+  accessKeyId: minio
+  secretAccessKey: minio-secret
+  # unused but a warn log is produced if not present
+  region: eu-west-1
+  bucket: nuxeo-binary-store
+mongodb:
+  enabled: true
+  host: {{ printf "mongodb.%s" $localDomain }}
+elasticsearch:
+  enabled: true
+  host: {{ printf "opensearch-cluster-master.%s" $localDomain }}
+kafka:
+  enabled: true
+  host: {{ printf "kafka.%s" $localDomain }}
+customProperties:
+  minio: |
+    nuxeo.s3storage.endpoint=http://{{ printf "minio.%s" $localDomain }}:9000
+    nuxeo.s3storage.pathstyleaccess=true

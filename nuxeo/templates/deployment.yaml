@@ -36,20 +36,15 @@ spec:
       containers:
       - name: {{ .Chart.Name }}
         {{- with .Values.containerSecurityContext }}
-        securityContext:
-          {{- toYaml . | nindent 10 }}
+        securityContext: {{- toYaml . | nindent 10 }}
         {{- end }}
-        resources:
-          requests:
-            memory: "{{ .Values.resources.requests.memory }}"
-            cpu: "{{ .Values.resources.requests.cpu }}"
-          limits:
-            memory: "{{ .Values.resources.limits.memory }}"
-            cpu: "{{ .Values.resources.limits.cpu }}"
+        {{- with .Values.resources }}
+        resources: {{- toYaml . | nindent 10 }}
+        {{- end }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-{{- if .Values.image.pullPolicy }}
-        imagePullPolicy: {{ .Values.image.pullPolicy }}
-{{- end }}
+        {{- with .Values.image.pullPolicy }}
+        imagePullPolicy: {{ toYaml . }}
+        {{- end }}
         ports:
         - containerPort: {{ .Values.service.internalPort }}
           name: tomcat
@@ -60,7 +55,9 @@ spec:
           httpGet:
             path: {{ .Values.probePath }}
             port: {{ .Values.service.internalPort }}
-          initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+          {{- with .Values.livenessProbe.initialDelaySeconds }}
+          initialDelaySeconds: {{ toYaml . }}
+          {{- end }}
           periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
           successThreshold: {{ .Values.livenessProbe.successThreshold }}
           timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
@@ -69,11 +66,24 @@ spec:
           httpGet:
             path: {{ .Values.probePath }}
             port: {{ .Values.service.internalPort }}
-          initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+          {{- with .Values.readinessProbe.initialDelaySeconds }}
+          initialDelaySeconds: {{ toYaml . }}
+          {{- end }}
           periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
           successThreshold: {{ .Values.readinessProbe.successThreshold }}
           timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
           failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+        startupProbe:
+          httpGet:
+            path: {{ .Values.probePath }}
+            port: {{ .Values.service.internalPort }}
+          {{- with .Values.startupProbe.initialDelaySeconds }}
+          initialDelaySeconds: {{ toYaml . }}
+          {{- end }}
+          periodSeconds: {{ .Values.startupProbe.periodSeconds }}
+          successThreshold: {{ .Values.startupProbe.successThreshold }}
+          timeoutSeconds: {{ .Values.startupProbe.timeoutSeconds }}
+          failureThreshold: {{ .Values.startupProbe.failureThreshold }}
         env:
         - name: POD_NAME
           valueFrom:
@@ -94,16 +104,16 @@ spec:
               name: {{ template "nuxeo.fullname" . }}-instance-clid
               key: CLID
 {{- end }}
-{{- if .Values.packages }}
+{{- with .Values.packages }}
         - name: NUXEO_PACKAGES
-          value: {{ .Values.packages }}
+          value: {{ toYaml . }}
 {{- end }}
-{{- if .Values.customEnvs }}
-{{ toYaml .Values.customEnvs | indent 8 }}
+{{- with .Values.customEnvs }}
+{{ toYaml . | indent 8 }}
 {{- end }}
         envFrom:
-{{- if .Values.customEnvsFrom }}
-{{ toYaml .Values.customEnvsFrom | indent 8 }}
+{{- with .Values.customEnvsFrom }}
+{{ toYaml . | indent 8 }}
 {{- end }}
         volumeMounts:
           - name: nuxeoconf
@@ -118,7 +128,7 @@ spec:
           {{- end }}
           - name: log
             mountPath: /var/log/nuxeo
-          {{- if not (include "nuxeo.cloudProvider.enabled" .) }}
+          {{- if not (include "nuxeo.binary.cloudProvider.enabled" .) }}
           - name: binaries
             mountPath: /var/lib/nuxeo/binaries
           {{- end }}
@@ -131,28 +141,31 @@ spec:
       initContainers:
 {{- if and .Values.mongodb.enabled .Values.mongodb.host }}
       - name: init-mongodb
-        image: busybox
-        imagePullPolicy: {{ .Values.initContainers.imagePullPolicy }}
+        image: "{{ .Values.mongodb.initContainer.repository }}:{{ .Values.mongodb.initContainer.tag }}"
+        imagePullPolicy: {{ .Values.mongodb.initContainer.imagePullPolicy }}
         command: ['sh', '-c', 'until nc -w1 {{ .Values.mongodb.host }} {{ .Values.mongodb.port }}; do echo "waiting for mongodb"; sleep 2; done;']
 {{- end }}
 {{- if .Values.postgresql.enabled }}
       - name: init-postgresql
-        image: busybox
-        imagePullPolicy: {{ .Values.initContainers.imagePullPolicy }}
+        image: "{{ .Values.postgresql.initContainer.repository }}:{{ .Values.postgresql.initContainer.tag }}"
+        imagePullPolicy: {{ .Values.postgresql.initContainer.imagePullPolicy }}
         command: ['sh', '-c', 'until nc -w1 {{ .Values.postgresql.host }} {{ .Values.postgresql.port }}; do echo "waiting for postgresql"; sleep 2; done;']
 {{- end }}
 {{- if .Values.elasticsearch.enabled }}
       - name: init-elasticsearch
-        image: busybox
-        imagePullPolicy: {{ .Values.initContainers.imagePullPolicy }}
+        image: "{{ .Values.elasticsearch.initContainer.repository }}:{{ .Values.elasticsearch.initContainer.tag }}"
+        imagePullPolicy: {{ .Values.elasticsearch.initContainer.imagePullPolicy }}
         command: ['sh', '-c', 'until nc -w1 {{ .Values.elasticsearch.host }} {{ .Values.elasticsearch.port }}; do echo "waiting for elastic"; sleep 2; done;']
 {{- end }}
 {{- if .Values.kafka.enabled }}
       - name: init-kafka
-        image: busybox
-        imagePullPolicy: {{ .Values.initContainers.imagePullPolicy }}
+        image: "{{ .Values.kafka.initContainer.repository }}:{{ .Values.kafka.initContainer.tag }}"
+        imagePullPolicy: {{ .Values.kafka.initContainer.imagePullPolicy }}
         command: ['sh', '-c', 'until nc -w1 {{ .Values.kafka.host }} {{ .Values.kafka.port }}; do echo "waiting for kafka"; sleep 2; done;']
 {{- end }}
+      {{- with .Values.initContainers }}
+      {{- toYaml . | nindent 6 }}
+      {{- end }}
       {{- with .Values.podSecurityContext }}
       securityContext:
         {{- toYaml . | nindent 8 }}
@@ -175,7 +188,7 @@ spec:
         {{- else }}
         emptyDir: {}
         {{- end }}
-      {{- if not (include "nuxeo.cloudProvider.enabled" .) }}
+      {{- if not (include "nuxeo.binary.cloudProvider.enabled" .) }}
       - name: binaries
         {{- if .Values.persistentVolumeStorage.enabled }}
         persistentVolumeClaim:
