@@ -175,6 +175,72 @@ type: Opaque
 {{- end -}}
 
 {{/*
+Returns the name of the mongodb secret to get auth from.
+*/}}
+{{- define "nuxeo.secret.mongodb.name" -}}
+{{- if .Values.mongodb.auth.existingSecret -}}
+{{- .Values.mongodb.auth.existingSecret -}}
+{{- else -}}
+{{- printf "%s-%s" (include "nuxeo.fullname" .) "mongodb" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Returns the name of the postgresql secret to get auth from.
+*/}}
+{{- define "nuxeo.secret.postgresql.name" -}}
+{{- if .Values.postgresql.existingSecret -}}
+{{- .Values.postgresql.existingSecret -}}
+{{- else -}}
+{{- printf "%s-%s" (include "nuxeo.fullname" .) "postgresql" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Returns the name of the elasticsearch secret to get auth from.
+*/}}
+{{- define "nuxeo.secret.elasticsearch.name" -}}
+{{- if .Values.elasticsearch.basicAuth.existingSecret -}}
+{{- .Values.elasticsearch.basicAuth.existingSecret -}}
+{{- else -}}
+{{- printf "%s-%s" (include "nuxeo.fullname" .) "elasticsearch" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Returns the name of the kafka secret to get auth from.
+*/}}
+{{- define "nuxeo.secret.kafka.name" -}}
+{{- if .Values.kafka.auth.existingSecret -}}
+{{- .Values.kafka.auth.existingSecret -}}
+{{- else -}}
+{{- printf "%s-%s" (include "nuxeo.fullname" .) "kafka" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Returns the name of the Google Cloud Platform secret to get auth from.
+*/}}
+{{- define "nuxeo.secret.gcp.name" -}}
+{{- if .Values.googleCloudStorage.existingSecret -}}
+{{- .Values.googleCloudStorage.existingSecret -}}
+{{- else -}}
+{{- printf "%s-%s" (include "nuxeo.fullname" .) "google-cloud" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Returns the name of the Amazon secret to get auth from.
+*/}}
+{{- define "nuxeo.secret.amazon.name" -}}
+{{- if .Values.amazonS3.existingSecret -}}
+{{- .Values.amazonS3.existingSecret -}}
+{{- else -}}
+{{- printf "%s-%s" (include "nuxeo.fullname" .) "amazon" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the list of node types depending on the architecture.
 */}}
 {{- define "nuxeo.nodeTypes" -}}

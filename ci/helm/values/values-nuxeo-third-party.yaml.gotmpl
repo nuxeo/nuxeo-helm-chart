@@ -1,7 +1,4 @@
 {{- $localDomain := printf "%s.svc.cluster.local" .Namespace -}}
-architecture: "api-worker"
-replicaCount: 1
-workerCount: 1
 packages: amazon-s3-online-storage
 customEnvs:
 - name: NUXEO_CLID

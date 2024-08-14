@@ -75,20 +75,30 @@ clid: ""
 mongodb:
   enabled: false
   protocol: mongodb
+  # deprecated since 3.1.0, use auth object instead
   # credentials:
-  # url:
-  # host:
+  host: ""
   port: 27017
+  # when set it overrides values from mongodb.host and mongodb.port
+  url: ""
+  auth:
+    enabled: false
+    username: ""
+    password: ""
+    # existing secret with MongoDB credentials (keys: mongodb-username, mongodb-password)
+    existingSecret: ""
   initContainer:
     repository: busybox
     tag: latest
     imagePullPolicy: IfNotPresent
 postgresql:
   enabled: false
-  # host:
+  host: ""
   port: 5432
-  # username:
-  # password:
+  username: ""
+  password: ""
+  # existing secret with PostgreSQL credentials (keys: postgresql-username, postgresql-password)
+  existingSecret: ""
   initContainer:
     repository: busybox
     tag: latest
@@ -96,7 +106,7 @@ postgresql:
 elasticsearch:
   enabled: false
   protocol: http
-  # host:
+  host: ""
   port: 9200
   clusterName: elasticsearch
   indexNumberOfReplicas: 0
@@ -106,8 +116,10 @@ elasticsearch:
   ## To configure Basic Authentication, see https://doc.nuxeo.com/nxdoc/cloud/elasticsearch-setup/#basic-authentication.
   basicAuth:
     enabled: false
-    # username:
-    # password:
+    username: ""
+    password: ""
+    # existing secret with Elasticsearch credentials (keys: elasticsearch-username, elasticsearch-password)
+    existingSecret: ""
   httpReadOnly:
     ## Allows to enable the Elasticsearch Pass-through, see https://doc.nuxeo.com/nxdoc/cloud/elasticsearch-passthrough/.
     enabled: false
@@ -117,8 +129,15 @@ elasticsearch:
     imagePullPolicy: IfNotPresent
 kafka:
   enabled: false
-  # host:
+  host: ""
   port: 9092
+  auth:
+    # enable SASL authentication to kafka
+    enabled: false
+    username: ""
+    password: ""
+    # existing secret with Kafka credentials (keys: kafka-username, kafka-password)
+    existingSecret: ""
   initContainer:
     repository: busybox
     tag: latest
@@ -129,19 +148,23 @@ redis:
 initContainers: []
 googleCloudStorage:
   enabled: false
-  # gcpProjectId:
-  # credentials:
-  # bucket:
+  gcpProjectId: ""
+  credentials: ""
+  # existing secret with GCP credentials (keys: gcp-project-id, gcp-credentials)
+  existingSecret: ""
+  bucket: ""
   ## The bucket prefix needs to end with /
-  # bucketPrefix:
+  bucketPrefix: ""
 amazonS3:
   enabled: false
-  # accessKeyId:
-  # secretAccessKey:
-  # region:
-  # bucket:
+  accessKeyId: ""
+  secretAccessKey: ""
+  # existing secret with Amazon credentials (keys: amazon-key-id, amazon-secret-key))
+  existingSecret: ""
+  region: ""
+  bucket: ""
   ## The bucket prefix needs to end with /
-  # bucketPrefix:
+  bucketPrefix: ""
 serviceAccount:
   create: true
   annotations: {}

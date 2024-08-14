@@ -1,3 +1,7 @@
+nuxeo:
+  extraValuesFiles:
+  - values/values-nuxeo-cluster.yaml.gotmpl
+  - values/values-nuxeo-third-party.yaml.gotmpl
 minio:
   enabled: true
 mongodb:

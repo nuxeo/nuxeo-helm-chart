@@ -1,5 +1,4 @@
 {{- $dot := . -}}
-{{- $credentials := ternary "" (printf "%s%s" .Values.mongodb.credentials "@") (empty .Values.mongodb.credentials) -}}
 {{- range splitList "," (include "nuxeo.nodeTypes" .) }}
 {{- $nuxeoNodeType := . -}}
 {{- $data := dict "Values" $dot.Values "Chart" $dot.Chart "Release" $dot.Release "nuxeoNodeType" $nuxeoNodeType -}}
@@ -34,10 +33,16 @@ data:
     nuxeo.append.templates.docker=docker
     {{- end }}
 {{- if .Values.mongodb.enabled }}
+    {{- $credentials := "" -}}
+    {{- if .Values.mongodb.auth.enabled -}}
+      {{- $credentials = "${env:NUXEO_MONGODB_USERNAME}:${env:NUXEO_MONGODB_PASSWORD}@" -}}
+    {{- else if .Values.mongodb.credentials -}}
+      {{- $credentials = printf "%s%s" .Values.mongodb.credentials "@" -}}
+    {{- end }}
     nuxeo.append.templates.mongodb=mongodb
 {{- if .Values.mongodb.url }}
     nuxeo.mongodb.server={{ .Values.mongodb.protocol }}://{{ $credentials }}{{ .Values.mongodb.url }}
-{{- else}}
+{{- else }}
     nuxeo.mongodb.server={{ .Values.mongodb.protocol }}://{{ $credentials }}{{ .Values.mongodb.host }}:{{ .Values.mongodb.port }}
 {{- end }}
     nuxeo.mongodb.dbname={{ template "nuxeo.fullname" . }}
@@ -47,8 +52,8 @@ data:
     nuxeo.db.host={{ .Values.postgresql.host }}
     nuxeo.db.port={{ .Values.postgresql.port }}
     nuxeo.db.name={{ template "nuxeo.fullname" . }}
-    nuxeo.db.user={{ .Values.postgresql.username }}
-    nuxeo.db.password={{ .Values.postgresql.password }}
+    nuxeo.db.user=${env:NUXEO_POSTGRESQL_USERNAME}
+    nuxeo.db.password=${env:NUXEO_POSTGRESQL_PASSWORD}
 {{- end }}
 {{- if .Values.elasticsearch.enabled }}
     elasticsearch.addressList={{ .Values.elasticsearch.protocol }}://{{ .Values.elasticsearch.host }}:{{ .Values.elasticsearch.port }}
@@ -58,12 +63,12 @@ data:
     elasticsearch.restClient.socketTimeoutMs={{ .Values.elasticsearch.restClient.socketTimeoutMs }}
     elasticsearch.restClient.connectionTimeoutMs={{ .Values.elasticsearch.restClient.connectionTimeoutMs }}
     {{- if .Values.elasticsearch.basicAuth.enabled }}
-    elasticsearch.restClient.username={{ .Values.elasticsearch.basicAuth.username }}
-    elasticsearch.restClient.password={{ .Values.elasticsearch.basicAuth.password }}
+    elasticsearch.restClient.username=${env:NUXEO_ELASTICSEARCH_USERNAME}
+    elasticsearch.restClient.password=${env:NUXEO_ELASTICSEARCH_PASSWORD}
     {{- end }}
     {{- if .Values.elasticsearch.httpReadOnly.enabled }}
     {{- if .Values.elasticsearch.basicAuth.enabled }}
-    elasticsearch.httpReadOnly.baseUrl={{ .Values.elasticsearch.protocol }}://{{ .Values.elasticsearch.basicAuth.username }}:{{ .Values.elasticsearch.basicAuth.password }}@{{ .Values.elasticsearch.host }}:{{ .Values.elasticsearch.port }}
+    elasticsearch.httpReadOnly.baseUrl={{ .Values.elasticsearch.protocol }}://${env:NUXEO_ELASTICSEARCH_USERNAME}:${env:NUXEO_ELASTICSEARCH_PASSWORD}@{{ .Values.elasticsearch.host }}:{{ .Values.elasticsearch.port }}
     {{- else }}
     elasticsearch.httpReadOnly.baseUrl={{ .Values.elasticsearch.protocol }}://{{ .Values.elasticsearch.host }}:{{ .Values.elasticsearch.port }}
     {{- end }}
@@ -72,6 +77,10 @@ data:
 {{- if .Values.kafka.enabled }}
     kafka.enabled=true
     kafka.bootstrap.servers={{ .Values.kafka.host }}:{{ .Values.kafka.port }}
+    {{- if .Values.kafka.auth.enabled }}
+    kafka.sasl.enabled=true
+    kafka.sasl.jaas.config=org.apache.kafka.common.security.scram.ScramLoginModule required username="${env:NUXEO_KAFKA_USERNAME}" password="${env:NUXEO_KAFKA_PASSWORD}";
+    {{- end }}
     kafka.topicPrefix={{ template "nuxeo.fullname" . }}
     nuxeo.stream.work.enabled=true
     nuxeo.pubsub.provider=stream
@@ -84,9 +93,9 @@ data:
 {{- end }}
 {{- if .Values.googleCloudStorage.enabled }}
     nuxeo.core.binarymanager=org.nuxeo.ecm.core.storage.gcp.GoogleStorageBinaryManager
-    nuxeo.gcp.project={{ .Values.googleCloudStorage.gcpProjectId }}
-    nuxeo.gcp.credentials={{ .Values.googleCloudStorage.credentials }}
-    nuxeo.gcp.storage.bucket= {{ .Values.googleCloudStorage.bucket }}
+    nuxeo.gcp.project=${env:NUXEO_GOOGLE_CLOUD_PROJECT_ID}
+    nuxeo.gcp.credentials=${env:NUXEO_GOOGLE_CLOUD_CREDENTIALS}
+    nuxeo.gcp.storage.bucket={{ .Values.googleCloudStorage.bucket }}
     {{- if .Values.googleCloudStorage.bucketPrefix }}
     nuxeo.gcp.storage.bucket_prefix={{ .Values.googleCloudStorage.bucketPrefix }}
     {{- else }}
@@ -95,10 +104,10 @@ data:
 {{- end }}
 {{- if .Values.amazonS3.enabled }}
     nuxeo.core.binarymanager=org.nuxeo.ecm.blob.s3.S3BlobProvider
-    nuxeo.aws.accessKeyId={{ .Values.amazonS3.accessKeyId }}
-    nuxeo.aws.secretKey={{ .Values.amazonS3.secretAccessKey }}
+    nuxeo.aws.accessKeyId=${env:NUXEO_AMAZON_KEY_ID}
+    nuxeo.aws.secretKey=${env:NUXEO_AMAZON_SECRET_KEY}
     nuxeo.aws.region={{ .Values.amazonS3.region }}
-    nuxeo.s3storage.bucket= {{ .Values.amazonS3.bucket }}
+    nuxeo.s3storage.bucket={{ .Values.amazonS3.bucket }}
     {{- if .Values.amazonS3.bucketPrefix }}
     nuxeo.s3storage.bucket_prefix={{ .Values.amazonS3.bucketPrefix }}
     {{- else }}

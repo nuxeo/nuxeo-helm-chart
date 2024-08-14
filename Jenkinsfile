@@ -89,7 +89,7 @@ pipeline {
       steps {
         script {
           def stages = [:]
-          for (env in ['default', 'cluster']) {
+          for (env in ['default', 'cluster', 'third-party-auth']) {
             stages["Deploy ${env} environment"] = buildTestStage(env)
           }
           parallel stages

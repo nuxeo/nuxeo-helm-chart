@@ -97,6 +97,78 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.uid
+        {{- if .Values.mongodb.auth.enabled }}
+        - name: NUXEO_MONGODB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "nuxeo.secret.mongodb.name" . }}
+              key: mongodb-username
+        - name: NUXEO_MONGODB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "nuxeo.secret.mongodb.name" . }}
+              key: mongodb-password
+        {{- end }}
+        {{- if .Values.postgresql.enabled }}
+        - name: NUXEO_POSTGRESQL_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "nuxeo.secret.postgresql.name" . }}
+              key: postgresql-username
+        - name: NUXEO_POSTGRESQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "nuxeo.secret.postgresql.name" . }}
+              key: postgresql-password
+        {{- end }}
+        {{- if .Values.elasticsearch.basicAuth.enabled }}
+        - name: NUXEO_ELASTICSEARCH_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "nuxeo.secret.elasticsearch.name" . }}
+              key: elasticsearch-username
+        - name: NUXEO_ELASTICSEARCH_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "nuxeo.secret.elasticsearch.name" . }}
+              key: elasticsearch-password
+        {{- end }}
+        {{- if .Values.kafka.auth.enabled }}
+        - name: NUXEO_KAFKA_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "nuxeo.secret.kafka.name" . }}
+              key: kafka-username
+        - name: NUXEO_KAFKA_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "nuxeo.secret.kafka.name" . }}
+              key: kafka-password
+        {{- end }}
+        {{- if .Values.googleCloudStorage.enabled }}
+        - name: NUXEO_GOOGLE_CLOUD_PROJECT_ID
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "nuxeo.secret.gcp.name" . }}
+              key: gcp-project-id
+        - name: NUXEO_GOOGLE_CLOUD_CREDENTIALS
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "nuxeo.secret.gcp.name" . }}
+              key: gcp-credentials
+        {{- end }}
+        {{- if .Values.amazonS3.enabled }}
+        - name: NUXEO_AMAZON_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "nuxeo.secret.amazon.name" . }}
+              key: amazon-key-id
+        - name: NUXEO_AMAZON_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "nuxeo.secret.amazon.name" . }}
+              key: amazon-secret-key
+        {{- end }}
 {{- if .Values.clid }}
         - name: NUXEO_CLID
           valueFrom:
