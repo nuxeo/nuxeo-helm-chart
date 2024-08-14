@@ -175,6 +175,160 @@ type: Opaque
 {{- end -}}
 
 {{/*
+Returns the name of the mongodb secret to get auth from.
+*/}}
+{{- define "nuxeo.secret.mongodb.name" -}}
+{{- if .Values.mongodb.auth.existingSecret -}}
+{{- .Values.mongodb.auth.existingSecret -}}
+{{- else -}}
+{{- printf "%s-%s" (include "nuxeo.fullname" .) "mongodb" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Returns the name of the postgresql secret to get auth from.
+*/}}
+{{- define "nuxeo.secret.postgresql.name" -}}
+{{- if .Values.postgresql.existingSecret -}}
+{{- .Values.postgresql.existingSecret -}}
+{{- else -}}
+{{- printf "%s-%s" (include "nuxeo.fullname" .) "postgresql" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Returns the username of the postgresql auth.
+*/}}
+{{- define "nuxeo.secret.postgresql.auth.username" -}}
+{{- if .Values.postgresql.auth.username -}}
+{{- .Values.postgresql.auth.username -}}
+{{- else -}}
+{{- .Values.postgresql.username -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Returns the password of the postgresql auth.
+*/}}
+{{- define "nuxeo.secret.postgresql.auth.password" -}}
+{{- if .Values.postgresql.auth.password -}}
+{{- .Values.postgresql.auth.password -}}
+{{- else -}}
+{{- .Values.postgresql.password -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Returns the name of the elasticsearch secret to get auth from.
+*/}}
+{{- define "nuxeo.secret.elasticsearch.name" -}}
+{{- if .Values.elasticsearch.auth.existingSecret -}}
+{{- .Values.elasticsearch.auth.existingSecret -}}
+{{- else -}}
+{{- printf "%s-%s" (include "nuxeo.fullname" .) "elasticsearch" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Returns the username of the elasticsearch auth.
+*/}}
+{{- define "nuxeo.secret.elasticsearch.auth.username" -}}
+{{- if .Values.elasticsearch.auth.username -}}
+{{- .Values.elasticsearch.auth.username -}}
+{{- else -}}
+{{- .Values.elasticsearch.basicAuth.username -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Returns the password of the elasticsearch auth.
+*/}}
+{{- define "nuxeo.secret.elasticsearch.auth.password" -}}
+{{- if .Values.elasticsearch.auth.password -}}
+{{- .Values.elasticsearch.auth.password -}}
+{{- else -}}
+{{- .Values.elasticsearch.basicAuth.password -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Returns the name of the kafka secret to get auth from.
+*/}}
+{{- define "nuxeo.secret.kafka.name" -}}
+{{- if .Values.kafka.auth.existingSecret -}}
+{{- .Values.kafka.auth.existingSecret -}}
+{{- else -}}
+{{- printf "%s-%s" (include "nuxeo.fullname" .) "kafka" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Returns the name of the Google Cloud Storage secret to get auth from.
+*/}}
+{{- define "nuxeo.secret.gcs.name" -}}
+{{- if .Values.googleCloudStorage.auth.existingSecret -}}
+{{- .Values.googleCloudStorage.auth.existingSecret -}}
+{{- else -}}
+{{- printf "%s-%s" (include "nuxeo.fullname" .) "google-cloud-storage" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Returns the project id of the Google Cloud Storage auth.
+*/}}
+{{- define "nuxeo.secret.gcs.auth.projectId" -}}
+{{- if .Values.googleCloudStorage.auth.projectId -}}
+{{- .Values.googleCloudStorage.auth.projectId -}}
+{{- else -}}
+{{- .Values.googleCloudStorage.gcpProjectId -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Returns the credentials of the Google Cloud Storage auth.
+*/}}
+{{- define "nuxeo.secret.gcs.auth.credentials" -}}
+{{- if .Values.googleCloudStorage.auth.credentials -}}
+{{- .Values.googleCloudStorage.auth.credentials -}}
+{{- else -}}
+{{- .Values.googleCloudStorage.credentials -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Returns the name of the AmazonS3 secret to get auth from.
+*/}}
+{{- define "nuxeo.secret.amazonS3.name" -}}
+{{- if .Values.amazonS3.auth.existingSecret -}}
+{{- .Values.amazonS3.auth.existingSecret -}}
+{{- else -}}
+{{- printf "%s-%s" (include "nuxeo.fullname" .) "amazon" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Returns the access key id of the AmazonS3 auth.
+*/}}
+{{- define "nuxeo.secret.amazonS3.auth.accessKeyId" -}}
+{{- if .Values.amazonS3.auth.accessKeyId -}}
+{{- .Values.amazonS3.auth.accessKeyId -}}
+{{- else -}}
+{{- .Values.amazonS3.accessKeyId -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Returns the secret key of the AmazonS3 auth.
+*/}}
+{{- define "nuxeo.secret.amazonS3.auth.secretKey" -}}
+{{- if .Values.amazonS3.auth.secretKey -}}
+{{- .Values.amazonS3.auth.secretKey -}}
+{{- else -}}
+{{- .Values.amazonS3.secretAccessKey -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the list of node types depending on the architecture.
 */}}
 {{- define "nuxeo.nodeTypes" -}}

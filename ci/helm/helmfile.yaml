@@ -1,3 +1,14 @@
+environments:
+  default:
+    values:
+    - environments/default.yaml
+  cluster:
+    values:
+    - environments/cluster.yaml.gotmpl
+  third-party-auth:
+    values:
+    - environments/third-party-auth.yaml.gotmpl
+---
 repositories:
 - name: opensearch
   url: https://opensearch-project.github.io/helm-charts/
@@ -9,7 +20,7 @@ helmDefaults:
 releases:
 - name: nuxeo
   chart: ./../../nuxeo
-  {{ if eq .Environment.Name "cluster" }}
+  {{ if ne .Environment.Name "default" }}
   needs:
   - minio
   - mongodb
@@ -18,36 +29,27 @@ releases:
   {{ end }}
   values:
   - values/values-nuxeo.yaml.gotmpl
-  - values/{{ .Environment.Name }}/values-nuxeo.yaml.gotmpl
 - name: minio
   chart: oci://registry-1.docker.io/bitnamicharts/minio
   version: 14.6.29
-  condition: minio.enabled
+  condition: deployment.minio.enabled
   values:
   - values/values-minio.yaml.gotmpl
 - name: mongodb
   chart: oci://registry-1.docker.io/bitnamicharts/mongodb
   version: 13.3.1
-  condition: mongodb.enabled
+  condition: deployment.mongodb.enabled
   values:
   - values/values-mongodb.yaml.gotmpl
 - name: opensearch
   chart: opensearch/opensearch
   version: 1.16.0
-  condition: opensearch.enabled
+  condition: deployment.opensearch.enabled
   values:
   - values/values-opensearch.yaml.gotmpl
 - name: kafka
   chart: oci://registry-1.docker.io/bitnamicharts/kafka
   version: 26.4.3
-  condition: kafka.enabled
+  condition: deployment.kafka.enabled
   values:
   - values/values-kafka.yaml.gotmpl
-
-environments:
-  default:
-    values:
-    - environments/default.yaml
-  cluster:
-    values:
-    - environments/cluster.yaml

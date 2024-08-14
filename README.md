@@ -126,7 +126,7 @@ To run it, you need to:
 - In the `ci/helm` directory, run:
 
 ```shell
-helmfile --namespace=NAMESPACE --environment=cluster sync
+NAMESPACE=NAMESPACE helmfile --namespace=NAMESPACE --environment=cluster sync
 ```
 
 `NAMESPACE` is the target Kubernetes namespace for the various Helm releases.

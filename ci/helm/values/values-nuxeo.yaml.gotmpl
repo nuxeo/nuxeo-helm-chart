@@ -1,4 +1,4 @@
-{{- $publicDomain := printf "%s.platform.dev.nuxeo.com" .Namespace -}}
+{{- $publicDomain := printf "%s.platform.dev.nuxeo.com" ( requiredEnv "NAMESPACE" ) -}}
 image:
   tag: "2023"
   pullSecrets:
@@ -22,3 +22,7 @@ ingress:
     - {{ $publicDomain }}
     secretName: platform-tls
 {{ readFile "values-tolerations-nodeselector.yaml" }}
+# environment specific values
+{{ with (.Values | get "nuxeo" dict) }}
+{{- toYaml . }}
+{{- end -}}
