@@ -75,20 +75,37 @@ clid: ""
 mongodb:
   enabled: false
   protocol: mongodb
+  # deprecated since 3.1.0, use auth object instead
   # credentials:
-  # url:
-  # host:
+  host: ""
   port: 27017
+  # when set it overrides values from mongodb.host and mongodb.port
+  url: ""
+  auth:
+    enabled: false
+    username: ""
+    password: ""
+    # existing secret with MongoDB credentials (keys: mongodb-username, mongodb-password)
+    # NOTE: When it's set the previous parameters are ignored.
+    existingSecret: ""
   initContainer:
     repository: busybox
     tag: latest
     imagePullPolicy: IfNotPresent
 postgresql:
   enabled: false
-  # host:
+  host: ""
   port: 5432
+  # deprecated since 3.1.0, use auth object instead
   # username:
+  # deprecated since 3.1.0, use auth object instead
   # password:
+  auth:
+    username: ""
+    password: ""
+    # existing secret with PostgreSQL credentials (keys: postgresql-username, postgresql-password)
+    # NOTE: When it's set the previous parameters are ignored.
+    existingSecret: ""
   initContainer:
     repository: busybox
     tag: latest
@@ -96,20 +113,28 @@ postgresql:
 elasticsearch:
   enabled: false
   protocol: http
-  # host:
+  host: ""
   port: 9200
   clusterName: elasticsearch
   indexNumberOfReplicas: 0
   restClient:
     socketTimeoutMs: 300000
     connectionTimeoutMs: 300000
-  ## To configure Basic Authentication, see https://doc.nuxeo.com/nxdoc/cloud/elasticsearch-setup/#basic-authentication.
+  # deprecated since 3.1.0, use auth object instead
   basicAuth:
     enabled: false
     # username:
     # password:
+  ## To configure Basic Authentication, see https://doc.nuxeo.com/nxdoc/search-setup/#basic-authentication.
+  auth:
+    enabled: false
+    username: ""
+    password: ""
+    # existing secret with Elasticsearch credentials (keys: elasticsearch-username, elasticsearch-password)
+    # NOTE: When it's set the previous parameters are ignored.
+    existingSecret: ""
   httpReadOnly:
-    ## Allows to enable the Elasticsearch Pass-through, see https://doc.nuxeo.com/nxdoc/cloud/elasticsearch-passthrough/.
+    ## Allows to enable the Elasticsearch Pass-through, see https://doc.nuxeo.com/nxdoc/elasticsearch-passthrough/.
     enabled: false
   initContainer:
     repository: busybox
@@ -117,8 +142,16 @@ elasticsearch:
     imagePullPolicy: IfNotPresent
 kafka:
   enabled: false
-  # host:
+  host: ""
   port: 9092
+  auth:
+    # enable SASL authentication to kafka
+    enabled: false
+    username: ""
+    password: ""
+    # existing secret with Kafka credentials (keys: kafka-username, kafka-password)
+    # NOTE: When it's set the previous parameters are ignored.
+    existingSecret: ""
   initContainer:
     repository: busybox
     tag: latest
@@ -129,19 +162,35 @@ redis:
 initContainers: []
 googleCloudStorage:
   enabled: false
+  # deprecated since 3.1.0, use auth object instead
   # gcpProjectId:
+  # deprecated since 3.1.0, use auth object instead
   # credentials:
-  # bucket:
+  auth:
+    projectId: ""
+    credentials: ""
+    # existing secret with GCS credentials (keys: gcs-project-id, gcs-credentials)
+    # NOTE: When it's set the previous parameters are ignored.
+    existingSecret: ""
+  bucket: ""
   ## The bucket prefix needs to end with /
-  # bucketPrefix:
+  bucketPrefix: ""
 amazonS3:
   enabled: false
+  # deprecated since 3.1.0, use auth object instead
   # accessKeyId:
+  # deprecated since 3.1.0, use auth object instead
   # secretAccessKey:
-  # region:
-  # bucket:
+  auth:
+    accessKeyId: ""
+    secretKey: ""
+    # existing secret with Amazon credentials (keys: amazon-s3-access-key-id, amazon-s3-secret-key)
+    # NOTE: When it's set the previous parameters are ignored.
+    existingSecret: ""
+  region: ""
+  bucket: ""
   ## The bucket prefix needs to end with /
-  # bucketPrefix:
+  bucketPrefix: ""
 serviceAccount:
   create: true
   annotations: {}

@@ -1,7 +1,4 @@
-{{- $localDomain := printf "%s.svc.cluster.local" .Namespace -}}
-architecture: "api-worker"
-replicaCount: 1
-workerCount: 1
+{{- $localDomain := printf "%s.svc.cluster.local" ( requiredEnv "NAMESPACE" ) -}}
 packages: amazon-s3-online-storage
 customEnvs:
 - name: NUXEO_CLID
@@ -11,8 +8,9 @@ customEnvs:
       key: instance.clid
 amazonS3:
   enabled: true
-  accessKeyId: minio
-  secretAccessKey: minio-secret
+  auth:
+    accessKeyId: minio
+    secretKey: minio-secret
   # unused but a warn log is produced if not present
   region: eu-west-1
   bucket: nuxeo-binary-store
