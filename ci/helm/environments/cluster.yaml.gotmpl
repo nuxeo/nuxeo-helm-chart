@@ -1,0 +1,16 @@
+# enabled conditions used in helmfile.yaml
+deployment:
+  minio:
+    enabled: true
+  mongodb:
+    enabled: true
+  kafka:
+    enabled: true
+  opensearch:
+    enabled: true
+# values injected in each chart
+nuxeo:
+  {{- tpl (readFile "../values/values-nuxeo-third-party.yaml.gotmpl") . | nindent 2 }}
+  architecture: "api-worker"
+  replicaCount: 1
+  workerCount: 1

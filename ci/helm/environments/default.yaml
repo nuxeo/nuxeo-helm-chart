@@ -1,8 +1,10 @@
-minio:
-  enabled: false
-mongodb:
-  enabled: false
-kafka:
-  enabled: false
-opensearch:
-  enabled: false
+# enabled conditions used in helmfile.yaml
+deployment:
+  minio:
+    enabled: false
+  mongodb:
+    enabled: false
+  kafka:
+    enabled: false
+  opensearch:
+    enabled: false

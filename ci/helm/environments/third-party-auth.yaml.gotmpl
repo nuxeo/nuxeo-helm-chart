@@ -1,0 +1,41 @@
+# enabled conditions used in helmfile.yaml
+deployment:
+  minio:
+    enabled: true
+  mongodb:
+    enabled: true
+  kafka:
+    enabled: true
+  opensearch:
+    enabled: true
+# values injected in each chart
+nuxeo:
+  {{- tpl (readFile "../values/values-nuxeo-third-party.yaml.gotmpl") . | nindent 2 }}
+  mongodb:
+    auth:
+      enabled: true
+      username: dummyMongoDBUser
+      password: dummyMongoDBPassword
+  kafka:
+    auth:
+      enabled: true
+      username: dummyKafkaUser
+      password: dummyKafkaPassword
+mongodb:
+  auth:
+    enabled: true
+    rootUser: dummyMongoDBUser
+    rootPassword: dummyMongoDBPassword
+kafka:
+  listeners:
+    client:
+      protocol: SASL_PLAINTEXT
+  sasl:
+    client:
+      users:
+      - dummyKafkaUser
+      passwords:
+      - dummyKafkaPassword
+# too complicated to enable basic authentication on opensearch
+# opensearch:
+#   auth:

@@ -1,8 +1,0 @@
-minio:
-  enabled: true
-mongodb:
-  enabled: true
-kafka:
-  enabled: true
-opensearch:
-  enabled: true
