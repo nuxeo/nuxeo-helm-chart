@@ -22,3 +22,7 @@ podLabels:
   dev.nuxeo.com/app: mongodb
   dev.nuxeo.com/resource: pod
 {{ readFile "values-tolerations-nodeselector.yaml" }}
+# environment specific values
+{{ with .Values.mongodb }}
+{{- toYaml . }}
+{{- end -}}

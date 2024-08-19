@@ -22,3 +22,7 @@ ingress:
     - {{ $publicDomain }}
     secretName: platform-tls
 {{ readFile "values-tolerations-nodeselector.yaml" }}
+# environment specific values
+{{ with .Values.nuxeo }}
+{{- toYaml . }}
+{{- end -}}

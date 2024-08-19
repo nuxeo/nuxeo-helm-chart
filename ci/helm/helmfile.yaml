@@ -18,45 +18,30 @@ releases:
   {{ end }}
   values:
   - values/values-nuxeo.yaml.gotmpl
-  {{- with .Environment.Values | get "nuxeo" dict | get "extraValuesFiles" list }}
-  {{- toYaml . | nindent 2 }}
-  {{- end }}
 - name: minio
   chart: oci://registry-1.docker.io/bitnamicharts/minio
   version: 14.6.29
   condition: minio.enabled
   values:
   - values/values-minio.yaml.gotmpl
-  {{- with .Environment.Values | get "minio" dict | get "extraValuesFiles" list }}
-  {{- toYaml . | nindent 2 }}
-  {{- end }}
 - name: mongodb
   chart: oci://registry-1.docker.io/bitnamicharts/mongodb
   version: 13.3.1
   condition: mongodb.enabled
   values:
   - values/values-mongodb.yaml.gotmpl
-  {{- with .Environment.Values | get "mongodb" dict | get "extraValuesFiles" list }}
-  {{- toYaml . | nindent 2 }}
-  {{- end }}
 - name: opensearch
   chart: opensearch/opensearch
   version: 1.16.0
   condition: opensearch.enabled
   values:
   - values/values-opensearch.yaml.gotmpl
-  {{- with .Environment.Values | get "opensearch" dict | get "extraValuesFiles" list }}
-  {{- toYaml . | nindent 2 }}
-  {{- end }}
 - name: kafka
   chart: oci://registry-1.docker.io/bitnamicharts/kafka
   version: 26.4.3
   condition: kafka.enabled
   values:
   - values/values-kafka.yaml.gotmpl
-  {{- with .Environment.Values | get "kafka" dict | get "extraValuesFiles" list }}
-  {{- toYaml . | nindent 2 }}
-  {{- end }}
 
 environments:
   default:
@@ -64,7 +49,7 @@ environments:
     - environments/default.yaml
   cluster:
     values:
-    - environments/cluster.yaml
+    - environments/cluster.yaml.gotmpl
   third-party-auth:
     values:
-    - environments/third-party-auth.yaml
+    - environments/third-party-auth.yaml.gotmpl

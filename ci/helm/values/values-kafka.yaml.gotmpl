@@ -37,6 +37,10 @@ broker:
 {{ readFile "values-tolerations-nodeselector.yaml" | indent 2 }}
 serviceAccount:
   create: false
+# environment specific values
+{{- with .Values.kafka }}
+{{- toYaml . }}
+{{- end -}}
 zookeeper:
   enabled: true
   image:

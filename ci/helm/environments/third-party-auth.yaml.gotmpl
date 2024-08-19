@@ -1,0 +1,36 @@
+nuxeo:
+  {{- tpl (readFile "../values/values-nuxeo-third-party.yaml.gotmpl") . | nindent 2 }}
+  mongodb:
+    auth:
+      enabled: true
+      username: dummyMongoDBUser
+      password: dummyMongoDBPassword
+  kafka:
+    auth:
+      enabled: true
+      username: dummyKafkaUser
+      password: dummyKafkaPassword
+minio:
+  enabled: true
+mongodb:
+  enabled: true
+  auth:
+    enabled: true
+    rootUser: dummyMongoDBUser
+    rootPassword: dummyMongoDBPassword
+kafka:
+  enabled: true
+  listeners:
+    client:
+      protocol: SASL_PLAINTEXT
+  sasl:
+    client:
+      users:
+      - dummyKafkaUser
+      passwords:
+      - dummyKafkaPassword
+opensearch:
+  enabled: true
+# too complicated to enable basic authentication on opensearch
+#  extraValuesFiles:
+#  - values/values-opensearch-auth.yaml.gotmpl
