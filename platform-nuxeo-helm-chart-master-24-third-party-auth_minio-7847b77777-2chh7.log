@@ -1,0 +1,29 @@
+[38;5;6m [38;5;5m11:37:54.54 [0m[38;5;2mINFO [0m ==> 
+[38;5;6m [38;5;5m11:37:54.54 [0m[38;5;2mINFO [0m ==> [1mWelcome to the Bitnami minio container[0m
+[38;5;6m [38;5;5m11:37:54.54 [0m[38;5;2mINFO [0m ==> Subscribe to project updates by watching [1mhttps://github.com/bitnami/containers[0m
+[38;5;6m [38;5;5m11:37:54.54 [0m[38;5;2mINFO [0m ==> Submit issues and feature requests at [1mhttps://github.com/bitnami/containers/issues[0m
+[38;5;6m [38;5;5m11:37:54.54 [0m[38;5;2mINFO [0m ==> Upgrade to Tanzu Application Catalog for production environments to access custom-configured and pre-packaged software components. Gain enhanced features, including Software Bill of Materials (SBOM), CVE scan result reports, and VEX documents. To learn more, visit [1mhttps://bitnami.com/enterprise[0m
+[38;5;6m [38;5;5m11:37:54.55 [0m[38;5;2mINFO [0m ==> 
+[38;5;6m [38;5;5m11:37:54.55 [0m[38;5;2mINFO [0m ==> ** Starting MinIO setup **
+[38;5;6mminio [38;5;5m11:37:54.58 [0m[38;5;2mINFO [0m ==> Starting MinIO in background...
+[38;5;6mminio [38;5;5m11:37:59.63 [0m[38;5;2mINFO [0m ==> Adding local Minio host to 'mc' configuration...
+[38;5;6mminio [38;5;5m11:37:59.67 [0m[38;5;2mINFO [0m ==> Creating default buckets...
+Bucket created successfully `local/nuxeo-binary-store`.
+[38;5;6mminio [38;5;5m11:37:59.84 [0m[38;5;2mINFO [0m ==> Stopping MinIO...
+
+[38;5;6m [38;5;5m11:37:59.90 [0m[38;5;2mINFO [0m ==> ** MinIO setup finished! **
+[38;5;6mminio [38;5;5m11:37:59.91 [0m[38;5;2mINFO [0m ==> ** Starting MinIO **
+MinIO Object Storage Server
+Copyright: 2015-2024 MinIO, Inc.
+License: GNU AGPLv3 - https://www.gnu.org/licenses/agpl-3.0.html
+Version: DEVELOPMENT.2024-07-26T20-48-21Z (go1.22.5 linux/amd64)
+
+API: http://localhost:9000 
+WebUI: http://10.60.225.4:9001 http://127.0.0.1:9001 
+
+Docs: https://min.io/docs/minio/linux/index.html
+INFO: 
+ You are running an older version of MinIO released 1 month before the latest release 
+ Update: Run `mc admin update ALIAS` 
+
+
