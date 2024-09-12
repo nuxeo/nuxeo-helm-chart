@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-library identifier: "platform-ci-shared-library@v0.0.32"
+library identifier: "platform-ci-shared-library@v0.0.41"
 
 String getChartVersion(chart) {
   container('base') {
@@ -74,7 +74,7 @@ pipeline {
               sh "yq write -i ${CHART_DESCRIPTOR} version ${VERSION}"
 
               echo "Package chart version: ${VERSION}"
-              sh "helm3 package ${CHART_NAME}"
+              sh "helm package ${CHART_NAME}"
             }
           }
         }
