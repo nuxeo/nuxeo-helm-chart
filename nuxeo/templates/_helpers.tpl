@@ -189,8 +189,8 @@ Returns the name of the mongodb secret to get auth from.
 Returns the name of the postgresql secret to get auth from.
 */}}
 {{- define "nuxeo.secret.postgresql.name" -}}
-{{- if .Values.postgresql.existingSecret -}}
-{{- .Values.postgresql.existingSecret -}}
+{{- if .Values.postgresql.auth.existingSecret -}}
+{{- .Values.postgresql.auth.existingSecret -}}
 {{- else -}}
 {{- printf "%s-%s" (include "nuxeo.fullname" .) "postgresql" -}}
 {{- end -}}
