@@ -1,0 +1,379 @@
+ENTRYPOINT: Initialize server configuration without /etc/nuxeo/nuxeo.conf
+ENTRYPOINT: Move /opt/nuxeo/server/bin/nuxeo.conf to /etc/nuxeo/nuxeo.conf
+ENTRYPOINT: Append required properties to /etc/nuxeo/nuxeo.conf
+nuxeo.data.dir=/var/lib/nuxeo
+nuxeo.log.dir=/var/log/nuxeo
+nuxeo.tmp.dir=/tmp
+nuxeo.pid.dir=/var/pid/nuxeo
+# Set java.io.tmpdir = ${nuxeo.tmp.dir}
+launcher.override.java.tmpdir=true
+ENTRYPOINT: Append properties from /etc/nuxeo/conf.d/00-docker.conf to /etc/nuxeo/nuxeo.conf
+ENTRYPOINT: Append properties from /etc/nuxeo/conf.d/00-nuxeo.conf to /etc/nuxeo/nuxeo.conf
+ENTRYPOINT: Append properties from /etc/nuxeo/conf.d/nuxeo-minio.conf to /etc/nuxeo/nuxeo.conf
+ENTRYPOINT: Write NUXEO_CLID environment variable to /var/lib/nuxeo/instance.clid
+ENTRYPOINT: Install Nuxeo packages: amazon-s3-online-storage
+Nuxeo home:          /opt/nuxeo/server
+Nuxeo configuration: /etc/nuxeo/nuxeo.conf
+Include template: /opt/nuxeo/server/templates/common-base
+Include template: /opt/nuxeo/server/templates/common
+Include template: /opt/nuxeo/server/templates/default
+Include template: /opt/nuxeo/server/templates/docker
+Include template: /opt/nuxeo/server/templates/mongodb
+
+Dependency resolution:
+  Installation order (1):        amazon-s3-online-storage-2023.18.9
+  Packages to download (1):      amazon-s3-online-storage:2023.18.9
+
+Downloading [amazon-s3-online-storage-2023.18.9]...
+|/-Added amazon-s3-online-storage-2023.18.9
+Installing amazon-s3-online-storage-2023.18.9
+ENTRYPOINT: Looking for shell scripts in /docker-entrypoint-initnuxeo.d
+Nuxeo home:          /opt/nuxeo/server
+Nuxeo configuration: /etc/nuxeo/nuxeo.conf
+Include template: /opt/nuxeo/server/templates/common-base
+Include template: /opt/nuxeo/server/templates/common
+Include template: /opt/nuxeo/server/templates/default
+Include template: /opt/nuxeo/server/templates/aws
+Include template: /opt/nuxeo/server/templates/s3binaries
+Include template: /opt/nuxeo/server/templates/docker
+Include template: /opt/nuxeo/server/templates/mongodb
+No current configuration, generating files...
+FreeMarker variables: ignored 'java.version.date' conflicting with 'java.version'
+Configuration files generated.
+[AdminClient clientId=adminclient-1] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+Server started with process ID: 341
+Go to http://localhost:8080/nuxeo
+2024-09-12 08:51:20 INFO [main] org.apache.catalina.startup.Catalina.load Server initialization in [534] milliseconds
+# Running Nuxeo Preprocessor ...
+Preprocessing: /opt/nuxeo/server/nxserver
+Done.
+# Preprocessing done.
+2024-09-12T08:51:23,403 INFO  [FrameworkLoader] 
+======================================================================
+= Starting Nuxeo Framework
+======================================================================
+  * Distribution Version = 2023.18.9
+  * Distribution Date = 202409060207
+  * Server home = /opt/nuxeo/server
+  * Runtime home = /opt/nuxeo/server/nxserver
+  * Data Directory = /var/lib/nuxeo
+  * Log Directory = /var/log/nuxeo
+  * Configuration Directory = /opt/nuxeo/server/nxserver/config
+  * Temp Directory = /tmp
+======================================================================
+2024-09-12T08:51:29,139 WARN  [CommandLineExecutorComponent] Command not available: ffmpeg-info (command ffprobe not found in system path (descriptor CommandLineDescriptor[available=false,command=ffprobe,enabled=true,installErrorMessage=<null>,installationDirective=You need to install ffmpeg from http://ffmpeg.org (apt-get install ffmpeg),name=ffmpeg-info,parameterString=#{inFilePath},readOutput=true,testParameterString=,tester=<null>,timeout=<null>,winCommand=<null>,winParameterString=<null>,winTestParameterString=]). You need to install ffmpeg from http://ffmpeg.org (apt-get install ffmpeg))
+2024-09-12T08:51:29,152 WARN  [CommandLineExecutorComponent] Command not available: ffmpeg-screenshot (command ffmpeg not found in system path (descriptor CommandLineDescriptor[available=false,command=ffmpeg,enabled=true,installErrorMessage=<null>,installationDirective=You need to install ffmpeg from http://ffmpeg.org (apt-get install ffmpeg),name=ffmpeg-screenshot,parameterString=-y -ss #{position} -i #{inFilePath} -frames:v 1 -f image2 #{outFilePath},readOutput=true,testParameterString=,tester=<null>,timeout=<null>,winCommand=<null>,winParameterString=<null>,winTestParameterString=]). You need to install ffmpeg from http://ffmpeg.org (apt-get install ffmpeg))
+2024-09-12T08:51:29,160 WARN  [CommandLineExecutorComponent] Command not available: ffmpeg-screenshot-resize (command ffmpeg not found in system path (descriptor CommandLineDescriptor[available=false,command=ffmpeg,enabled=true,installErrorMessage=<null>,installationDirective=You need to install ffmpeg from http://ffmpeg.org (apt-get install ffmpeg),name=ffmpeg-screenshot-resize,parameterString=-y -ss #{position} -i #{inFilePath} -frames:v 1 -f image2 -vf scale=#{width}:#{height} #{outFilePath},readOutput=true,testParameterString=,tester=<null>,timeout=<null>,winCommand=<null>,winParameterString=<null>,winTestParameterString=]). You need to install ffmpeg from http://ffmpeg.org (apt-get install ffmpeg))
+2024-09-12T08:51:29,167 WARN  [CommandLineExecutorComponent] Command not available: ffmpeg-towebm (command ffmpeg not found in system path (descriptor CommandLineDescriptor[available=false,command=ffmpeg,enabled=true,installErrorMessage=<null>,installationDirective=You need to install ffmpeg from http://ffmpeg.org (apt-get install ffmpeg),name=ffmpeg-towebm,parameterString=-i #{inFilePath} -s #{width}x#{height} -acodec libvorbis -v 0 #{outFilePath},readOutput=true,testParameterString=,tester=<null>,timeout=<null>,winCommand=<null>,winParameterString=<null>,winTestParameterString=]). You need to install ffmpeg from http://ffmpeg.org (apt-get install ffmpeg))
+2024-09-12T08:51:29,176 WARN  [CommandLineExecutorComponent] Command not available: ffmpeg-tomp4 (command ffmpeg not found in system path (descriptor CommandLineDescriptor[available=false,command=ffmpeg,enabled=true,installErrorMessage=<null>,installationDirective=You need to install ffmpeg from http://ffmpeg.org (apt-get install ffmpeg),name=ffmpeg-tomp4,parameterString=-i #{inFilePath} -s #{width}x#{height} -acodec aac -strict -2 -pix_fmt yuv420p -vcodec libx264 -v 0 #{outFilePath},readOutput=true,testParameterString=,tester=<null>,timeout=<null>,winCommand=<null>,winParameterString=-i #{inFilePath} -s #{width}x#{height} -pix_fmt yuv420p -vcodec libx264 -v 0 #{outFilePath},winTestParameterString=]). You need to install ffmpeg from http://ffmpeg.org (apt-get install ffmpeg))
+2024-09-12T08:51:29,184 WARN  [CommandLineExecutorComponent] Command not available: ffmpeg-toogg (command ffmpeg not found in system path (descriptor CommandLineDescriptor[available=false,command=ffmpeg,enabled=true,installErrorMessage=<null>,installationDirective=You need to install ffmpeg from http://ffmpeg.org (apt-get install ffmpeg),name=ffmpeg-toogg,parameterString=-i #{inFilePath} -s #{width}x#{height} -acodec libvorbis -v 0 #{outFilePath},readOutput=true,testParameterString=,tester=<null>,timeout=<null>,winCommand=<null>,winParameterString=<null>,winTestParameterString=]). You need to install ffmpeg from http://ffmpeg.org (apt-get install ffmpeg))
+2024-09-12T08:51:29,191 WARN  [CommandLineExecutorComponent] Command not available: ffmpeg-toavi (command ffmpeg not found in system path (descriptor CommandLineDescriptor[available=false,command=ffmpeg,enabled=true,installErrorMessage=<null>,installationDirective=You need to install ffmpeg.,name=ffmpeg-toavi,parameterString=-i #{inFilePath} -s #{width}x#{height} -q:v 0 -c:v mpeg4 -c:a ac3 #{outFilePath},readOutput=true,testParameterString=,tester=<null>,timeout=<null>,winCommand=<null>,winParameterString=<null>,winTestParameterString=]). You need to install ffmpeg.)
+2024-09-12T08:51:29,209 WARN  [CommandLineExecutorComponent] Command not available: videoClosedCaptionsExtractor (command ccextractor not found in system path (descriptor CommandLineDescriptor[available=false,command=ccextractor,enabled=true,installErrorMessage=<null>,installationDirective=You need to install ccextractor.,name=videoClosedCaptionsExtractor,parameterString=#{sourceFilePath} -out=#{outFormat} -trim -o #{outFilePath},readOutput=true,testParameterString=,tester=<null>,timeout=<null>,winCommand=<null>,winParameterString=<null>,winTestParameterString=]). You need to install ccextractor.)
+2024-09-12T08:51:29,216 WARN  [CommandLineExecutorComponent] Command not available: videoPartClosedCaptionsExtractor (command ccextractor not found in system path (descriptor CommandLineDescriptor[available=false,command=ccextractor,enabled=true,installErrorMessage=<null>,installationDirective=You need to install ccextractor.,name=videoPartClosedCaptionsExtractor,parameterString=#{sourceFilePath} -out=#{outFormat} -startat #{startAt} -endat #{endAt} -trim -o #{outFilePath},readOutput=true,testParameterString=,tester=<null>,timeout=<null>,winCommand=<null>,winParameterString=<null>,winTestParameterString=]). You need to install ccextractor.)
+2024-09-12T08:51:29,223 WARN  [CommandLineExecutorComponent] Command not available: videoConcat (command ffmpeg not found in system path (descriptor CommandLineDescriptor[available=false,command=ffmpeg,enabled=true,installErrorMessage=<null>,installationDirective=You need to install ffmpeg.,name=videoConcat,parameterString=-y -f concat -safe 0 -i #{listFilePath} -c copy #{outFilePath},readOutput=true,testParameterString=,tester=<null>,timeout=<null>,winCommand=<null>,winParameterString=<null>,winTestParameterString=]). You need to install ffmpeg.)
+2024-09-12T08:51:29,229 WARN  [CommandLineExecutorComponent] Command not available: videoSlicerByCopy (command ffmpeg not found in system path (descriptor CommandLineDescriptor[available=false,command=ffmpeg,enabled=true,installErrorMessage=<null>,installationDirective=You need to install ffmpeg.,name=videoSlicerByCopy,parameterString=-y -i #{sourceFilePath} -ss #{startAt} -t #{duration} -c copy #{outFilePath},readOutput=true,testParameterString=,tester=<null>,timeout=<null>,winCommand=<null>,winParameterString=<null>,winTestParameterString=]). You need to install ffmpeg.)
+2024-09-12T08:51:29,235 WARN  [CommandLineExecutorComponent] Command not available: videoSlicer (command ffmpeg not found in system path (descriptor CommandLineDescriptor[available=false,command=ffmpeg,enabled=true,installErrorMessage=<null>,installationDirective=You need to install ffmpeg.,name=videoSlicer,parameterString=-y -i #{sourceFilePath} -ss #{startAt} -t #{duration} #{outFilePath},readOutput=true,testParameterString=,tester=<null>,timeout=<null>,winCommand=<null>,winParameterString=<null>,winTestParameterString=]). You need to install ffmpeg.)
+2024-09-12T08:51:29,241 WARN  [CommandLineExecutorComponent] Command not available: videoSlicerStartAt (command ffmpeg not found in system path (descriptor CommandLineDescriptor[available=false,command=ffmpeg,enabled=true,installErrorMessage=<null>,installationDirective=You need to install ffmpeg.,name=videoSlicerStartAt,parameterString=-y -i #{sourceFilePath} -ss #{startAt} #{outFilePath},readOutput=true,testParameterString=,tester=<null>,timeout=<null>,winCommand=<null>,winParameterString=<null>,winTestParameterString=]). You need to install ffmpeg.)
+2024-09-12T08:51:29,247 WARN  [CommandLineExecutorComponent] Command not available: videoSlicerSegments (command ffmpeg not found in system path (descriptor CommandLineDescriptor[available=false,command=ffmpeg,enabled=true,installErrorMessage=<null>,installationDirective=You need to install ffmpeg.,name=videoSlicerSegments,parameterString=-y -i #{sourceFilePath} -map 0 -c copy -f segment -segment_time #{duration} -reset_timestamps 1
+        #{outFilePath},readOutput=true,testParameterString=,tester=<null>,timeout=<null>,winCommand=<null>,winParameterString=<null>,winTestParameterString=]). You need to install ffmpeg.)
+2024-09-12T08:51:29,252 WARN  [CommandLineExecutorComponent] Command not available: videoWatermarkWithPicture (command ffmpeg not found in system path (descriptor CommandLineDescriptor[available=false,command=ffmpeg,enabled=true,installErrorMessage=<null>,installationDirective=You need to install ffmpeg.,name=videoWatermarkWithPicture,parameterString=-y -i #{sourceFilePath} -i #{pictureFilePath} -filter_complex #{filterComplex} #{outFilePath},readOutput=true,testParameterString=,tester=<null>,timeout=<null>,winCommand=<null>,winParameterString=<null>,winTestParameterString=]). You need to install ffmpeg.)
+2024-09-12T08:51:29,793 WARN  [DirectoryRegistry] Directory: template-directory redefined with different factory
+2024-09-12T08:51:30,646 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-1] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:30,950 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-1] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:30,964 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-1] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:30,971 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-1] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:31,100 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-1] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:31,172 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-1] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:31,177 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-1] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:31,183 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-1] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:31,204 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:31,334 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:31,339 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:31,344 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:31,455 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:31,458 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:31,463 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:31,572 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:31,577 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:31,583 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:31,588 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:31,593 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:31,601 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-6] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:31,683 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-6] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:31,688 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-6] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:31,722 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-1] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:31,727 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-1] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:31,787 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-1] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:31,792 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-1] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:31,797 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-1] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:32,005 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-1] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:32,014 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-1] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:32,085 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-1] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:32,090 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-1] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:32,096 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:32,102 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:32,106 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-1] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:32,125 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:32,152 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:32,157 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:32,295 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:32,299 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:32,303 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:32,307 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:32,330 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-1] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:32,334 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-1] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:32,398 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-1] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:32,402 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-1] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:32,408 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-1] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:32,432 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-1] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:32,435 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-1] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:32,515 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-1] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:32,519 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-1] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:32,522 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-1] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:32,543 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:32,546 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:32,551 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:32,646 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:32,649 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:32,652 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:32,671 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:32,674 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:32,678 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:32,948 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:32,952 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:32,957 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:32,989 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:32,994 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:32,998 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:33,097 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:33,101 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:33,105 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:34,106 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:34,110 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:34,204 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:34,207 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:34,211 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:34,213 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:34,306 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:34,309 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:34,311 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:34,314 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:34,317 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:34,416 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:34,420 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:34,424 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:34,428 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:34,522 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:34,525 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:34,529 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:34,531 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:34,623 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:34,625 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:34,628 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:34,642 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:34,655 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:34,671 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:34,684 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:34,705 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:34,709 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:34,712 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:34,836 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:34,838 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:34,841 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:34,861 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:34,864 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:34,868 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:34,998 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,002 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,006 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,008 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,125 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,130 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,134 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,145 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,164 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,167 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,171 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,251 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,253 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,256 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,271 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,274 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,276 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,366 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,368 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,371 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,390 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-5] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,393 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-5] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,448 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-5] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,451 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-5] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,454 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-5] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,481 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,484 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,487 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,490 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,493 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,497 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,512 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,526 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-1] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,530 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-1] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,541 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,546 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,549 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,630 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,633 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,635 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,652 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,654 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,657 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,739 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,741 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,743 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,760 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,763 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,846 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,849 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,852 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,854 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,871 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,874 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,920 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,923 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,925 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,928 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,944 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,946 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:35,949 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:36,024 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:36,026 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:36,028 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:36,040 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:36,042 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:36,044 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:36,123 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:36,128 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:36,131 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:36,147 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:36,149 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:36,152 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:36,230 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:36,233 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:36,235 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:36,263 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:36,265 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:36,268 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:36,271 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:36,469 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:36,471 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:36,473 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:36,475 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:36,602 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:36,605 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:36,607 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:36,617 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:36,633 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:36,636 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:36,638 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:36,680 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:36,682 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:36,684 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:36,699 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:36,701 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:36,802 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:36,804 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:36,806 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:36,808 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-3] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:36,822 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:36,824 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:36,866 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:36,868 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:36,870 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:36,890 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:36,892 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:36,939 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:36,941 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:36,944 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:36,946 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:37,042 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:37,045 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:37,047 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:37,048 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:37,211 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:37,213 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:37,215 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:37,216 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:37,363 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:37,365 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:37,367 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:37,369 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:37,523 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:37,525 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:37,529 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:37,531 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:37,613 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:37,615 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:37,616 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:37,618 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:37,759 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:37,761 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:37,764 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:37,766 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:37,885 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:37,887 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:37,889 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:37,890 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:37,979 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:37,981 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:37,983 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:37,985 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:38,076 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:38,078 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:38,080 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:38,082 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:38,231 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:38,233 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:38,235 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:38,238 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:38,283 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:38,285 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:38,287 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:38,289 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:38,329 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:38,331 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:38,333 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:38,334 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:38,483 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:38,485 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:38,486 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:38,488 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:38,528 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:38,530 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:38,532 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:38,542 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:38,550 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:38,559 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:38,568 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:38,576 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:38,586 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:38,596 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:38,605 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:38,615 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:38,625 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:38,635 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:38,646 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:38,655 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:38,663 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:38,672 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-4] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:38,675 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-1] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:38,677 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-1] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:38,684 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-6] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:38,697 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-6] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:38,699 WARN  [KafkaAdminClient] [AdminClient clientId=adminclient-6] The DescribeTopicPartitions API is not supported, using Metadata API to describe topics.
+2024-09-12T08:51:47,932 WARN  [JmxReporter] Creating Jmx reporter
+2024-09-12T08:51:47,955 WARN  [StreamMetricsNuxeoReporter] Reporting Stream Metrics to: internal/metrics
+2024-09-12T08:51:49,434 INFO  [OSGiRuntimeService] Nuxeo Platform Started
+======================================================================
+= Component Loading Status: Pending: 0 / Missing: 0 / Unstarted: 0 / Total: 565
+======================================================================
+2024-09-12 08:51:52 INFO [main] org.apache.catalina.startup.Catalina.start Server startup in [31670] milliseconds
+2024-09-12T08:51:52,206 WARN  [HealthCheckResult] HealthCheck is not healthy, see probes: [ProbeInfo{name=s3BinaryManagerStatus, status=No S3BinaryManager bucket configured, runCount=2, runDate=Thu Sep 12 08:51:52 UTC 2024, runDuration=9ms}, ProbeInfo{name=runtimeStatus, status=Runtime started, runCount=1, runDate=Thu Sep 12 08:51:52 UTC 2024, runDuration=0ms}, ProbeInfo{name=ldapDirectories, status=No configured LDAP directory, runCount=1, runDate=Thu Sep 12 08:51:52 UTC 2024, runDuration=0ms}, ProbeInfo{name=elasticSearchStatus, status=GREEN, runCount=1, runDate=Thu Sep 12 08:51:52 UTC 2024, runDuration=8ms}, ProbeInfo{name=repositoryStatus, status=Repository started, runCount=1, runDate=Thu Sep 12 08:51:52 UTC 2024, runDuration=3ms}, ProbeInfo{name=streamStatus, status=No failure, runCount=1, runDate=Thu Sep 12 08:51:52 UTC 2024, runDuration=0ms}]

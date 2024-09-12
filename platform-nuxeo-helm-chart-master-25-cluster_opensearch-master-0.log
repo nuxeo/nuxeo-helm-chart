@@ -1,0 +1,112 @@
+Enabling execution of install_demo_configuration.sh for OpenSearch Security Plugin
+OpenSearch Security Demo Installer
+ ** Warning: Do not use on production or public reachable systems **
+Basedir: /usr/share/opensearch
+OpenSearch install type: rpm/deb on NAME="Amazon Linux"
+OpenSearch config dir: /usr/share/opensearch/config
+OpenSearch config file: /usr/share/opensearch/config/opensearch.yml
+OpenSearch bin dir: /usr/share/opensearch/bin
+OpenSearch plugins dir: /usr/share/opensearch/plugins
+OpenSearch lib dir: /usr/share/opensearch/lib
+Detected OpenSearch Version: x-content-1.3.6
+Detected OpenSearch Security Version: 1.3.6.0
+
+tee: /usr/share/opensearch/config/opensearch.yml: Permission denied
+Enabling OpenSearch Security Plugin
+[2024-09-12T08:50:18,731][INFO ][o.o.n.Node               ] [opensearch-master-0] version[1.3.6], pid[45], build[tar/cbf74db21db3eb4d79c43caeafc23eec592bf697/2022-10-04T20:26:16.847170Z], OS[Linux/6.1.85+/amd64], JVM[Eclipse Adoptium/OpenJDK 64-Bit Server VM/11.0.16/11.0.16+8]
+[2024-09-12T08:50:18,734][INFO ][o.o.n.Node               ] [opensearch-master-0] JVM home [/usr/share/opensearch/jdk], using bundled JDK [true]
+[2024-09-12T08:50:18,734][INFO ][o.o.n.Node               ] [opensearch-master-0] JVM arguments [-Xshare:auto, -Dopensearch.networkaddress.cache.ttl=60, -Dopensearch.networkaddress.cache.negative.ttl=10, -XX:+AlwaysPreTouch, -Xss1m, -Djava.awt.headless=true, -Dfile.encoding=UTF-8, -Djna.nosys=true, -XX:-OmitStackTraceInFastThrow, -Dio.netty.noUnsafe=true, -Dio.netty.noKeySetOptimization=true, -Dio.netty.recycler.maxCapacityPerThread=0, -Dio.netty.allocator.numDirectArenas=0, -Dlog4j.shutdownHookEnabled=false, -Dlog4j2.disable.jmx=true, -Djava.locale.providers=SPI,COMPAT, -Xms1g, -Xmx1g, -XX:+UseG1GC, -XX:G1ReservePercent=25, -XX:InitiatingHeapOccupancyPercent=30, -Djava.io.tmpdir=/tmp/opensearch-1984844483164900006, -XX:+HeapDumpOnOutOfMemoryError, -XX:HeapDumpPath=data, -XX:ErrorFile=logs/hs_err_pid%p.log, -Xlog:gc*,gc+age=trace,safepoint:file=logs/gc.log:utctime,pid,tags:filecount=32,filesize=64m, -Dclk.tck=100, -Djdk.attach.allowAttachSelf=true, -Djava.security.policy=/usr/share/opensearch/config/opensearch-performance-analyzer/opensearch_security.policy, --add-opens=jdk.attach/sun.tools.attach=ALL-UNNAMED, -Dopensearch.cgroups.hierarchy.override=/, -Xmx1g, -Xms1g, -XX:MaxDirectMemorySize=536870912, -Dopensearch.path.home=/usr/share/opensearch, -Dopensearch.path.conf=/usr/share/opensearch/config, -Dopensearch.distribution.type=tar, -Dopensearch.bundled_jdk=true]
+[2024-09-12T08:50:19,851][WARN ][stderr                   ] [opensearch-master-0] SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+[2024-09-12T08:50:19,852][WARN ][stderr                   ] [opensearch-master-0] SLF4J: Defaulting to no-operation (NOP) logger implementation
+[2024-09-12T08:50:19,852][WARN ][stderr                   ] [opensearch-master-0] SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+[2024-09-12T08:50:19,862][INFO ][o.o.s.s.t.SSLConfig      ] [opensearch-master-0] SSL dual mode is disabled
+[2024-09-12T08:50:19,863][WARN ][o.o.s.OpenSearchSecurityPlugin] [opensearch-master-0] OpenSearch Security plugin installed but disabled. This can expose your configuration (including passwords) to the public.
+[2024-09-12T08:50:20,436][INFO ][o.o.p.c.PluginSettings   ] [opensearch-master-0] Config: metricsLocation: /dev/shm/performanceanalyzer/, metricsDeletionInterval: 1, httpsEnabled: false, cleanup-metrics-db-files: true, batch-metrics-retention-period-minutes: 7, rpc-port: 9650, webservice-port 9600
+[2024-09-12T08:50:20,821][INFO ][o.o.i.r.ReindexPlugin    ] [opensearch-master-0] ReindexPlugin reloadSPI called
+[2024-09-12T08:50:20,822][INFO ][o.o.i.r.ReindexPlugin    ] [opensearch-master-0] Unable to find any implementation for RemoteReindexExtension
+[2024-09-12T08:50:20,885][INFO ][o.o.j.JobSchedulerPlugin ] [opensearch-master-0] Loaded scheduler extension: reports-scheduler, index: .opendistro-reports-definitions
+[2024-09-12T08:50:20,891][INFO ][o.o.j.JobSchedulerPlugin ] [opensearch-master-0] Loaded scheduler extension: opendistro_anomaly_detector, index: .opendistro-anomaly-detector-jobs
+[2024-09-12T08:50:20,892][INFO ][o.o.j.JobSchedulerPlugin ] [opensearch-master-0] Loaded scheduler extension: opendistro-index-management, index: .opendistro-ism-config
+[2024-09-12T08:50:20,896][INFO ][o.o.p.PluginsService     ] [opensearch-master-0] loaded module [aggs-matrix-stats]
+[2024-09-12T08:50:20,897][INFO ][o.o.p.PluginsService     ] [opensearch-master-0] loaded module [analysis-common]
+[2024-09-12T08:50:20,897][INFO ][o.o.p.PluginsService     ] [opensearch-master-0] loaded module [geo]
+[2024-09-12T08:50:20,897][INFO ][o.o.p.PluginsService     ] [opensearch-master-0] loaded module [ingest-common]
+[2024-09-12T08:50:20,897][INFO ][o.o.p.PluginsService     ] [opensearch-master-0] loaded module [ingest-geoip]
+[2024-09-12T08:50:20,897][INFO ][o.o.p.PluginsService     ] [opensearch-master-0] loaded module [ingest-user-agent]
+[2024-09-12T08:50:20,897][INFO ][o.o.p.PluginsService     ] [opensearch-master-0] loaded module [lang-expression]
+[2024-09-12T08:50:20,897][INFO ][o.o.p.PluginsService     ] [opensearch-master-0] loaded module [lang-mustache]
+[2024-09-12T08:50:20,897][INFO ][o.o.p.PluginsService     ] [opensearch-master-0] loaded module [lang-painless]
+[2024-09-12T08:50:20,897][INFO ][o.o.p.PluginsService     ] [opensearch-master-0] loaded module [mapper-extras]
+[2024-09-12T08:50:20,897][INFO ][o.o.p.PluginsService     ] [opensearch-master-0] loaded module [opensearch-dashboards]
+[2024-09-12T08:50:20,897][INFO ][o.o.p.PluginsService     ] [opensearch-master-0] loaded module [parent-join]
+[2024-09-12T08:50:20,897][INFO ][o.o.p.PluginsService     ] [opensearch-master-0] loaded module [percolator]
+[2024-09-12T08:50:20,898][INFO ][o.o.p.PluginsService     ] [opensearch-master-0] loaded module [rank-eval]
+[2024-09-12T08:50:20,898][INFO ][o.o.p.PluginsService     ] [opensearch-master-0] loaded module [reindex]
+[2024-09-12T08:50:20,898][INFO ][o.o.p.PluginsService     ] [opensearch-master-0] loaded module [repository-url]
+[2024-09-12T08:50:20,898][INFO ][o.o.p.PluginsService     ] [opensearch-master-0] loaded module [transport-netty4]
+[2024-09-12T08:50:20,898][INFO ][o.o.p.PluginsService     ] [opensearch-master-0] loaded plugin [opensearch-alerting]
+[2024-09-12T08:50:20,898][INFO ][o.o.p.PluginsService     ] [opensearch-master-0] loaded plugin [opensearch-anomaly-detection]
+[2024-09-12T08:50:20,898][INFO ][o.o.p.PluginsService     ] [opensearch-master-0] loaded plugin [opensearch-asynchronous-search]
+[2024-09-12T08:50:20,898][INFO ][o.o.p.PluginsService     ] [opensearch-master-0] loaded plugin [opensearch-cross-cluster-replication]
+[2024-09-12T08:50:20,899][INFO ][o.o.p.PluginsService     ] [opensearch-master-0] loaded plugin [opensearch-index-management]
+[2024-09-12T08:50:20,899][INFO ][o.o.p.PluginsService     ] [opensearch-master-0] loaded plugin [opensearch-job-scheduler]
+[2024-09-12T08:50:20,899][INFO ][o.o.p.PluginsService     ] [opensearch-master-0] loaded plugin [opensearch-knn]
+[2024-09-12T08:50:20,899][INFO ][o.o.p.PluginsService     ] [opensearch-master-0] loaded plugin [opensearch-ml]
+[2024-09-12T08:50:20,899][INFO ][o.o.p.PluginsService     ] [opensearch-master-0] loaded plugin [opensearch-observability]
+[2024-09-12T08:50:20,899][INFO ][o.o.p.PluginsService     ] [opensearch-master-0] loaded plugin [opensearch-performance-analyzer]
+[2024-09-12T08:50:20,899][INFO ][o.o.p.PluginsService     ] [opensearch-master-0] loaded plugin [opensearch-reports-scheduler]
+[2024-09-12T08:50:20,899][INFO ][o.o.p.PluginsService     ] [opensearch-master-0] loaded plugin [opensearch-security]
+[2024-09-12T08:50:20,899][INFO ][o.o.p.PluginsService     ] [opensearch-master-0] loaded plugin [opensearch-sql]
+[2024-09-12T08:50:20,949][INFO ][o.o.e.NodeEnvironment    ] [opensearch-master-0] using [1] data paths, mounts [[/ (overlay)]], net usable_space [79gb], net total_space [94.2gb], types [overlay]
+[2024-09-12T08:50:20,949][INFO ][o.o.e.NodeEnvironment    ] [opensearch-master-0] heap size [1gb], compressed ordinary object pointers [true]
+[2024-09-12T08:50:20,990][INFO ][o.o.n.Node               ] [opensearch-master-0] node name [opensearch-master-0], node ID [97HZz0jqTYemGzzIZJeFqA], cluster name [opensearch], roles [master, remote_cluster_client, data, ingest]
+[2024-09-12T08:50:24,969][INFO ][o.o.a.b.ADCircuitBreakerService] [opensearch-master-0] Registered memory breaker.
+[2024-09-12T08:50:25,391][INFO ][o.o.m.c.b.MLCircuitBreakerService] [opensearch-master-0] Registered ML memory breaker.
+[2024-09-12T08:50:25,966][INFO ][o.o.t.NettyAllocator     ] [opensearch-master-0] creating NettyAllocator with the following configs: [name=unpooled, suggested_max_allocation_size=256kb, factors={opensearch.unsafe.use_unpooled_allocator=null, g1gc_enabled=true, g1gc_region_size=1mb, heap_size=1gb}]
+[2024-09-12T08:50:26,057][INFO ][o.o.d.DiscoveryModule    ] [opensearch-master-0] using discovery type [single-node] and seed hosts providers [settings]
+[2024-09-12T08:50:26,485][WARN ][o.o.g.DanglingIndicesState] [opensearch-master-0] gateway.auto_import_dangling_indices is disabled, dangling indices will not be automatically detected or imported and must be managed manually
+[2024-09-12T08:50:26,810][INFO ][o.o.p.h.c.PerformanceAnalyzerConfigAction] [opensearch-master-0] PerformanceAnalyzer Enabled: false
+[2024-09-12T08:50:26,841][INFO ][o.o.n.Node               ] [opensearch-master-0] initialized
+[2024-09-12T08:50:26,841][INFO ][o.o.n.Node               ] [opensearch-master-0] starting ...
+[2024-09-12T08:50:26,974][INFO ][o.o.t.TransportService   ] [opensearch-master-0] publish_address {10.60.196.18:9300}, bound_addresses {0.0.0.0:9300}
+[2024-09-12T08:50:27,193][WARN ][o.o.b.BootstrapChecks    ] [opensearch-master-0] max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]
+[2024-09-12T08:50:27,204][INFO ][o.o.c.c.Coordinator      ] [opensearch-master-0] setting initial configuration to VotingConfiguration{97HZz0jqTYemGzzIZJeFqA}
+[2024-09-12T08:50:27,378][INFO ][o.o.c.s.MasterService    ] [opensearch-master-0] elected-as-master ([1] nodes joined)[{opensearch-master-0}{97HZz0jqTYemGzzIZJeFqA}{eajDhFOkTaqpIDk0L60LEQ}{10.60.196.18}{10.60.196.18:9300}{dimr}{shard_indexing_pressure_enabled=true} elect leader, _BECOME_MASTER_TASK_, _FINISH_ELECTION_], term: 1, version: 1, delta: master node changed {previous [], current [{opensearch-master-0}{97HZz0jqTYemGzzIZJeFqA}{eajDhFOkTaqpIDk0L60LEQ}{10.60.196.18}{10.60.196.18:9300}{dimr}{shard_indexing_pressure_enabled=true}]}
+[2024-09-12T08:50:27,462][INFO ][o.o.c.c.CoordinationState] [opensearch-master-0] cluster UUID set to [2iCWYVGaQEaVuaONRpSX4Q]
+[2024-09-12T08:50:27,490][INFO ][o.o.c.s.ClusterApplierService] [opensearch-master-0] master node changed {previous [], current [{opensearch-master-0}{97HZz0jqTYemGzzIZJeFqA}{eajDhFOkTaqpIDk0L60LEQ}{10.60.196.18}{10.60.196.18:9300}{dimr}{shard_indexing_pressure_enabled=true}]}, term: 1, version: 1, reason: Publication{term=1, version=1}
+[2024-09-12T08:50:27,498][INFO ][o.o.a.c.ADClusterEventListener] [opensearch-master-0] Cluster is not recovered yet.
+[2024-09-12T08:50:27,507][INFO ][o.o.i.i.ManagedIndexCoordinator] [opensearch-master-0] Cache master node onMaster time: 1726131027507
+[2024-09-12T08:50:27,512][WARN ][o.o.p.c.s.h.ConfigOverridesClusterSettingHandler] [opensearch-master-0] Config override setting update called with empty string. Ignoring.
+[2024-09-12T08:50:27,529][INFO ][o.o.h.AbstractHttpServerTransport] [opensearch-master-0] publish_address {10.60.196.18:9200}, bound_addresses {0.0.0.0:9200}
+[2024-09-12T08:50:27,529][INFO ][o.o.n.Node               ] [opensearch-master-0] started
+[2024-09-12T08:50:27,530][INFO ][o.o.s.OpenSearchSecurityPlugin] [opensearch-master-0] Node started
+[2024-09-12T08:50:27,531][INFO ][o.o.s.OpenSearchSecurityPlugin] [opensearch-master-0] 0 OpenSearch Security modules loaded so far: []
+[2024-09-12T08:50:27,570][INFO ][o.o.a.c.HashRing         ] [opensearch-master-0] Node added: [97HZz0jqTYemGzzIZJeFqA]
+[2024-09-12T08:50:27,576][INFO ][o.o.a.c.HashRing         ] [opensearch-master-0] Add data node to AD version hash ring: 97HZz0jqTYemGzzIZJeFqA
+[2024-09-12T08:50:27,578][INFO ][o.o.a.c.HashRing         ] [opensearch-master-0] All nodes with known AD version: {97HZz0jqTYemGzzIZJeFqA=ADNodeInfo{version=1.3.6, isEligibleDataNode=true}}
+[2024-09-12T08:50:27,579][INFO ][o.o.a.c.HashRing         ] [opensearch-master-0] Rebuild AD hash ring for realtime AD with cooldown, nodeChangeEvents size 0
+[2024-09-12T08:50:27,579][INFO ][o.o.a.c.HashRing         ] [opensearch-master-0] Build AD version hash ring successfully
+[2024-09-12T08:50:27,580][INFO ][o.o.a.c.ADDataMigrator   ] [opensearch-master-0] Start migrating AD data
+[2024-09-12T08:50:27,580][INFO ][o.o.a.c.ADDataMigrator   ] [opensearch-master-0] AD job index doesn't exist, no need to migrate
+[2024-09-12T08:50:27,580][INFO ][o.o.a.c.ADClusterEventListener] [opensearch-master-0] Init AD version hash ring successfully
+[2024-09-12T08:50:27,614][INFO ][o.o.g.GatewayService     ] [opensearch-master-0] recovered [0] indices into cluster_state
+[2024-09-12T08:51:27,509][INFO ][o.o.i.i.ManagedIndexCoordinator] [opensearch-master-0] Performing move cluster state metadata.
+[2024-09-12T08:51:27,510][INFO ][o.o.i.i.MetadataService  ] [opensearch-master-0] ISM config index not exist, so we cancel the metadata migration job.
+[2024-09-12T08:51:27,511][INFO ][o.o.i.i.ManagedIndexCoordinator] [opensearch-master-0] Performing ISM template migration.
+[2024-09-12T08:51:27,512][INFO ][o.o.i.i.m.ISMTemplateService] [opensearch-master-0] Doing ISM template migration 1 time.
+[2024-09-12T08:51:27,512][INFO ][o.o.i.i.m.ISMTemplateService] [opensearch-master-0] Use 2024-09-12T07:50:27.507Z as migrating ISM template last_updated_time
+[2024-09-12T08:51:27,513][INFO ][o.o.i.i.m.ISMTemplateService] [opensearch-master-0] ISM templates: {}
+[2024-09-12T08:51:27,514][INFO ][o.o.i.i.m.ISMTemplateService] [opensearch-master-0] Policies to update: []
+[2024-09-12T08:51:27,518][INFO ][o.o.i.i.m.ISMTemplateService] [opensearch-master-0] Failure experienced when migrating ISM Template and update ISM policies: {}
+[2024-09-12T08:51:27,624][INFO ][o.o.c.s.ClusterSettings  ] [opensearch-master-0] updating [plugins.index_state_management.template_migration.control] from [0] to [-1]
+[2024-09-12T08:51:27,630][INFO ][o.o.i.i.m.ISMTemplateService] [opensearch-master-0] Successfully update template migration setting
+[2024-09-12T08:51:42,187][INFO ][o.o.c.m.MetadataCreateIndexService] [opensearch-master-0] [nuxeo-audit] creating index, cause [api], templates [], shards [5]/[0]
+[2024-09-12T08:51:42,765][INFO ][o.o.c.r.a.AllocationService] [opensearch-master-0] Cluster health status changed from [YELLOW] to [GREEN] (reason: [shards started [[nuxeo-audit][4]]]).
+[2024-09-12T08:51:42,856][INFO ][o.o.c.m.MetadataMappingService] [opensearch-master-0] [nuxeo-audit/cqI-1V8FT6i2idgApqv94g] create_mapping [_doc]
+[2024-09-12T08:51:42,916][INFO ][o.o.c.m.MetadataCreateIndexService] [opensearch-master-0] [nuxeo-uidgen] creating index, cause [api], templates [], shards [1]/[1]
+[2024-09-12T08:51:42,917][INFO ][o.o.c.r.a.AllocationService] [opensearch-master-0] updating number_of_replicas to [0] for indices [nuxeo-uidgen]
+[2024-09-12T08:51:43,021][INFO ][o.o.c.r.a.AllocationService] [opensearch-master-0] Cluster health status changed from [YELLOW] to [GREEN] (reason: [shards started [[nuxeo-uidgen][0]]]).
+[2024-09-12T08:51:43,074][INFO ][o.o.c.m.MetadataMappingService] [opensearch-master-0] [nuxeo-uidgen/v-gIF9QiSlaxXc7bfpWylA] create_mapping [_doc]
+[2024-09-12T08:51:43,158][INFO ][o.o.c.m.MetadataCreateIndexService] [opensearch-master-0] [nuxeo] creating index, cause [api], templates [], shards [5]/[0]
+[2024-09-12T08:51:43,435][INFO ][o.o.c.r.a.AllocationService] [opensearch-master-0] Cluster health status changed from [YELLOW] to [GREEN] (reason: [shards started [[nuxeo][4]]]).
+[2024-09-12T08:51:43,493][INFO ][o.o.c.m.MetadataMappingService] [opensearch-master-0] [nuxeo/MzStGD8BTvWRknxyksFDTw] create_mapping [_doc]

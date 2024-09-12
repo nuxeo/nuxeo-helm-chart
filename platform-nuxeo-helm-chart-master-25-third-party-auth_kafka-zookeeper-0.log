@@ -1,0 +1,17 @@
+[38;5;6mzookeeper [38;5;5m08:50:23.21 [0m
+[38;5;6mzookeeper [38;5;5m08:50:23.21 [0m[1mWelcome to the Bitnami zookeeper container[0m
+[38;5;6mzookeeper [38;5;5m08:50:23.22 [0mSubscribe to project updates by watching [1mhttps://github.com/bitnami/bitnami-docker-zookeeper[0m
+[38;5;6mzookeeper [38;5;5m08:50:23.22 [0mSubmit issues and feature requests at [1mhttps://github.com/bitnami/bitnami-docker-zookeeper/issues[0m
+[38;5;6mzookeeper [38;5;5m08:50:23.22 [0m
+[38;5;6mzookeeper [38;5;5m08:50:23.22 [0m[38;5;2mINFO [0m ==> ** Starting ZooKeeper setup **
+[38;5;6mzookeeper [38;5;5m08:50:23.24 [0m[38;5;3mWARN [0m ==> You have set the environment variable ALLOW_ANONYMOUS_LOGIN=yes. For safety reasons, do not use this flag in a production environment.
+[38;5;6mzookeeper [38;5;5m08:50:23.27 [0m[38;5;2mINFO [0m ==> Initializing ZooKeeper...
+[38;5;6mzookeeper [38;5;5m08:50:23.27 [0m[38;5;2mINFO [0m ==> No injected configuration file found, creating default config files...
+[38;5;6mzookeeper [38;5;5m08:50:23.38 [0m[38;5;2mINFO [0m ==> No additional servers were specified. ZooKeeper will run in standalone mode...
+[38;5;6mzookeeper [38;5;5m08:50:23.38 [0m[38;5;2mINFO [0m ==> Deploying ZooKeeper from scratch...
+[38;5;6mzookeeper [38;5;5m08:50:23.38 [0m[38;5;2mINFO [0m ==> ** ZooKeeper setup finished! **
+
+[38;5;6mzookeeper [38;5;5m08:50:23.41 [0m[38;5;2mINFO [0m ==> ** Starting ZooKeeper **
+/opt/bitnami/java/bin/java
+ZooKeeper JMX enabled by default
+Using config: /opt/bitnami/zookeeper/bin/../conf/zoo.cfg
