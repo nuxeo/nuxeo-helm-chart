@@ -62,6 +62,7 @@ pipeline {
     CHART_REPO_INTERNAL_CREDENTIALS = 'chartmuseum'
     CHART_REPO_PUBLIC = 'https://packages.nuxeo.com/repository/helm-releases-public/'
     CHART_REPO_PUBLIC_CREDENTIALS = 'packages.nuxeo.com-auth'
+    JIRA_NUXEO_CHART_MOVING_VERSION = 'helm-chart-next'
   }
   stages {
     stage('Helm package') {
@@ -120,8 +121,35 @@ pipeline {
         container('base') {
           nxWithGitHubStatus(context: 'release', message: 'Release') {
             script {
-              // tag the version - nuxeo-helm-chart doesn't follow the v1.2.3 convention
-              nxGit.commitTagPush(tag: env.VERSION)
+              nxGit.commitTagPush()
+            }
+          }
+        }
+      }
+    }
+    stage('Release Jira version') {
+      when {
+        expression { !nxUtils.isPullRequest() }
+      }
+      steps {
+        container('base') {
+          script {
+            def jiraVersionName = "helm-chart-${VERSION}"
+            // create a new released version in Jira
+            def jiraVersion = [
+                project: 'NXP',
+                name: jiraVersionName,
+                releaseDate: LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE),
+                released: true,
+            ]
+            nxJira.newVersion(version: jiraVersion)
+            // find Jira tickets included in this release and update them
+            def jiraTickets = nxJira.jqlSearch(jql: "project = NXP and fixVersion = '${JIRA_NUXEO_CHART_MOVING_VERSION}'")
+            def previousVersion = sh(returnStdout: true, script: "perl -pe 's/\\b(\\d+)(?=\\D*\$)/\$1-1/e' <<< ${VERSION}").trim()
+            def changelog = nxGit.getChangeLog(previousVersion: previousVersion, version: env.VERSION)
+            def committedIssues = jiraTickets.data.issues.findAll { changelog.contains(it.key) }
+            committedIssues.each {
+              nxJira.editIssueFixVersion(idOrKey: it.key, fixVersionToRemove: env.JIRA_NUXEO_CHART_MOVING_VERSION, fixVersionToAdd: jiraVersionName)
             }
           }
         }
