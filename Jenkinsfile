@@ -56,7 +56,7 @@ pipeline {
     CHART_NAME = 'nuxeo'
     CHART_DESCRIPTOR = "${CHART_NAME}/Chart.yaml"
     CURRENT_NAMESPACE = nxK8s.getCurrentNamespace()
-    VERSION = nxUtils.getVersion(baseVersion: getChartVersion("${CHART_NAME}"), tagPrefix: '')
+    VERSION = nxUtils.getVersion(baseVersion: getChartVersion("${CHART_NAME}"))
     CHART_ARCHIVE = "${CHART_NAME}-${VERSION}.tgz"
     CHART_REPO_INTERNAL = 'http://chartmuseum:8080/api/charts'
     CHART_REPO_INTERNAL_CREDENTIALS = 'chartmuseum'
