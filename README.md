@@ -13,9 +13,8 @@ helm repo add nuxeo https://packages.nuxeo.com/repository/helm-releases-public/
 helm install my-release nuxeo/nuxeo
 ```
 
-{{#> callout type='warning' heading='PRIVATE IMAGE'}}
-The default Docker image referenced by this chart is hosted in our private [Docker registry](https://packages.nuxeo.com/#browse/search/docker=attributes.docker.imageName%3Dnuxeo%2Fnuxeo%20AND%20attributes.docker.imageTag%3D2023%20AND%20repository_name%3Ddocker-private). If you are a Nuxeo client, please ask access to the registry through a support ticket. If not, contact your Nuxeo administrator or Nuxeo sales representative to get access to this image.
-{{/callout}}
+> [!WARNING]
+> The default Docker image referenced by this chart is hosted in our private [Docker registry](https://packages.nuxeo.com/#browse/search/docker=attributes.docker.imageName%3Dnuxeo%2Fnuxeo%20AND%20attributes.docker.imageTag%3D2023%20AND%20repository_name%3Ddocker-private). If you are a Nuxeo client, please ask access to the registry through a support ticket. If not, contact your Nuxeo administrator or Nuxeo sales representative to get access to this image.
 
 ## Scope
 
