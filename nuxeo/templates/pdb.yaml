@@ -1,4 +1,4 @@
-{{- if or .Values.podDisruptionBudget.minAvailable .Values.podDisruptionBudget.maxUnavailable }}
+{{- if (include "nuxeo.poddisruptionbudget.enabled" .) }}
 {{- range splitList "," (include "nuxeo.nodeTypes" .) }}
 {{- $nuxeoNodeType := . -}}
 {{- $data := dict "Values" $.Values "Chart" $.Chart "Release" $.Release "nuxeoNodeType" $nuxeoNodeType -}}

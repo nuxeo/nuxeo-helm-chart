@@ -10,7 +10,6 @@ APP VERSION: {{ .Values.image.tag }}
 {{- $releaseNamespace := .Release.Namespace }}
 {{- $clusterDomain := .Values.clusterDomain }}
 
-
 ** Please be patient while the nuxeo chart is being deployed **
 
 Nuxeo architecture: {{ $architecture }}.
