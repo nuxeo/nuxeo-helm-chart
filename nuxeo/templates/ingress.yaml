@@ -17,27 +17,27 @@ spec:
   ingressClassName: {{ toYaml . }}
   {{- end }}
   rules:
-    - http:
-        paths:
-          - backend:
-              {{- if $isAPIv1 }}
-              service:
-                name: {{ template "nuxeo.fullname" . }}
-                port:
-                  number: {{ .Values.service.externalPort}}
-              {{- else }}
-              serviceName: {{ template "nuxeo.fullname" . }}
-              servicePort: {{ .Values.service.externalPort}}
-              {{- end }}
-            {{- if .Values.ingress.path }}
-            path: {{ .Values.ingress.path }}
-            {{- end }}
+  - http:
+      paths:
+        - backend:
             {{- if $isAPIv1 }}
-            pathType: ImplementationSpecific
+            service:
+              name: {{ template "nuxeo.fullname" . }}
+              port:
+                number: {{ .Values.service.externalPort}}
+            {{- else }}
+            serviceName: {{ template "nuxeo.fullname" . }}
+            servicePort: {{ .Values.service.externalPort}}
             {{- end }}
-      {{- with .Values.ingress.hostname }}
-      host: {{ toYaml . }}
-      {{- end }}
+          {{- if .Values.ingress.path }}
+          path: {{ .Values.ingress.path }}
+          {{- end }}
+          {{- if $isAPIv1 }}
+          pathType: ImplementationSpecific
+          {{- end }}
+    {{- with .Values.ingress.hostname }}
+    host: {{ toYaml . }}
+    {{- end }}
   {{- with .Values.ingress.tls }}
   tls: {{- toYaml . | nindent 4 }}
   {{- end }}

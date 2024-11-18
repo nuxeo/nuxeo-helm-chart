@@ -91,7 +91,6 @@ Return true if the deployment needs to be rolled.
     {{- false -}}
   {{- end -}}
 {{- end -}}
-
 {{- end -}}
 
 {{/*
@@ -347,5 +346,14 @@ Returns the name of the service account to use
     {{ default (include "nuxeo.fullname" .) .Values.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if pod disruption budget is enabled.
+*/}}
+{{- define "nuxeo.poddisruptionbudget.enabled" -}}
+{{- if or .Values.podDisruptionBudget.minAvailable .Values.podDisruptionBudget.maxUnavailable }}
+  {{- true -}}
 {{- end -}}
 {{- end -}}
