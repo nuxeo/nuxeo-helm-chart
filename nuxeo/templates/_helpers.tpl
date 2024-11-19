@@ -157,9 +157,10 @@ Return true if a persistent volum claim with ReadWriteMany is enabled for log st
 {{- end -}}
 
 {{/*
-Template for an Opaque secret manifest, using a dictionary as scope:
+Template for a secret manifest, using a dictionary as scope:
   - .: root context
   - name: secret name
+  - type: secret type
   - data: secret data, map of key value pairs
   - dataType: "data" or "stringData", depending on whether the data values are arbitrary or base64-encoded strings
 */}}
@@ -169,7 +170,7 @@ kind: Secret
 metadata:
   name: {{ .name }}
   labels: {{- include "nuxeo.labels" . | nindent 4 }}
-type: Opaque
+type: {{ (default "Opaque" .type) }}
 {{ .dataType }}: {{ toYaml .data | nindent 2 }}
 {{- end -}}
 
