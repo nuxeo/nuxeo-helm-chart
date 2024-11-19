@@ -271,19 +271,24 @@ metrics:
 extraContainers: []
 extraVolumeMounts: []
 extraVolumes: []
-## Extra Opaque secrets to deploy, using non base64-encoded strings.
-## This is a map of key value pairs with the key as secret name and the value as secret data.
-## The secret data is itself a map of key value pairs, using arbitrary string values (`stringData` field).
+## Extra secrets to deploy, using non base64-encoded strings.
+## This is a map of key value pairs with the key as secret name and the value as secret content.
+## The secret content is itself a map of two key value pairs:
+## - the secret type
+## - the secret data, a map of key value pairs using arbitrary string values (`stringData` field).
 ## For instance:
 ## ```
 ## extraStringSecrets:
 ##   stringsecret1:
-##     key1: value1
-##     key2: value2
+##     type: Opaque (default value)
+##     data:
+##       key1: value1
+##       key2: value2
 ##   stringsecret2:
-##     key3: |-
-##       multiline
-##       value
+##     data:
+##       key3: |-
+##         multiline
+##         value
 ## ```
 # extraStringSecrets: {}
 ## Same as `extraStringSecrets` except that the secret data uses base64-encoded strings (`data` field).
