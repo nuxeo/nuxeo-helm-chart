@@ -1,5 +1,5 @@
-{{- $isAPIv1 := (.Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress") -}}
 {{- if .Values.ingress.enabled -}}
+{{- $isAPIv1 := (.Capabilities.APIVersions.Has "networking.k8s.io/v1") -}}
 apiVersion: {{ ternary "networking.k8s.io/v1" "networking.k8s.io/v1beta1" $isAPIv1 }}
 kind: Ingress
 metadata:
