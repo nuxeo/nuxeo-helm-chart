@@ -46,7 +46,7 @@ livenessProbe:
   # initialDelaySeconds:
   periodSeconds: 5
   successThreshold: 1
-  timeoutSeconds: 10
+  timeoutSeconds: 4
   failureThreshold: 12
 # Nuxeo pods will stop receiving traffic if probe fails during 15s
 readinessProbe:
@@ -54,14 +54,14 @@ readinessProbe:
   # initialDelaySeconds:
   periodSeconds: 5
   successThreshold: 1
-  timeoutSeconds: 10
+  timeoutSeconds: 4
   failureThreshold: 3
 # Nuxeo pods will be started if probe succeeds once 30s after container startup
 startupProbe:
   initialDelaySeconds: 30
   periodSeconds: 5
   successThreshold: 1
-  timeoutSeconds: 10
+  timeoutSeconds: 4
   failureThreshold: 20
 ## List of Nuxeo packages to install at startup, separated by a space.
 ## For instance:
