@@ -20,7 +20,7 @@ Roll deployment: {{ $deploymentRoll }}.
 Nuxeo can be accessed via port {{ .Values.service.externalPort }} on the following DNS name from within your cluster:
 
   {{ $fullname }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}
-{{- if .Values.ingress.enabled }}
+{{- if and .Values.ingress.enabled .Values.ingress.hostname }}
 
 Nuxeo can be accessed on the following DNS name:
 
