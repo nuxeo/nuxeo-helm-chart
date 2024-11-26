@@ -29,4 +29,4 @@ Nuxeo can be accessed on the following DNS name:
 
 To print the application logs:
 
-  kubectl logs -n {{ $releaseNamespace }} -f -l app.kubernetes.io/instance={{ $fullname }} --prefix
+  kubectl logs -n {{ $releaseNamespace }} -f -l app.kubernetes.io/instance={{ .Release.Name }} --prefix --tail -1
