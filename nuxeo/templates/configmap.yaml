@@ -18,7 +18,7 @@ data:
     nuxeo.pod.uid=${env:POD_UID}
     nuxeo.healthcheck.refresh.interval.seconds={{ min .Values.livenessProbe.periodSeconds .Values.readinessProbe.periodSeconds .Values.startupProbe.periodSeconds }}
     {{- if and .Values.ingress.enabled .Values.ingress.hostname }}
-      {{- if .Values.ingress.tls }}
+      {{- if or (include "nuxeo.ingress.tls.list" .) (include "nuxeo.ingress.tls.single" .) }}
     nuxeo.virtual.host=https://{{ .Values.ingress.hostname }}/
       {{- else }}
     nuxeo.virtual.host=http://{{ .Values.ingress.hostname }}/

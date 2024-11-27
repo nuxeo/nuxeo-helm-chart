@@ -38,7 +38,14 @@ spec:
     {{- with .Values.ingress.hostname }}
     host: {{ toYaml . }}
     {{- end }}
-  {{- with .Values.ingress.tls }}
-  tls: {{- toYaml . | nindent 4 }}
+  {{- if (include "nuxeo.ingress.tls.list" .) }}
+  tls: {{- toYaml .Values.ingress.tls | nindent 2 }}
+  {{- else if (include "nuxeo.ingress.tls.single" .) }}
+  tls:
+  - secretName: {{ .Values.ingress.tls.secretName }}
+    {{- with .Values.ingress.hostname }}
+    hosts:
+    - {{ toYaml . }}
+    {{- end }}
   {{- end }}
 {{- end }}

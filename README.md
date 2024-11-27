@@ -355,7 +355,8 @@ The following tables lists the configurable parameters of this chart and their d
 | `ingress.labels` | Nuxeo Ingress labels | `{}` |
 | `ingress.hostname` | Nuxeo Ingress host | `""` |
 | `ingress.path` | Nuxeo Ingress path | `""` |
-| `ingress.tls` | Nuxeo Ingress TLS configuration | `[]` |
+| `ingress.tls` | Nuxeo Ingress TLS configuration, accepts a list or a map with `secretName` as a single key | `nil` |
+| `ingress.tls.secretName` | Nuxeo Ingress single TLS configuration secret name | `""` |
 | `logs.persistence.enabled` | Enable persistent volume storage for Nuxeo logs | `false` |
 | `logs.persistence.storageClass` | Nuxeo logs persistent volume storage class | `""` |
 | `logs.persistence.accessModes` | Nuxeo logs persistent volume access modes | `["ReadWriteOnce"]` |
