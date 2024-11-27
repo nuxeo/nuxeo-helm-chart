@@ -358,3 +358,21 @@ Return true if pod disruption budget is enabled.
   {{- true -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Return true if Ingress TLS configuration is a list.
+*/}}
+{{- define "nuxeo.ingress.tls.list" -}}
+{{- if kindIs "slice" .Values.ingress.tls -}}
+  {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if Ingress TLS configuration is single, defined by its secret name.
+*/}}
+{{- define "nuxeo.ingress.tls.single" -}}
+{{- if and (kindIs "map" .Values.ingress.tls) (.Values.ingress.tls.secretName) -}}
+  {{- true -}}
+{{- end -}}
+{{- end -}}

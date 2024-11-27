@@ -211,7 +211,17 @@ ingress:
   labels: {}
   hostname: ""
   path: ""
-  tls: []
+  ## TLS configuration, accepts either:
+  ## - a list
+  ## - a map with `secretName` as a single key, which translates in the `ingress.spec.tls` field to:
+  ## ```
+  ## tls:
+  ## - secretName: `ingress.tls.secretName` value
+  ##   hosts:
+  ##   - `ingress.hostname` value
+  ## ```
+  tls:
+    # secretName: ""
 logs:
   persistence:
     enabled: false
