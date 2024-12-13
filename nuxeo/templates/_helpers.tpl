@@ -139,6 +139,19 @@ Return true if a database is enabled.
 {{- end -}}
 
 {{/*
+Return the database template.
+*/}}
+{{- define "nuxeo.database.template" -}}
+{{- if .Values.mongodb.enabled -}}
+mongodb
+{{- else if .Values.postgresql.enabled -}}
+postgresql
+{{- else -}}
+default
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return true if a Kafka or Redis is enabled.
 */}}
 {{- define "nuxeo.kafkaRedis.enabled" -}}

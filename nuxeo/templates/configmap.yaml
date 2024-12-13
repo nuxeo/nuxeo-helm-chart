@@ -157,3 +157,30 @@ data:
 {{ $val | indent 4 }}
 {{- end }}
 {{- end }}
+{{- if include "nuxeo.database.enabled" . }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "nuxeo.fullname" . }}-init-script
+  labels: {{- include "nuxeo.labels" . | nindent 4 }}
+    role: init-script
+data:
+  init-nuxeo-db-template.sh: |
+    #!/bin/bash
+
+    # we don't want to have the default template declared in nuxeo.conf as it just defines H2 configuration
+    # test if nuxeo.templates is defined
+    if [ ! $(grep "^nuxeo.templates=" $NUXEO_CONF) ]; then
+      # it does not exist just define it to the configured database
+      echo -e "nuxeo.templates={{ include "nuxeo.database.template" . }}" >> $NUXEO_CONF
+    # test if nuxeo.templates is just default
+    elif [ $(grep "^nuxeo.templates=default$" $NUXEO_CONF) ]; then
+      # define it to the configured database, we cannot remove it otherwise nuxeoctl will redeclare default
+      sed -i -r "s/^nuxeo.templates=default$/nuxeo.templates={{ include "nuxeo.database.template" . }}" $NUXEO_CONF
+    # remove default template from nuxeo.templates
+    else
+      sed -i -r "/^nuxeo.templates=/{s/default,//; s/,default//}" $NUXEO_CONF
+    fi
+
+{{- end }}

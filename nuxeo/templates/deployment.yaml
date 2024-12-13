@@ -198,6 +198,11 @@ spec:
             subPath: nuxeo-{{ $key }}.conf
           {{- end }}
           {{- end }}
+          {{- if include "nuxeo.database.enabled" . }}
+          - name: nuxeo-init-script
+            mountPath: /docker-entrypoint-initnuxeo.d/init-nuxeo-db-template.sh
+            subPath: init-nuxeo-db-template.sh
+          {{- end }}
           - name: log
             mountPath: /var/log/nuxeo
           {{- if not (include "nuxeo.binary.cloudProvider.enabled" .) }}
@@ -252,6 +257,12 @@ spec:
         configMap:
           name: {{ template "nuxeo.fullname" . }}-conf-{{ $key }}
       {{- end }}
+      {{- end }}
+      {{- if include "nuxeo.database.enabled" . }}
+      - name: nuxeo-init-script
+        configMap:
+          name: {{ template "nuxeo.fullname" . }}-init-script
+          defaultMode: 0744
       {{- end }}
       - name: log
         {{- if .Values.logs.persistence.enabled }}
