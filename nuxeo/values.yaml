@@ -289,6 +289,7 @@ extraVolumes: []
 ## The secret content is itself a map of two key value pairs:
 ## - the secret type
 ## - the secret data, a map of key value pairs using arbitrary string values (`stringData` field).
+## We also support a simpler format for an Opaque secret, where the secret content is directly the `stringData` field.
 ## For instance:
 ## ```
 ## extraStringSecrets:
@@ -298,10 +299,9 @@ extraVolumes: []
 ##       key1: value1
 ##       key2: value2
 ##   stringsecret2:
-##     data:
-##       key3: |-
-##         multiline
-##         value
+##     key3: |-
+##       multiline
+##       value
 ## ```
 # extraStringSecrets: {}
 ## Same as `extraStringSecrets` except that the secret data uses base64-encoded strings (`data` field).
