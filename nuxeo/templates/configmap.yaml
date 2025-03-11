@@ -45,20 +45,20 @@ data:
 {{- else }}
     nuxeo.mongodb.server={{ .Values.mongodb.protocol }}://{{ $credentials }}{{ .Values.mongodb.host }}:{{ .Values.mongodb.port }}
 {{- end }}
-    nuxeo.mongodb.dbname={{ template "nuxeo.fullname" . }}
+    nuxeo.mongodb.dbname={{ .Values.mongodb.dbName | default (include "nuxeo.fullname" .) }}
 {{- end }}
 {{- if .Values.postgresql.enabled }}
     nuxeo.append.templates.postgresql=postgresql
     nuxeo.db.host={{ .Values.postgresql.host }}
     nuxeo.db.port={{ .Values.postgresql.port }}
-    nuxeo.db.name={{ template "nuxeo.fullname" . }}
+    nuxeo.db.name={{ .Values.postgresql.dbName | default (include "nuxeo.fullname" .) }}
     nuxeo.db.user=${env:NUXEO_POSTGRESQL_USERNAME}
     nuxeo.db.password=${env:NUXEO_POSTGRESQL_PASSWORD}
 {{- end }}
 {{- if .Values.elasticsearch.enabled }}
     elasticsearch.addressList={{ .Values.elasticsearch.protocol }}://{{ .Values.elasticsearch.host }}:{{ .Values.elasticsearch.port }}
     elasticsearch.clusterName={{ .Values.elasticsearch.clusterName }}
-    elasticsearch.indexName={{ template "nuxeo.fullname" . }}
+    elasticsearch.indexName={{ .Values.elasticsearch.indexName | default (include "nuxeo.fullname" .) }}
     elasticsearch.indexNumberOfReplicas={{ .Values.elasticsearch.indexNumberOfReplicas }}
     elasticsearch.restClient.socketTimeoutMs={{ .Values.elasticsearch.restClient.socketTimeoutMs }}
     elasticsearch.restClient.connectionTimeoutMs={{ .Values.elasticsearch.restClient.connectionTimeoutMs }}

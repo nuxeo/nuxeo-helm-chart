@@ -74,6 +74,7 @@ packages: ""
 clid: ""
 mongodb:
   enabled: false
+  dbName: ""
   protocol: mongodb
   # deprecated since 3.1.0, use auth object instead
   # credentials:
@@ -94,6 +95,7 @@ mongodb:
     imagePullPolicy: IfNotPresent
 postgresql:
   enabled: false
+  dbName: ""
   host: ""
   port: 5432
   # deprecated since 3.1.0, use auth object instead
@@ -112,6 +114,7 @@ postgresql:
     imagePullPolicy: IfNotPresent
 elasticsearch:
   enabled: false
+  indexName: ""
   protocol: http
   host: ""
   port: 9200

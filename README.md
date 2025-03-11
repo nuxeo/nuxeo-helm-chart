@@ -280,6 +280,7 @@ The following tables lists the configurable parameters of this chart and their d
 | `packages` | Nuxeo packages to install at startup, separated by a space | `""` |
 | `clid` | Nuxeo CLID, required for package installation | `""` |
 | `mongodb.enabled` | Enable MongoDB backend for Nuxeo | `false` |
+| `mongodb.dbName` | MongoDB database name | `""` |
 | `mongodb.protocol` | Protocol for MongoDB connection | `mongodb` |
 | `mongodb.host` | Host for MongoDB connection | `""` |
 | `mongodb.port` | Post for MongoDB connection | `27017` |
@@ -292,6 +293,7 @@ The following tables lists the configurable parameters of this chart and their d
 | `mongodb.initContainer.tag` | Image tag for MongoDB connection init container | `latest` |
 | `mongodb.initContainer.imagePullPolicy` | Image pull policy for MongoDB connection init container | `IfNotPresent` |
 | `postgresql.enabled` | Enable PostgreSQL backend for Nuxeo | `false` |
+| `postgresql.dbName` | PostgreSQL database name | `""` |
 | `postgresql.host` | Host for PostgreSQL connection | `""` |
 | `postgresql.port` | Post for PostgreSQL connection | `5432` |
 | `postgresql.auth.username` | PostgreSQL authentication username | `""` |
@@ -301,6 +303,7 @@ The following tables lists the configurable parameters of this chart and their d
 | `postgresql.initContainer.tag` | Image tag for PostgreSQL connection init container | `latest` |
 | `postgresql.initContainer.imagePullPolicy` | Image pull policy for PostgreSQL connection init container | `IfNotPresent` |
 | `elasticsearch.enabled` | Enable Elasticsearch for Nuxeo | `false` |
+| `elasticsearch.indexName` | Elasticsearch index name for the default document repository | `""` |
 | `elasticsearch.protocol` | Protocol for Elasticsearch connection | `http` |
 | `elasticsearch.host` | Host for Elasticsearch connection | `""` |
 | `elasticsearch.port` | Post for Elasticsearch connection | `9200` |
