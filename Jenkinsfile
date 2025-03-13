@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020 Nuxeo (http://nuxeo.com/) and others.
+ * (C) Copyright 2020-2025 Nuxeo (http://nuxeo.com/) and others.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-library identifier: "platform-ci-shared-library@v0.0.41"
+library identifier: "platform-ci-shared-library@v0.0.45"
 
 String getChartVersion(chart) {
   container('base') {
@@ -65,7 +65,9 @@ pipeline {
     CHART_REPO_INTERNAL_CREDENTIALS = 'chartmuseum'
     CHART_REPO_PUBLIC = 'https://packages.nuxeo.com/repository/helm-releases-public/'
     CHART_REPO_PUBLIC_CREDENTIALS = 'packages.nuxeo.com-auth'
-    JIRA_NUXEO_CHART_MOVING_VERSION = 'helm-chart-next'
+    JIRA_PROJECT = 'NXP'
+    JIRA_MOVING_VERSION = 'helm-chart-next'
+    JIRA_RELEASED_VERSION = "helm-chart-${VERSION}"
   }
   stages {
     stage('Helm package') {
@@ -116,7 +118,7 @@ pipeline {
         }
       }
     }
-    stage('GitHub release') {
+    stage('Release Project') {
       when {
         expression { !nxUtils.isPullRequest() }
       }
@@ -124,35 +126,18 @@ pipeline {
         container('base') {
           nxWithGitHubStatus(context: 'release', message: 'Release') {
             script {
-              nxGit.commitTagPush()
-            }
-          }
-        }
-      }
-    }
-    stage('Release Jira version') {
-      when {
-        expression { !nxUtils.isPullRequest() }
-      }
-      steps {
-        container('base') {
-          script {
-            def jiraVersionName = "helm-chart-${VERSION}"
-            // create a new released version in Jira
-            def jiraVersion = [
-                project: 'NXP',
-                name: jiraVersionName,
-                releaseDate: LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE),
-                released: true,
-            ]
-            nxJira.newVersion(version: jiraVersion)
-            // find Jira tickets included in this release and update them
-            def jiraTickets = nxJira.jqlSearch(jql: "project = NXP and fixVersion = '${JIRA_NUXEO_CHART_MOVING_VERSION}'")
-            def previousVersion = sh(returnStdout: true, script: "perl -pe 's/\\b(\\d+)(?=\\D*\$)/\$1-1/e' <<< ${VERSION}").trim()
-            def changelog = nxGit.getChangeLog(previousVersion: previousVersion, version: env.VERSION)
-            def committedIssues = jiraTickets.data.issues.findAll { changelog.contains(it.key) }
-            committedIssues.each {
-              nxJira.editIssueFixVersion(idOrKey: it.key, fixVersionToRemove: env.JIRA_NUXEO_CHART_MOVING_VERSION, fixVersionToAdd: jiraVersionName)
+              def jiraIssueFetchers = [
+                  type                 : 'jira',
+                  jql                  : "project = ${JIRA_PROJECT} and fixVersion = ${JIRA_MOVING_VERSION}",
+                  newJiraVersion       : [
+                      project    : env.JIRA_PROJECT,
+                      name       : env.JIRA_RELEASED_VERSION,
+                      releaseDate: LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE),
+                      released   : true,
+                  ],
+                  jiraMovingVersionName: env.JIRA_MOVING_VERSION,
+              ]
+              nxProject.release(issuesFetchers: [jiraIssueFetchers])
             }
           }
         }
