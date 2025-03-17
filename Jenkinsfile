@@ -16,7 +16,7 @@
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-library identifier: "platform-ci-shared-library@v0.0.45"
+library identifier: "platform-ci-shared-library@v0.0.49"
 
 String getChartVersion(chart) {
   container('base') {
