@@ -177,7 +177,7 @@ data:
     # test if nuxeo.templates is just default
     elif [ $(grep "^nuxeo.templates=default$" $NUXEO_CONF) ]; then
       # define it to the configured database, we cannot remove it otherwise nuxeoctl will redeclare default
-      sed -i -r "s/^nuxeo.templates=default$/nuxeo.templates={{ include "nuxeo.database.template" . }}" $NUXEO_CONF
+      sed -i -r "s/^nuxeo.templates=default$/nuxeo.templates={{ include "nuxeo.database.template" . }}/" $NUXEO_CONF
     # remove default template from nuxeo.templates
     else
       sed -i -r "/^nuxeo.templates=/{s/default,//; s/,default//}" $NUXEO_CONF
