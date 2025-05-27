@@ -16,7 +16,7 @@
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-library identifier: "platform-ci-shared-library@v0.0.53"
+library identifier: "platform-ci-shared-library@v0.0.66"
 
 String getChartVersion(chart) {
   container('base') {
@@ -147,7 +147,13 @@ pipeline {
   post {
     always {
       script {
-        nxJira.updateIssues()
+        if (nxUtils.isPullRequest()) {
+          nxUtils.setBuildDescription()
+        } else {
+          nxUtils.setReleaseDescription()
+          nxJira.updateIssues()
+          nxUtils.notifyReleaseStatusIfNecessary()
+        }
       }
     }
   }
