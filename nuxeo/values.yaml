@@ -258,6 +258,19 @@ customProperties: {}
 #     key1=value1
 #     key2=value2
 
+## Custom contributions to be moved to nxserver/config.
+## This is a map to allow mounting XML contributions within the Nuxeo container.
+## They keys MUST represent a valid Nuxeo contribution file, for instance it should end with -config.xml.
+customContributions: {}
+#  path-segment-config.xml: |
+#    <?xml version="1.0"?>
+#    <component name="override-path-segment-maxsize">
+#      <require>org.nuxeo.ecm.core.api.properties</require>
+#      <extension target="org.nuxeo.runtime.ConfigurationService" point="configuration">
+#        <property name="nuxeo.path.segment.maxsize">96</property>
+#      </extension>
+#    </component>
+
 ## Custom environment variables to set in the container
 ## customEnvs allows to define environment variables from a value or a key of a ConfigMap
 customEnvs: []
