@@ -157,7 +157,21 @@ data:
 {{ $val | indent 4 }}
 {{- end }}
 {{- end }}
-{{- if include "nuxeo.database.enabled" . }}
+{{- if .Values.customContributions }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "nuxeo.fullname" . }}-contributions
+  labels: {{- include "nuxeo.labels" . | nindent 4 }}
+    role: config
+data:
+{{- range $key, $val := .Values.customContributions }}
+  {{ $key }}: |
+{{ $val | indent 4 }}
+{{- end }}
+{{- end }}
+{{- if include "nuxeo.initScripts.needed" . }}
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -166,6 +180,7 @@ metadata:
   labels: {{- include "nuxeo.labels" . | nindent 4 }}
     role: init-script
 data:
+  {{- if include "nuxeo.database.enabled" . }}
   init-nuxeo-db-template.sh: |
     #!/bin/bash
 
@@ -182,5 +197,17 @@ data:
     else
       sed -i -r "/^nuxeo.templates=/{s/default,//; s/,default//}" $NUXEO_CONF
     fi
+  {{ end }}
+  {{- with .Values.customContributions }}
+  init-nuxeo-customContributions.sh: |
+    #!/bin/bash
 
+    CUSTOM_CONTRIBUTIONS_MOUNT=/etc/nuxeo/contrib.d
+    NXSERVER_CONFIG=${NUXEO_HOME}/nxserver/config
+    mkdir -p ${NXSERVER_CONFIG}
+    {{ range $key, $val := . }}
+    echo "Put {{ $key }} to ${NXSERVER_CONFIG}"
+    cp ${CUSTOM_CONTRIBUTIONS_MOUNT}/{{ $key }} ${NXSERVER_CONFIG}/{{ $key }}
+    {{ end }}
+  {{ end }}
 {{- end }}

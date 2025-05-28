@@ -94,6 +94,17 @@ Return true if the deployment needs to be rolled.
 {{- end -}}
 
 {{/*
+Return true if the deployment needs init scripts.
+*/}}
+{{- define "nuxeo.initScripts.needed" -}}
+{{- if or (include "nuxeo.database.enabled" .) .Values.customContributions -}}
+  {{- true -}}
+{{- else -}}
+  {{- false -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the Nuxeo architecure, "singleNode" by default.
 */}}
 {{- define "nuxeo.architecture" -}}
