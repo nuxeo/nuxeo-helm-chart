@@ -198,6 +198,13 @@ spec:
             subPath: nuxeo-{{ $key }}.conf
           {{- end }}
           {{- end }}
+          {{- if .Values.customContributions }}
+          - name: nuxeo-contributions
+            mountPath: /etc/nuxeo/contrib.d
+          - name: nuxeo-init-script
+            mountPath: /docker-entrypoint-initnuxeo.d/init-nuxeo-customContributions.sh
+            subPath: init-nuxeo-customContributions.sh
+          {{- end }}
           {{- if include "nuxeo.database.enabled" . }}
           - name: nuxeo-init-script
             mountPath: /docker-entrypoint-initnuxeo.d/init-nuxeo-db-template.sh
@@ -258,7 +265,12 @@ spec:
           name: {{ template "nuxeo.fullname" . }}-conf-{{ $key }}
       {{- end }}
       {{- end }}
-      {{- if include "nuxeo.database.enabled" . }}
+      {{- if .Values.customContributions }}
+      - name: nuxeo-contributions
+        configMap:
+          name: {{ template "nuxeo.fullname" . }}-contributions
+      {{- end }}
+      {{- if include "nuxeo.initScripts.needed" . }}
       - name: nuxeo-init-script
         configMap:
           name: {{ template "nuxeo.fullname" . }}-init-script
