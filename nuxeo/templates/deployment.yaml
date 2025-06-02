@@ -178,7 +178,7 @@ spec:
 {{- end }}
 {{- with .Values.packages }}
         - name: NUXEO_PACKAGES
-          value: {{ toYaml . }}
+          value: {{ . }}
 {{- end }}
 {{- with .Values.customEnvs }}
 {{ toYaml . | indent 8 }}
