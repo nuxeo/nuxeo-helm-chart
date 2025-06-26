@@ -93,6 +93,7 @@ mongodb:
     repository: busybox
     tag: latest
     imagePullPolicy: IfNotPresent
+    securityContext: {}
 postgresql:
   enabled: false
   dbName: ""
@@ -112,6 +113,7 @@ postgresql:
     repository: busybox
     tag: latest
     imagePullPolicy: IfNotPresent
+    securityContext: {}
 elasticsearch:
   enabled: false
   indexName: ""
@@ -143,6 +145,7 @@ elasticsearch:
     repository: busybox
     tag: latest
     imagePullPolicy: IfNotPresent
+    securityContext: {}
 kafka:
   enabled: false
   host: ""
@@ -159,6 +162,7 @@ kafka:
     repository: busybox
     tag: latest
     imagePullPolicy: IfNotPresent
+    securityContext: {}
 redis:
   enabled: false
 ## Extra init containers.

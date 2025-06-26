@@ -292,6 +292,7 @@ The following tables lists the configurable parameters of this chart and their d
 | `mongodb.initContainer.repository` | Image name for MongoDB connection init container                                                                                              | `busybox` |
 | `mongodb.initContainer.tag` | Image tag for MongoDB connection init container                                                                                               | `latest` |
 | `mongodb.initContainer.imagePullPolicy` | Image pull policy for MongoDB connection init container                                                                                       | `IfNotPresent` |
+| `mongodb.initContainer.securityContext` | Security context for MongoDB init container                                                                                       | `{}` |
 | `postgresql.enabled` | Enable PostgreSQL backend for Nuxeo                                                                                                           | `false` |
 | `postgresql.dbName` | PostgreSQL database name                                                                                                                      | `""` |
 | `postgresql.host` | Host for PostgreSQL connection                                                                                                                | `""` |
@@ -302,6 +303,7 @@ The following tables lists the configurable parameters of this chart and their d
 | `postgresql.initContainer.repository` | Image name for PostgreSQL connection init container                                                                                           | `busybox` |
 | `postgresql.initContainer.tag` | Image tag for PostgreSQL connection init container                                                                                            | `latest` |
 | `postgresql.initContainer.imagePullPolicy` | Image pull policy for PostgreSQL connection init container                                                                                    | `IfNotPresent` |
+| `postgresql.initContainer.securityContext` | Security context for PostgreSQL init container                                                                                       | `{}` |
 | `elasticsearch.enabled` | Enable Elasticsearch for Nuxeo                                                                                                                | `false` |
 | `elasticsearch.indexName` | Elasticsearch index name for the default document repository                                                                                  | `""` |
 | `elasticsearch.protocol` | Protocol for Elasticsearch connection                                                                                                         | `http` |
@@ -319,6 +321,7 @@ The following tables lists the configurable parameters of this chart and their d
 | `elasticsearch.initContainer.repository` | Image name for Elasticsearch connection init container                                                                                        | `busybox` |
 | `elasticsearch.initContainer.tag` | Image tag for Elasticsearch connection init container                                                                                         | `latest` |
 | `elasticsearch.initContainer.imagePullPolicy` | Image pull policy for Elasticsearch connection init container                                                                                 | `IfNotPresent` |
+| `elasticsearch.initContainer.securityContext` | Security context for Elasticsearch init container                                                                                       | `{}` |
 | `kafka.enabled` | Enable Kafka for Nuxeo                                                                                                                        | `false` |
 | `kafka.host` | Host for Kafka connection                                                                                                                     | `""` |
 | `kafka.port` | Post for Kafka connection                                                                                                                     | `9092` |
@@ -329,6 +332,7 @@ The following tables lists the configurable parameters of this chart and their d
 | `kafka.initContainer.repository` | Image name for Kafka connection init container                                                                                                | `busybox` |
 | `kafka.initContainer.tag` | Image tag for Kafka connection init container                                                                                                 | `latest` |
 | `kafka.initContainer.imagePullPolicy` | Image pull policy for Kafka connection init container                                                                                         | `IfNotPresent` |
+| `kafka.initContainer.securityContext` | Security context for Kafka init container                                                                                       | `{}` |
 | `redis.enabled` | Enable redis for Nuxeo                                                                                                                        | `false` |
 | `initContainers` | Extra init containers for Nuxeo deployment                                                                                                    | `[]` |
 | `googleCloudStorage.enabled` | Enable Google Cloud Storage for Nuxeo                                                                                                         | `false` |
