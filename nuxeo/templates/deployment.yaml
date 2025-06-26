@@ -228,24 +228,36 @@ spec:
         image: "{{ .Values.mongodb.initContainer.repository }}:{{ .Values.mongodb.initContainer.tag }}"
         imagePullPolicy: {{ .Values.mongodb.initContainer.imagePullPolicy }}
         command: ['sh', '-c', 'until nc -w1 {{ .Values.mongodb.host }} {{ .Values.mongodb.port }}; do echo "waiting for mongodb"; sleep 2; done;']
+        {{- with .Values.mongodb.initContainer.securityContext }}
+        securityContext: {{- toYaml . | nindent 10 }}
+        {{- end }}
 {{- end }}
 {{- if .Values.postgresql.enabled }}
       - name: init-postgresql
         image: "{{ .Values.postgresql.initContainer.repository }}:{{ .Values.postgresql.initContainer.tag }}"
         imagePullPolicy: {{ .Values.postgresql.initContainer.imagePullPolicy }}
         command: ['sh', '-c', 'until nc -w1 {{ .Values.postgresql.host }} {{ .Values.postgresql.port }}; do echo "waiting for postgresql"; sleep 2; done;']
+        {{- with .Values.postgresql.initContainer.securityContext }}
+        securityContext: {{- toYaml . | nindent 10 }}
+        {{- end }}
 {{- end }}
 {{- if .Values.elasticsearch.enabled }}
       - name: init-elasticsearch
         image: "{{ .Values.elasticsearch.initContainer.repository }}:{{ .Values.elasticsearch.initContainer.tag }}"
         imagePullPolicy: {{ .Values.elasticsearch.initContainer.imagePullPolicy }}
         command: ['sh', '-c', 'until nc -w1 {{ .Values.elasticsearch.host }} {{ .Values.elasticsearch.port }}; do echo "waiting for elastic"; sleep 2; done;']
+        {{- with .Values.elasticsearch.initContainer.securityContext }}
+        securityContext: {{- toYaml . | nindent 10 }}
+        {{- end }}
 {{- end }}
 {{- if .Values.kafka.enabled }}
       - name: init-kafka
         image: "{{ .Values.kafka.initContainer.repository }}:{{ .Values.kafka.initContainer.tag }}"
         imagePullPolicy: {{ .Values.kafka.initContainer.imagePullPolicy }}
         command: ['sh', '-c', 'until nc -w1 {{ .Values.kafka.host }} {{ .Values.kafka.port }}; do echo "waiting for kafka"; sleep 2; done;']
+        {{- with .Values.kafka.initContainer.securityContext }}
+        securityContext: {{- toYaml . | nindent 10 }}
+        {{- end }}
 {{- end }}
       {{- with .Values.initContainers }}
       {{- toYaml . | nindent 6 }}
