@@ -48,7 +48,8 @@ nuxeo clustering configuration:
 Validate binary storage configuration: only one type of storage can be enabled.
 */}}
 {{- define "nuxeo.validateValues.binaryStorage" -}}
-{{- if or (or (and .Values.googleCloudStorage.enabled .Values.amazonS3.enabled) (and .Values.googleCloudStorage.enabled .Values.persistentVolumeStorage.enabled)) (and .Values.amazonS3.enabled .Values.persistentVolumeStorage.enabled) -}}
+
+{{- if or (or (and .Values.googleCloudStorage.enabled .Values.amazonS3.enabled) (and .Values.googleCloudStorage.enabled .Values.persistentVolumeStorage.enabled)) (or (and .Values.amazonS3.enabled .Values.persistentVolumeStorage.enabled) (and .Values.azureBlob.enabled (or .Values.googleCloudStorage.enabled .Values.amazonS3.enabled .Values.persistentVolumeStorage.enabled))) -}}
 {{-   printf "\n" -}}
 nuxeo binary storage configuration:
 
@@ -56,6 +57,7 @@ nuxeo binary storage configuration:
     - Google Cloud Storage
     - Amazon S3
     - PersistentVolume
+    - Azure Blob
 
   Please set googleCloudStorage.enabled=true or amazonS3.enabled=true or persistentVolumeStorage.enabled=true.
 {{- end -}}

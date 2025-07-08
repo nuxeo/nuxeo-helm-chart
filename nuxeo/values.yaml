@@ -167,6 +167,14 @@ redis:
   enabled: false
 ## Extra init containers.
 initContainers: []
+azureBlob:
+  enabled: false
+  accountName: ""
+  container: ""
+  bucketPrefix: ""
+  auth:
+    accountKey: ""
+    existingSecret: ""  # Set this to a Kubernetes secret name to avoid hardcoding the key
 googleCloudStorage:
   enabled: false
   # deprecated since 3.1.0, use auth object instead
