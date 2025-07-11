@@ -132,4 +132,12 @@ WARNING
           accessKeyId: "ACCESS_KEY_ID"
           secretKey: "SECRET_KEY"
 {{- end -}}
+{{- if or .Values.azureBlob.accountName .Values.azureBlob.accountKey }}
+  azureBlob.accountName/azureBlob.accountKey have been deprecated
+  and will be removed in a future version, use azureBlob.auth object instead:
+      azureBlob:
+        auth:
+          accountName: "ACCOUNT_NAME"
+          accountKey: "ACCOUNT_KEY"
+{{- end -}}
 {{- end -}}

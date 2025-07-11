@@ -115,7 +115,7 @@ Return the Nuxeo architecure, "singleNode" by default.
 Return true if a cloud provider is enabled for binary storage.
 */}}
 {{- define "nuxeo.binary.cloudProvider.enabled" -}}
-{{- if or .Values.googleCloudStorage.enabled .Values.amazonS3.enabled -}}
+{{- if or .Values.googleCloudStorage.enabled .Values.amazonS3.enabled .Values.azureBlob.enabled -}}
     {{- true -}}
 {{- end -}}
 {{- end -}}
