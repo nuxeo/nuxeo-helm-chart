@@ -72,6 +72,12 @@ packages: ""
 ## Nuxeo CLID, required for package installation.
 ## Can be multiline, using |-.
 clid: ""
+keyVault:
+  csi:
+    enabled: true
+    providerClass: nuxeo-secrets-csi
+    volumeName: secrets-store-inline
+    mountPath: /mnt/secrets-store
 mongodb:
   enabled: false
   dbName: ""
@@ -89,6 +95,11 @@ mongodb:
     # existing secret with MongoDB credentials (keys: mongodb-username, mongodb-password)
     # NOTE: When it's set the previous parameters are ignored.
     existingSecret: ""
+    useKeyVaultCSI: false  # enable this to use CSI-based secret fetch
+    csiSecretName: "nuxeo-secrets-csi"  # must match SecretProviderClass name
+    csiSecretKeys:
+      username: "mongodb-username"
+      password: "mongodb-password"
   initContainer:
     repository: busybox
     tag: latest
@@ -138,6 +149,11 @@ elasticsearch:
     # existing secret with Elasticsearch credentials (keys: elasticsearch-username, elasticsearch-password)
     # NOTE: When it's set the previous parameters are ignored.
     existingSecret: ""
+    useKeyVaultCSI: false  # <- NEW: enable this to use CSI-based secret fetch
+    csiSecretName: "nuxeo-secrets-csi"  # <- NEW: must match SecretProviderClass name
+    csiSecretKeys:
+      username: "es-username"
+      password: "es-password"
   httpReadOnly:
     ## Allows to enable the Elasticsearch Pass-through, see https://doc.nuxeo.com/nxdoc/elasticsearch-passthrough/.
     enabled: false
@@ -151,18 +167,24 @@ kafka:
   host: ""
   port: 9092
   auth:
-    # enable SASL authentication to kafka
+    # enable SASL authentication to Kafka
     enabled: false
     username: ""
     password: ""
-    # existing secret with Kafka credentials (keys: kafka-username, kafka-password)
-    # NOTE: When it's set the previous parameters are ignored.
+    # Use existing Kubernetes secret (keys: kafka-username, kafka-password)
     existingSecret: ""
+    # Enable CSI Key Vault integration (mutually exclusive with `existingSecret`)
+    useKeyVaultCSI: false  # <- NEW: enable this to use CSI-based secret fetch
+    csiSecretName: "nuxeo-secrets-csi"  # <- NEW: must match SecretProviderClass name
+    csiSecretKeys:
+      username: "kafka-username"
+      password: "kafka-password"
   initContainer:
     repository: busybox
     tag: latest
     imagePullPolicy: IfNotPresent
     securityContext: {}
+
 redis:
   enabled: false
 ## Extra init containers.
@@ -198,6 +220,20 @@ amazonS3:
   bucket: ""
   ## The bucket prefix needs to end with /
   bucketPrefix: ""
+azureBlob:
+  enabled: false
+  auth:
+    accountName: ""
+    accountKey: ""
+    existingSecret: ""  # used if not using CSI
+    useKeyVaultCSI: false  # enable to use Key Vault CSI driver
+    csiSecretName: ""  # name of the SecretProviderClass
+    csiSecretKeys:
+      accountName: ""
+      accountKey: ""
+  container: ""
+  bucketPrefix: ""
+
 serviceAccount:
   create: true
   annotations: {}

@@ -91,17 +91,6 @@ data:
     nuxeo.work.queuing=redis
     nuxeo.redis.enabled=true
 {{- end }}
-{{- if .Values.azureBlob.enabled }}
-    nuxeo.core.binarymanager=org.nuxeo.ecm.blob.azure.AzureBinaryManager
-    nuxeo.azure.account.name={{ .Values.azureBlob.accountName }}
-    nuxeo.azure.account.key=${env:NUXEO_AZURE_BLOB_ACCOUNT_KEY}
-    nuxeo.azure.container={{ .Values.azureBlob.container }}
-    {{- if .Values.azureBlob.bucketPrefix }}
-    nuxeo.azure.bucket_prefix={{ .Values.azureBlob.bucketPrefix }}
-    {{- else }}
-    nuxeo.azure.bucket_prefix={{ template "nuxeo.fullname" . }}/
-    {{- end }}
-{{- end }}
 {{- if .Values.googleCloudStorage.enabled }}
     nuxeo.core.binarymanager=org.nuxeo.ecm.core.storage.gcp.GoogleStorageBinaryManager
     nuxeo.gcp.project=${env:NUXEO_GOOGLE_CLOUD_PROJECT_ID}
@@ -124,6 +113,13 @@ data:
     {{- else }}
     nuxeo.s3storage.bucket_prefix={{ template "nuxeo.fullname" . }}/
     {{- end }}
+{{- end }}
+{{- if .Values.azureBlob.enabled }}
+    nuxeo.core.binarymanager=org.nuxeo.ecm.blob.azure.AzureBlobProvider
+    nuxeo.azure.account.name=${env:NUXEO_AZURE_BLOB_ACCOUNT_NAME}
+    nuxeo.azure.account.key=${env:NUXEO_AZURE_BLOB_ACCOUNT_KEY}
+    nuxeo.azure.container={{ .Values.azureBlob.container }}
+    nuxeo.azure.bucket_prefix={{ coalesce .Values.azureBlob.bucketPrefix (include "nuxeo.fullname" .) }}
 {{- end }}
     metrics.enabled={{ .Values.metrics.enabled }}
 {{- if .Values.metrics.enabled }}

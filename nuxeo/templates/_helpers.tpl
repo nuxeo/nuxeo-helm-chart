@@ -1,3 +1,20 @@
+{{/*
+Return true if at least two boolean values in a list are true.
+*/}}
+{{- define "atLeastTwoTrue" -}}
+  {{- $trueCount := 0 -}}
+  {{- range . -}}
+    {{- if . -}}
+      {{- $trueCount = add1 $trueCount -}}
+    {{- end -}}
+  {{- end -}}
+  {{- if ge $trueCount 2 -}}
+    {{- true -}}
+  {{- else -}}
+    {{- false -}}
+  {{- end -}}
+{{- end -}}
+
 {{/* vim: set filetype=mustache: */}}
 {{/*
 Expand the name of the chart.
@@ -353,6 +370,50 @@ Returns the secret key of the AmazonS3 auth.
 {{- end -}}
 
 {{/*
+Returns the name of the Azure Blob Storage secret to get auth from.
+*/}}
+{{- define "nuxeo.secret.azureBlob.name" -}}
+{{- if .Values.azureBlobStorage.auth.existingSecret -}}
+{{- .Values.azureBlobStorage.auth.existingSecret -}}
+{{- else -}}
+{{- printf "%s-%s" (include "nuxeo.fullname" .) "azure-blob-storage" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Returns the Azure storage account name.
+*/}}
+{{- define "nuxeo.secret.azureBlob.auth.accountName" -}}
+{{- if .Values.azureBlobStorage.auth.accountName -}}
+{{- .Values.azureBlobStorage.auth.accountName -}}
+{{- else -}}
+{{- .Values.azureBlobStorage.accountName -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Returns the Azure storage account key.
+*/}}
+{{- define "nuxeo.secret.azureBlob.auth.accountKey" -}}
+{{- if .Values.azureBlobStorage.auth.accountKey -}}
+{{- .Values.azureBlobStorage.auth.accountKey -}}
+{{- else -}}
+{{- .Values.azureBlobStorage.accountKey -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Returns the Azure Blob container name.
+*/}}
+{{- define "nuxeo.secret.azureBlob.containerName" -}}
+{{- if .Values.azureBlobStorage.containerName -}}
+{{- .Values.azureBlobStorage.containerName -}}
+{{- else -}}
+{{- printf "nuxeo-container" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the list of node types depending on the architecture.
 */}}
 {{- define "nuxeo.nodeTypes" -}}
@@ -400,3 +461,26 @@ Return true if Ingress TLS configuration is single, defined by its secret name.
   {{- true -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Return extra CSI volumes if Key Vault CSI is enabled.
+*/}}
+{{- define "extraVolumes" -}}
+{{- if .Values.keyVault.csi.enabled }}
+- name: secrets-store-inline
+  csi: {{ .Values.keyVault.csi.volumeName | default "nuxeo-secrets-store-inline" }}
+    driver: secrets-store.csi.k8s.io
+    readOnly: true
+{{- end }}
+{{- end }}
+
+{{/*
+Return extra CSI volume mounts if Key Vault CSI is enabled.
+*/}}
+{{- define "extraVolumeMounts" -}}
+{{- if .Values.keyVault.csi.enabled }}
+- name: {{ .Values.keyVault.csi.volumeName | default "nuxeo-secrets-store-inline" }}
+  mountPath: {{ .Values.keyVault.csi.mountPath | default "/mnt/secrets-store" }}
+  readOnly: true
+{{- end }}
+{{- end }}

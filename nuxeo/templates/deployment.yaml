@@ -170,20 +170,23 @@ spec:
               key: amazon-s3-secret-key
         {{- end }}
         {{- if .Values.azureBlob.enabled }}
+        {{- if .Values.azureBlob.auth.existingSecret }}
         - name: NUXEO_AZURE_BLOB_ACCOUNT_NAME
           valueFrom:
             secretKeyRef:
-              name: {{ template "nuxeo.secret.azureBlob.name" . }}
+              name: {{ .Values.azureBlob.auth.existingSecret }}
               key: azure-blob-account-name
         - name: NUXEO_AZURE_BLOB_ACCOUNT_KEY
           valueFrom:
             secretKeyRef:
-              name: {{ template "nuxeo.secret.azureBlob.name" . }}
+              name: {{ .Values.azureBlob.auth.existingSecret }}
               key: azure-blob-account-key
         - name: NUXEO_AZURE_BLOB_CONTAINER
-          value: {{ .Values.azureBlob.container | quote }}
-        - name: NUXEO_AZURE_BLOB_ENDPOINT_SUFFIX
-          value: {{ .Values.azureBlob.endpointSuffix | quote }}
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.azureBlob.auth.existingSecret }}
+              key: azure-blob-container
+        {{- end }}      
         {{- end }}
 {{- if .Values.clid }}
         - name: NUXEO_CLID
@@ -231,11 +234,6 @@ spec:
           {{- if not (include "nuxeo.binary.cloudProvider.enabled" .) }}
           - name: binaries
             mountPath: /var/lib/nuxeo/binaries
-          {{- end }}
-          {{- if .Values.keyVault.csi.enabled }}
-          - name: secrets-store-inline
-            mountPath: /mnt/secrets-store
-            readOnly: true
           {{- end }}
           {{- with .Values.extraVolumeMounts }}
           {{- toYaml . | nindent 10 }}
@@ -324,14 +322,6 @@ spec:
         {{- else }}
         emptyDir: {}
         {{- end }}
-      {{- end }}
-      {{- if .Values.keyVault.csi.enabled }}
-      - name: secrets-store-inline
-        csi:
-          driver: secrets-store.csi.k8s.io
-          readOnly: true
-          volumeAttributes:
-            secretProviderClass: {{ .Values.keyVault.csi.providerClass }}
       {{- end }}
       {{- with .Values.extraVolumes }}
       {{- toYaml . | nindent  6 }}
