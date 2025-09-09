@@ -10,7 +10,6 @@ deployment:
     enabled: true
 # values injected in each chart
 nuxeo:
-  {{- tpl (readFile "../values/values-nuxeo-third-party.yaml.gotmpl") . | nindent 2 }}
   mongodb:
     auth:
       enabled: true
