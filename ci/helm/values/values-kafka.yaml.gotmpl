@@ -1,4 +1,5 @@
 image:
+  repository: bitnamilegacy/kafka
   tag: "3.6.0"
 kraft:
   enabled: false
@@ -44,6 +45,7 @@ serviceAccount:
 zookeeper:
   enabled: true
   image:
+    repository: bitnamilegacy/zookeeper
     tag: "3.6.2"
   replicaCount: 1
   persistence:
