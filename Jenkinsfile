@@ -126,13 +126,24 @@ pipeline {
         container('base') {
           nxWithGitHubStatus(context: 'release', message: 'Release') {
             script {
+              def issueFetchers = [
+                [
+                  type: 'github_dependabot',
+                ],
+                [
+                  type               : 'jira',
+                  jql                : "project = ${JIRA_PROJECT} and fixVersion = ${JIRA_MOVING_VERSION}",
+                  computeCommits: true,
+                ],
+              ]
               nxProject.release(
-                jql: "project = ${JIRA_PROJECT} and fixVersion = ${JIRA_MOVING_VERSION}",
+                issuesFetchers: issueFetchers,
                 newJiraVersion: [
-                    project    : env.JIRA_PROJECT,
-                    name       : env.JIRA_RELEASED_VERSION,
-                    releaseDate: LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE),
-                    released   : true,
+                  project    : env.JIRA_PROJECT,
+                  name       : env.JIRA_RELEASED_VERSION,
+                  description: "Nuxeo Helm chart ${VERSION}",
+                  releaseDate: LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE),
+                  released   : true,
                 ],
                 jiraMovingVersionName: env.JIRA_MOVING_VERSION,
               )
