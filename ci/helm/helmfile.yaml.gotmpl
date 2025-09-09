@@ -5,9 +5,11 @@ environments:
   cluster:
     values:
     - environments/cluster.yaml.gotmpl
+    - values/env-values-nuxeo-third-party.yaml.gotmpl
   third-party-auth:
     values:
     - environments/third-party-auth.yaml.gotmpl
+    - values/env-values-nuxeo-third-party.yaml.gotmpl
 ---
 repositories:
 - name: opensearch
