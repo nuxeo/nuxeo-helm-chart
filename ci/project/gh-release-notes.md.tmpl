@@ -1,0 +1,5 @@
+{{- $groupByType := groupBy "type" .Issues -}}
+{{- template "print-issue-block-with-commits" (dict "type" "New Features" "issues" (index $groupByType "New Feature")) }}
+{{- template "print-issue-block-with-commits" (dict "type" "Improvements" "issues" (index $groupByType "Improvement")) }}
+{{- template "print-issue-block-with-commits" (dict "type" "Bugs" "issues" (index $groupByType "Bug")) }}
+{{- template "print-issue-block-with-commits" (dict "type" "Tasks" "issues" (concat (index $groupByType "Task") (index $groupByType "Clean up"))) }}
