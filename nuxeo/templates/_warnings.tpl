@@ -132,4 +132,10 @@ WARNING
           accessKeyId: "ACCESS_KEY_ID"
           secretKey: "SECRET_KEY"
 {{- end -}}
+{{- if or .Values.azureBlob.auth.accountName .Values.azureBlob.auth.accountKey }}
+      azurBlob:
+        auth:
+          accountName: "ACCOUNT_NAME"
+          accountKey: "ACCOUNT_KEY"
+{{- end -}}
 {{- end -}}

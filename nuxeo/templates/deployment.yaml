@@ -169,6 +169,25 @@ spec:
               name: {{ template "nuxeo.secret.amazonS3.name" . }}
               key: amazon-s3-secret-key
         {{- end }}
+        {{- if .Values.azureBlob.enabled }}
+        {{- if .Values.azureBlob.auth.existingSecret }}
+        - name: NUXEO_AZURE_BLOB_ACCOUNT_NAME
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.azureBlob.auth.existingSecret }}
+              key: azure-blob-account-name
+        - name: NUXEO_AZURE_BLOB_ACCOUNT_KEY
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.azureBlob.auth.existingSecret }}
+              key: azure-blob-account-key
+        - name: NUXEO_AZURE_BLOB_CONTAINER
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.azureBlob.auth.existingSecret }}
+              key: azure-blob-container
+        {{- end }}      
+        {{- end }}
 {{- if .Values.clid }}
         - name: NUXEO_CLID
           valueFrom:
