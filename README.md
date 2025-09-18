@@ -248,7 +248,7 @@ The following tables lists the configurable parameters of this chart and their d
 | `replicaCount` | Number of Nuxeo pods                                                                                                                          | 1 |
 | `workerCount` | Number of Nuxeo worker pods if `architecture=api-worker`                                                                                      | `nil` |
 | `clusterDomain` | Domain name within the cluster                                                                                                                | `cluster.local` |
-| `virtualHost` | Virtual host `nuxeo.conf` property, if not retrieved from the Ingress configuration.                                                          | `""` |
+| `virtualHost` | Virtual host `nuxeo.conf` property, falling back on Ingress configuration.                                                                   | `""` |
 | `podLabels` | Nuxeo pod labels                                                                                                                              | `{}` |
 | `podAnnotations` | Nuxeo pod annotations                                                                                                                         | `{}` |
 | `nodeSelector` | Nuxeo node labels for pod assignment                                                                                                          | `{}` |
