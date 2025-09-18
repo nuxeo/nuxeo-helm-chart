@@ -400,3 +400,16 @@ Return true if Ingress TLS configuration is single, defined by its secret name.
   {{- true -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Returns the URL bound to the Ingress host name.
+*/}}
+{{- define "nuxeo.ingress.url" -}}
+{{- if and .Values.ingress.enabled .Values.ingress.hostname -}}
+  {{- if or (include "nuxeo.ingress.tls.list" .) (include "nuxeo.ingress.tls.single" .) }}
+    {{- printf "https://%s/" (.Values.ingress.hostname) -}}
+  {{- else }}
+    {{- printf "http://%s/" (.Values.ingress.hostname) -}}
+  {{- end }}
+{{- end -}}
+{{- end -}}

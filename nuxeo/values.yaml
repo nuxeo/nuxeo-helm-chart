@@ -16,7 +16,7 @@ replicaCount: 1
 # workerCount: 1
 clusterDomain: cluster.local
 # Virtual host nuxeo.conf property, if not retrieved from the Ingress configuration.
-virtualHost:
+virtualHost: ""
 podLabels: {}
 podAnnotations: {}
 nodeSelector: {}
