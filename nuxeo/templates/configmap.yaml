@@ -17,6 +17,13 @@ data:
     nuxeo.pod.namespace=${env:POD_NAMESPACE}
     nuxeo.pod.uid=${env:POD_UID}
     nuxeo.healthcheck.refresh.interval.seconds={{ min .Values.livenessProbe.periodSeconds .Values.readinessProbe.periodSeconds .Values.startupProbe.periodSeconds }}
+    {{- if .Values.url }}
+    nuxeo.url={{ .Values.url  }}
+    {{- else }}
+      {{- with (include "nuxeo.ingress.url" .) }}
+    nuxeo.url={{ . }}
+      {{- end }}
+    {{- end }}
     {{- if .Values.virtualHost }}
     nuxeo.virtual.host={{ .Values.virtualHost  }}
     {{- else }}

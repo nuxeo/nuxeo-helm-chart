@@ -15,6 +15,8 @@ strategy:
 replicaCount: 1
 # workerCount: 1
 clusterDomain: cluster.local
+# Nuxeo URL nuxeo.conf property, if not retrieved from the Ingress configuration.
+url: ""
 # Virtual host nuxeo.conf property, if not retrieved from the Ingress configuration.
 virtualHost: ""
 podLabels: {}
