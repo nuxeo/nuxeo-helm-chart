@@ -70,6 +70,15 @@ pipeline {
     JIRA_RELEASED_VERSION = "helm-chart-${VERSION}"
   }
   stages {
+    stage('Set labels') {
+      steps {
+        container('base') {
+          script {
+            nxK8s.setPodLabels()
+          }
+        }
+      }
+    }
     stage('Helm package') {
       steps {
         container('base') {
