@@ -26,7 +26,7 @@ WARNING
   Using a cloud provider for binary storage is preferred for production.
   You can enable one by setting either:
     googleCloudStorage.enabled=true or amazonS3.enabled=true.
-  {{- if not (.Values.persistentVolumeStorage.enabled) }}
+  {{- if not (or .Values.persistentVolumeStorage.enabled .Values.persistentVolumeStorage.existingClaim) }}
   By not enabling a persistent volume for binary storage, binaries will be
   stored in an emptyDir volume, thus not surviving a pod restart.
   {{- end }}
@@ -34,8 +34,15 @@ WARNING
 {{- end -}}
 
 {{- define "nuxeo.warnings.message.binary.pvc" -}}
-{{- if .Values.persistentVolumeStorage.enabled -}}
-  {{- if include "nuxeo.binary.pvc.has-many" . }}
+{{- if .Values.persistentVolumeStorage.existingClaim }}
+  Using an existing persistent volume claim (PVC) named
+  {{ .Values.persistentVolumeStorage.existingClaim }} for binary storage.
+  Ensure the access mode suits your use case:
+  - ReadWriteMany: additional configuration might need to be added,
+    see https://doc.nuxeo.com/nxdoc/file-storage-architecture/.
+  - ReadWriteOnce: the deployment won't be able to scale up in Kubernetes.
+{{- else if .Values.persistentVolumeStorage.enabled -}}
+  {{- if include "nuxeo.binary.pvc.clustering.ready" . }}
   Enabling a persistent volume for binary storage with the ReadWriteMany
   access mode is not supported by the Nuxeo Helm Chart.
   Additional configuration might need to be added,
@@ -65,12 +72,18 @@ WARNING
 {{- end -}}
 
 {{- define "nuxeo.warnings.message.log.pvc" -}}
-{{- if .Values.logs.persistence.enabled -}}
-  {{- if include "nuxeo.log.pvc.has-many" . }}
-  Enabling a persistent volume for logs storage with the ReadWriteMany
+{{- if .Values.logs.persistence.existingClaim }}
+  Using an existing persistent volume claim (PVC) named
+  {{ .Values.logs.persistence.existingClaim }} for log storage.
+  Ensure the access mode suits your use case:
+  - ReadWriteMany: additional configuration might need to be added.
+  - ReadWriteOnce: the deployment won't be able to scale up in Kubernetes.
+{{- else if .Values.logs.persistence.enabled -}}
+  {{- if include "nuxeo.log.pvc.clustering.ready" . }}
+  Enabling a persistent volume for log storage with the ReadWriteMany
   access mode is not supported by the Nuxeo Helm Chart.
   Additional configuration might need to be added, otherwise every Nuxeo
-  pods will write to the same server.log.
+  pod will write to the same server.log.
   {{- else }}
   By enabling a persistent volume for log storage, since it is mounted with
   the ReadWriteOnce access mode, the deployment won't be able to scale up

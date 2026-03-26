@@ -24,7 +24,7 @@ Validate clustering configuration: if more than 1 replica, must enable:
   - Kafka or Redis.
 */}}
 {{- define "nuxeo.validateValues.clustering" -}}
-{{- if and (include "nuxeo.clustering.enabled" .) (not (and (or (include "nuxeo.binary.cloudProvider.enabled" .) (include "nuxeo.binary.pvc.has-many" .)) (include "nuxeo.database.enabled" .) (include "nuxeo.kafkaRedis.enabled" .))) -}}
+{{- if and (include "nuxeo.clustering.enabled" .) (not (and (or (include "nuxeo.binary.cloudProvider.enabled" .) (include "nuxeo.binary.pvc.clustering.ready" .)) (include "nuxeo.database.enabled" .) (include "nuxeo.kafkaRedis.enabled" .))) -}}
 {{-   printf "\n" -}}
 nuxeo clustering configuration:
 
@@ -48,7 +48,8 @@ nuxeo clustering configuration:
 Validate binary storage configuration: only one type of storage can be enabled.
 */}}
 {{- define "nuxeo.validateValues.binaryStorage" -}}
-{{- if or (or (and .Values.googleCloudStorage.enabled .Values.amazonS3.enabled) (and .Values.googleCloudStorage.enabled .Values.persistentVolumeStorage.enabled)) (and .Values.amazonS3.enabled .Values.persistentVolumeStorage.enabled) -}}
+{{- $pvcEnabled := or .Values.persistentVolumeStorage.enabled (ne .Values.persistentVolumeStorage.existingClaim "") -}}
+{{- if or (or (and .Values.googleCloudStorage.enabled .Values.amazonS3.enabled) (and .Values.googleCloudStorage.enabled $pvcEnabled)) (and .Values.amazonS3.enabled $pvcEnabled) -}}
 {{-   printf "\n" -}}
 nuxeo binary storage configuration:
 
@@ -57,7 +58,7 @@ nuxeo binary storage configuration:
     - Amazon S3
     - PersistentVolume
 
-  Please set googleCloudStorage.enabled=true or amazonS3.enabled=true or persistentVolumeStorage.enabled=true.
+  Please set googleCloudStorage.enabled=true or amazonS3.enabled=true or persistentVolumeStorage.enabled=true or persistentVolumeStorage.existingClaim.
 {{- end -}}
 {{- end -}}
 

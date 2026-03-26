@@ -121,10 +121,10 @@ Return true if a cloud provider is enabled for binary storage.
 {{- end -}}
 
 {{/*
-Return true if a persistent volum claim with ReadWriteMany is enabled for binary storage.
+Return true if an existing persistent volume claim is defined, or a persistent volum claim with ReadWriteMany is enabled for binary storage.
 */}}
-{{- define "nuxeo.binary.pvc.has-many" -}}
-{{- if and .Values.persistentVolumeStorage.enabled (eq (first .Values.persistentVolumeStorage.accessModes) "ReadWriteMany") -}}
+{{- define "nuxeo.binary.pvc.clustering.ready" -}}
+{{- if or .Values.persistentVolumeStorage.existingClaim (and .Values.persistentVolumeStorage.enabled (eq (first .Values.persistentVolumeStorage.accessModes) "ReadWriteMany")) -}}
     {{- true -}}
 {{- end -}}
 {{- end -}}
@@ -172,10 +172,10 @@ Return true if a Kafka or Redis is enabled.
 {{- end -}}
 
 {{/*
-Return true if a persistent volum claim with ReadWriteMany is enabled for log storage.
+Return true if an existing persistent volume claim is defined, or a persistent volum claim with ReadWriteMany is enabled for log storage.
 */}}
-{{- define "nuxeo.log.pvc.has-many" -}}
-{{- if and .Values.logs.persistence.enabled (eq (first .Values.logs.persistence.accessModes) "ReadWriteMany") -}}
+{{- define "nuxeo.log.pvc.clustering.ready" -}}
+{{- if or .Values.logs.persistence.existingClaim (and .Values.logs.persistence.enabled (eq (first .Values.logs.persistence.accessModes) "ReadWriteMany")) -}}
     {{- true -}}
 {{- end -}}
 {{- end -}}

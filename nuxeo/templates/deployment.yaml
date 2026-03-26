@@ -289,7 +289,10 @@ spec:
           defaultMode: 0744
       {{- end }}
       - name: log
-        {{- if .Values.logs.persistence.enabled }}
+        {{- if .Values.logs.persistence.existingClaim }}
+        persistentVolumeClaim:
+          claimName: {{ .Values.logs.persistence.existingClaim | quote }}
+        {{- else if .Values.logs.persistence.enabled }}
         persistentVolumeClaim:
           claimName: {{ template "nuxeo.fullname" . }}-log
         {{- else }}
@@ -297,7 +300,10 @@ spec:
         {{- end }}
       {{- if not (include "nuxeo.binary.cloudProvider.enabled" .) }}
       - name: binaries
-        {{- if .Values.persistentVolumeStorage.enabled }}
+        {{- if .Values.persistentVolumeStorage.existingClaim }}
+        persistentVolumeClaim:
+          claimName: {{ .Values.persistentVolumeStorage.existingClaim | quote }}
+        {{- else if .Values.persistentVolumeStorage.enabled }}
         persistentVolumeClaim:
           claimName: {{ template "nuxeo.fullname" . }}-binaries
         {{- else }}
