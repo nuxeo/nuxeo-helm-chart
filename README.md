@@ -166,7 +166,7 @@ Besides possible errors when [Clustering](#clustering) is enabled, the following
 
 - Binary storage mutual exclusion:
 
-  If two parameters are set to `true` out of these three: `googleCloudStorage.enabled`, `amazonS3.enabled`, `persistentVolumeStorage.enabled`, an error indicates that only one type of binary storage can be enabled among Google Cloud Storage, Amazon S3 and PersistentVolume.
+  If a cloud provider is enabled for binary storage, by setting either `googleCloudStorage.enabled=true` or `amazonS3.enabled=true`, and a persistent volume is also enabled for binary storage, by setting either `persistentVolumeStorage.enabled=true` or `persistentVolumeStorage.existingClaim`, an error indicates that only one type of binary storage can be enabled among Google Cloud Storage, Amazon S3 and PersistentVolume.
 
 ## Installation Warnings
 
@@ -175,15 +175,23 @@ Besides possible warnings when [Clustering](#clustering) is enabled, the followi
 - Binary storage recommendations:
 
   If no cloud provider is enabled for binary storage, by setting either `googleCloudStorage.enabled=true` or `amazonS3.enabled=true`, a warning indicates that using a cloud provider for binary storage is preferred for production.
-  In this case, if `persistentVolumeStorage.enabled=false`, an extra warning indicates that by not enabling a persistent volume for binary storage, binaries will be stored in an `emptyDir` volume, thus not surviving a pod restart.
+  In this case, if `persistentVolumeStorage.enabled=false` and `persistentVolumeStorage.existingClaim` is unset, an extra warning indicates that by not having a persistent volume for binary storage, binaries will be stored in an `emptyDir` volume, thus not surviving a pod restart.
 
 - Binary storage persistent volume access mode:
+
+  If `persistentVolumeStorage.existingClaim` is set, a warning indicates that the access mode of the existing persistent volume claim must suit the use case:
+  - `ReadWriteMany`: additional configuration might need to be added, looking at the [File Storage](https://doc.nuxeo.com/nxdoc/file-storage-architecture/) documentation.
+  - `ReadWriteOnce`: the deployment won't be able to scale up in Kubernetes.
 
   If `persistentVolumeStorage.enabled=true` and `persistentVolumeStorage.accessModes=["ReadWriteMany"]`, a warning indicates that enabling a persistent volume for binary storage with the `ReadWriteMany` access mode is not supported by the Nuxeo Helm Chart, and additional configuration might need to be added, looking at the [File Storage](https://doc.nuxeo.com/nxdoc/file-storage-architecture/) documentation.
 
   If `persistentVolumeStorage.enabled=true` and `persistentVolumeStorage.accessModes=["ReadWriteOnce"]`, a warning indicates that by enabling a persistent volume for binary storage mounted with the `ReadWriteOnce` access mode, the deployment won't be able to scale up in Kubernetes.
 
 - Log storage persistent volume access mode:
+
+  If `logs.persistence.existingClaim` is set, a warning indicates that the access mode of the existing persistent volume claim must suit the use case:
+  - `ReadWriteMany`: additional configuration might need to be added.
+  - `ReadWriteOnce`: the deployment won't be able to scale up in Kubernetes.
 
   If `logs.persistence.enabled=true`, a warning indicates that this setup is not recommended for production, a log collector being preferred.
 
@@ -352,6 +360,7 @@ The following tables lists the configurable parameters of this chart and their d
 | `serviceAccount.create` | Enable creation of a service account for Nuxeo deployment | `true` |
 | `serviceAccount.annotations` | Nuxeo service account annotations | `{}` |
 | `serviceAccount.name` | Default Nuxeo service account name | `""` |
+| `persistentVolumeStorage.existingClaim` | Name of an existing PersistentVolumeClaim to use for Nuxeo binary storage. | `""` |
 | `persistentVolumeStorage.enabled` | Enable persistent volume storage for Nuxeo binaries | `false` |
 | `persistentVolumeStorage.storageClass` | Nuxeo binaries persistent volume storage class | `""` |
 | `persistentVolumeStorage.accessModes` | Nuxeo binaries persistent volume access modes | `["ReadWriteOnce"]` |
@@ -366,6 +375,7 @@ The following tables lists the configurable parameters of this chart and their d
 | `ingress.path` | Nuxeo Ingress path | `""` |
 | `ingress.tls` | Nuxeo Ingress TLS configuration, accepts a list or a map with `secretName` as a single key | `nil` |
 | `ingress.tls.secretName` | Nuxeo Ingress single TLS configuration secret name | `""` |
+| `logs.persistence.existingClaim` | Name of an existing PersistentVolumeClaim to use for Nuxeo log storage. | `""` |
 | `logs.persistence.enabled` | Enable persistent volume storage for Nuxeo logs | `false` |
 | `logs.persistence.storageClass` | Nuxeo logs persistent volume storage class | `""` |
 | `logs.persistence.accessModes` | Nuxeo logs persistent volume access modes | `["ReadWriteOnce"]` |

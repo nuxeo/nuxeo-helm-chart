@@ -1,4 +1,4 @@
-{{- if .Values.persistentVolumeStorage.enabled }}
+{{- if and .Values.persistentVolumeStorage.enabled (not .Values.persistentVolumeStorage.existingClaim) }}
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
@@ -19,7 +19,7 @@ spec:
   storageClassName: {{ toYaml . }}
   {{- end }}
 {{- end }}
-{{- if .Values.logs.persistence.enabled }}
+{{- if and .Values.logs.persistence.enabled (not .Values.logs.persistence.existingClaim) }}
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1

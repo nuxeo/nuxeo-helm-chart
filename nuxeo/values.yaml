@@ -206,6 +206,9 @@ serviceAccount:
   # The custom name of the service account to use
   # name:
 persistentVolumeStorage:
+  ## Name of an existing PersistentVolumeClaim to use for binary storage.
+  ## When set, no PVC is created by the chart and `persistentVolumeStorage.enabled` is ignored.
+  existingClaim: ""
   enabled: false
   storageClass: ""
   accessModes:
@@ -233,6 +236,9 @@ ingress:
     # secretName: ""
 logs:
   persistence:
+    ## Name of an existing PersistentVolumeClaim to use for log storage.
+    ## When set, no PVC is created by the chart and `logs.persistence.enabled` is ignored.
+    existingClaim: ""
     enabled: false
     storageClass: ""
     accessModes:
