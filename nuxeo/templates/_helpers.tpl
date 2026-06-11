@@ -46,6 +46,21 @@ Create chart name and version as used by the chart label.
 {{- end -}}
 
 {{/*
+Return a container image reference string.
+Uses `repository@digest` when `digest` is set, otherwise `repository:tag`.
+Scope: a dict with `repository`, `tag`, `digest` keys
+(e.g., .Values.image or .Values.mongodb.initContainer).
+*/}}
+{{- define "nuxeo.image.ref" -}}
+{{- $img := . -}}
+{{- if $img.digest -}}
+{{ $img.repository }}@{{ $img.digest }}
+{{- else -}}
+{{ $img.repository }}:{{ $img.tag }}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Common labels
 */}}
 {{- define "nuxeo.labels" -}}

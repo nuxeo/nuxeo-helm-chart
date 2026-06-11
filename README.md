@@ -249,6 +249,7 @@ The following tables lists the configurable parameters of this chart and their d
 | --------- | ----------- | ------- |
 | `image.repository` | Nuxeo image name | `docker-private.packages.nuxeo.com/nuxeo/nuxeo` |
 | `image.tag` | Nuxeo image tag | `2023` |
+| `image.digest` | Nuxeo image digest in the form `sha256:...`. When set, takes precedence over `image.tag` and the image is referenced as `repository@digest`. | `""` |
 | `image.pullSecrets` | Nuxeo image registry secret names | `[]` |
 | `image.pullPolicy` | Nuxeo image pull policy | `IfNotPresent` |
 | `architecture` | Nuxeo architecture (`singleNode` or `api-worker`) | `singleNode` |
@@ -300,6 +301,7 @@ The following tables lists the configurable parameters of this chart and their d
 | `mongodb.auth.existingSecret` | Existing secret with MongoDB credentials (keys: `mongodb-username`, `mongodb-password`), overrides `username` and `password` | `""` |
 | `mongodb.initContainer.repository` | Image name for MongoDB connection init container | `busybox` |
 | `mongodb.initContainer.tag` | Image tag for MongoDB connection init container | `latest` |
+| `mongodb.initContainer.digest` | Image digest in the form `sha256:...` for MongoDB connection init container. When set, takes precedence over `tag`. | `""` |
 | `mongodb.initContainer.imagePullPolicy` | Image pull policy for MongoDB connection init container | `IfNotPresent` |
 | `mongodb.initContainer.securityContext` | Security context for MongoDB init container | `{}` |
 | `postgresql.enabled` | Enable PostgreSQL backend for Nuxeo | `false` |
@@ -311,6 +313,7 @@ The following tables lists the configurable parameters of this chart and their d
 | `postgresql.auth.existingSecret` | Existing secret with PostgreSQL credentials (keys: `postgresql-username`, `postgresql-password`), overrides `username` and `password` | `""` |
 | `postgresql.initContainer.repository` | Image name for PostgreSQL connection init container | `busybox` |
 | `postgresql.initContainer.tag` | Image tag for PostgreSQL connection init container | `latest` |
+| `postgresql.initContainer.digest` | Image digest in the form `sha256:...` for PostgreSQL connection init container. When set, takes precedence over `tag`. | `""` |
 | `postgresql.initContainer.imagePullPolicy` | Image pull policy for PostgreSQL connection init container | `IfNotPresent` |
 | `postgresql.initContainer.securityContext` | Security context for PostgreSQL init container | `{}` |
 | `elasticsearch.enabled` | Enable Elasticsearch for Nuxeo | `false` |
@@ -329,6 +332,7 @@ The following tables lists the configurable parameters of this chart and their d
 | `elasticsearch.httpReadOnly.enabled` | Enable Elasticsearch passthrough | `false` |
 | `elasticsearch.initContainer.repository` | Image name for Elasticsearch connection init container | `busybox` |
 | `elasticsearch.initContainer.tag` | Image tag for Elasticsearch connection init container | `latest` |
+| `elasticsearch.initContainer.digest` | Image digest in the form `sha256:...` for Elasticsearch connection init container. When set, takes precedence over `tag`. | `""` |
 | `elasticsearch.initContainer.imagePullPolicy` | Image pull policy for Elasticsearch connection init container | `IfNotPresent` |
 | `elasticsearch.initContainer.securityContext` | Security context for Elasticsearch init container | `{}` |
 | `kafka.enabled` | Enable Kafka for Nuxeo | `false` |
@@ -340,6 +344,7 @@ The following tables lists the configurable parameters of this chart and their d
 | `kafka.auth.existingSecret` | Existing secret with Kafka credentials (keys: `kafka-username`, `kafka-password`), overrides `username` and `password` | `""` |
 | `kafka.initContainer.repository` | Image name for Kafka connection init container | `busybox` |
 | `kafka.initContainer.tag` | Image tag for Kafka connection init container | `latest` |
+| `kafka.initContainer.digest` | Image digest in the form `sha256:...` for Kafka connection init container. When set, takes precedence over `tag`. | `""` |
 | `kafka.initContainer.imagePullPolicy` | Image pull policy for Kafka connection init container | `IfNotPresent` |
 | `kafka.initContainer.securityContext` | Security context for Kafka init container | `{}` |
 | `redis.enabled` | Enable redis for Nuxeo | `false` |

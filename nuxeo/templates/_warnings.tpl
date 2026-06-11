@@ -94,7 +94,7 @@ WARNING
 {{- end -}}
 
 {{- define "nuxeo.warnings.message.rolling-tag" -}}
-{{- if and (contains "/nuxeo/nuxeo" .Values.image.repository) (not (.Values.image.tag | toString | regexFind "^(\\d)+\\.(\\d)+.*$" )) }}
+{{- if and (contains "/nuxeo/nuxeo" .Values.image.repository) (not .Values.image.digest) (not (.Values.image.tag | toString | regexFind "^(\\d)+\\.(\\d)+.*$" )) }}
   Rolling tag detected ({{ .Values.image.repository }}:{{ .Values.image.tag }}),
   please note that it is strongly recommended to avoid using rolling tags
   in a production environment.
