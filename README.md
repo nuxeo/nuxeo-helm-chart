@@ -249,7 +249,7 @@ The following tables lists the configurable parameters of this chart and their d
 | --------- | ----------- | ------- |
 | `image.repository` | Nuxeo image name | `docker-private.packages.nuxeo.com/nuxeo/nuxeo` |
 | `image.tag` | Nuxeo image tag | `2023` |
-| `image.digest` | Nuxeo image digest in the form `sha256:...`. When set, takes precedence over `image.tag` and the image is referenced as `repository@digest`. | `""` |
+| `image.digest` | Nuxeo image digest in the form `sha256:...`. When set, takes precedence over `image.tag` for the image pull reference (`repository@digest`). The `image.tag` is still used as the `app.kubernetes.io/version` label; if empty, the label falls back to the first 12 hex characters of the digest. | `""` |
 | `image.pullSecrets` | Nuxeo image registry secret names | `[]` |
 | `image.pullPolicy` | Nuxeo image pull policy | `IfNotPresent` |
 | `architecture` | Nuxeo architecture (`singleNode` or `api-worker`) | `singleNode` |
