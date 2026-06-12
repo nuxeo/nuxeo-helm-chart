@@ -1,6 +1,6 @@
 CHART NAME: {{ .Chart.Name }}
 CHART VERSION: {{ .Chart.Version }}
-APP VERSION: {{ .Values.image.tag }}
+IMAGE: {{ include "nuxeo.image.ref" .Values.image }}
 
 {{- include "nuxeo.validateValues" . }}
 

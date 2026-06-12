@@ -2,7 +2,10 @@ image:
   repository: docker-private.packages.nuxeo.com/nuxeo/nuxeo
   tag: 2023
   # Image digest in the form `sha256:...`. When set, takes precedence over `tag`
-  # and the image is referenced as `repository@digest` (immutable pin).
+  # for the image pull reference (rendered as `repository@digest`).
+  # The `tag` value is still used as the `app.kubernetes.io/version` label for
+  # human-readable identification; if `tag` is empty, the label falls back to
+  # the first 12 hex characters of the digest.
   digest: ""
   pullSecrets: []
   pullPolicy: IfNotPresent

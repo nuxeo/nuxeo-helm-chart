@@ -61,6 +61,19 @@ Scope: a dict with `repository`, `tag`, `digest` keys
 {{- end -}}
 
 {{/*
+Return a Kubernetes-label-safe version string.
+Uses image.tag if set, otherwise the first 12 hex chars of image.digest
+(strips any algorithm prefix like "sha256:" or "sha512:").
+*/}}
+{{- define "nuxeo.image.version" -}}
+{{- if .Values.image.tag -}}
+{{ .Values.image.tag | toString }}
+{{- else -}}
+{{ last (splitList ":" (.Values.image.digest | toString)) | trunc 12 }}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Common labels
 */}}
 {{- define "nuxeo.labels" -}}
@@ -69,7 +82,7 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- with .nuxeoNodeType }}
 app.kubernetes.io/component: {{ . }}
 {{- end }}
-app.kubernetes.io/version: {{ .Values.image.tag | quote }}
+app.kubernetes.io/version: {{ include "nuxeo.image.version" . | quote }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 helm.sh/chart: {{ include "nuxeo.chart" . }}
 {{ include "nuxeo.selectorLabels" . }}
@@ -91,9 +104,12 @@ tier: {{ ternary "backend" "frontend" (eq (default "single" .nuxeoNodeType) "wor
 
 {{/*
 Return true if the deployment needs to be rolled.
+A digest-pinned image is immutable, so no roll is needed.
 */}}
 {{- define "nuxeo.deployment.roll" -}}
-{{- if .Values.image.pullPolicy -}}
+{{- if .Values.image.digest -}}
+  {{- false -}}
+{{- else if .Values.image.pullPolicy -}}
   {{- if eq "Always" .Values.image.pullPolicy -}}
     {{- true -}}
   {{- else -}}
