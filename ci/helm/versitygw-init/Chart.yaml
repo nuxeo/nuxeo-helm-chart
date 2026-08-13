@@ -1,0 +1,9 @@
+apiVersion: v2
+name: versitygw-init
+description: >
+  Provisions the PersistentVolumeClaim shared with the versitygw release and
+  pre-creates the S3 bucket directory on the POSIX backend. The upstream
+  versitygw chart does not auto-create buckets, so this chart ensures the
+  directory exists before VersityGW starts.
+type: application
+version: 1.0.0

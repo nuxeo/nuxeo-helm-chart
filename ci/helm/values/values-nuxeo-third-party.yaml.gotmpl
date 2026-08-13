@@ -9,10 +9,11 @@ customEnvs:
 amazonS3:
   enabled: true
   auth:
-    accessKeyId: minio
-    secretKey: minio-secret
+    # Must stay in sync with auth.accessKey/auth.secretKey in values-versitygw.yaml.gotmpl.
+    accessKeyId: versitygw
+    secretKey: versitygw-secret-key
   # unused but a warn log is produced if not present
-  region: eu-west-1
+  region: us-east-1
   bucket: nuxeo-binary-store
 mongodb:
   enabled: true
@@ -24,6 +25,6 @@ kafka:
   enabled: true
   host: {{ printf "kafka.%s" $localDomain }}
 customProperties:
-  minio: |
-    nuxeo.s3storage.endpoint=http://{{ printf "minio.%s" $localDomain }}:9000
+  versitygw: |
+    nuxeo.s3storage.endpoint=http://{{ printf "versitygw.%s" $localDomain }}:7070
     nuxeo.s3storage.pathstyleaccess=true
