@@ -24,19 +24,30 @@ releases:
   chart: ./../../nuxeo
   {{ if ne .Environment.Name "default" }}
   needs:
-  - minio
+  - versitygw
   - mongodb
   - opensearch
   - kafka
   {{ end }}
   values:
   - values/values-nuxeo.yaml.gotmpl
-- name: minio
-  chart: oci://registry-1.docker.io/bitnamicharts/minio
-  version: 14.6.29
-  condition: deployment.minio.enabled
+# versitygw-init provisions the PVC and pre-creates the S3 bucket directory
+# before VersityGW starts. The upstream versitygw chart reuses the PVC it
+# creates (persistence.create=false) so the bucket is guaranteed to exist
+# when VersityGW accepts its first request from Nuxeo.
+- name: versitygw-init
+  chart: ./versitygw-init
+  condition: deployment.versitygw.enabled
   values:
-  - values/values-minio.yaml.gotmpl
+  - values/values-versitygw-init.yaml.gotmpl
+- name: versitygw
+  chart: oci://ghcr.io/versity/versitygw/charts/versitygw
+  version: "0.3.5"
+  condition: deployment.versitygw.enabled
+  needs:
+  - versitygw-init
+  values:
+  - values/values-versitygw.yaml.gotmpl
 - name: mongodb
   chart: oci://registry-1.docker.io/bitnamicharts/mongodb
   version: 13.3.1
